@@ -1,0 +1,183 @@
+post_id,user_id,text,created_at,language,platform,likes,shares,replies,sentiment,emotion,stance,topic,is_misinformation
+p001,u01,"Fast, friendly, and reliable transport support!",2025-01-01T00:00:00,de,Mastodon,14,0,8,positive,joy,support,transport,True
+p002,u02,The electric vehicles meeting starts at 10:00. More: https://example.org,2025-01-01T08:00:00,en,Forum,28,4,3,neutral,calm,neutral,electric vehicles,False
+p003,u03,"Great, another broken university app... just what we needed.",2025-01-01T16:00:00,en,Microblog,94,28,2,negative,anger,oppose,university,False
+p004,u04,"Fast, friendly, and reliable customer service support!",2025-01-02T00:00:00,en,Mastodon,54,1,0,positive,joy,support,customer service,False
+p005,u05,The public health meeting starts at 10:00. More: https://example.org,2025-01-02T08:00:00,en,Forum,27,7,0,neutral,calm,neutral,public health,False
+p006,u06,"Great, another broken transport app... just what we needed.",2025-01-02T16:00:00,en,Microblog,25,22,13,negative,anger,oppose,transport,False
+p007,u07,I love the new electric vehicles service! Great work 😊 #BetterCity,2025-01-03T00:00:00,en,Mastodon,57,18,8,positive,joy,support,electric vehicles,False
+p008,u08,The university meeting starts at 10:00. More: https://example.org,2025-01-03T08:00:00,en,Forum,97,25,5,neutral,calm,neutral,university,False
+p009,u09,"Great, another broken customer service app... just what we needed.",2025-01-03T16:00:00,en,Microblog,54,10,8,negative,anger,oppose,customer service,False
+p010,u10,,2025-01-04T00:00:00,en,Mastodon,27,30,10,positive,joy,support,public health,False
+p011,u11,The transport meeting starts at 10:00. More: https://example.org,2025-01-04T08:00:00,de,Forum,11,12,3,neutral,calm,neutral,transport,False
+p012,u12,Very disappointed with the electric vehicles update. #fail,2025-01-04T16:00:00,en,Microblog,44,19,8,negative,anger,oppose,electric vehicles,True
+p013,u13,I love the new university service! Great work 😊 #BetterCity,2025-01-05T00:00:00,en,Mastodon,93,14,3,positive,joy,support,university,False
+p014,u14,New customer service information was posted today.,2025-01-05T08:00:00,en,Forum,10,17,9,neutral,calm,neutral,customer service,False
+p015,u15,"Great, another broken public health app... just what we needed.",2025-01-05T16:00:00,en,Microblog,79,28,11,negative,anger,oppose,public health,False
+p016,u16,"Fast, friendly, and reliable transport support!",2025-01-06T00:00:00,en,Mastodon,24,22,2,positive,joy,support,transport,False
+p017,u17,The electric vehicles meeting starts at 10:00. More: https://example.org,2025-01-06T08:00:00,en,Forum,84,7,9,neutral,calm,neutral,electric vehicles,False
+p018,u18,The university service is not good and soooo slow 😠,2025-01-06T16:00:00,en,Microblog,29,27,3,negative,anger,oppose,university,False
+p019,u19,The customer service update is excellent and very useful.,2025-01-07T00:00:00,en,Mastodon,35,14,11,positive,joy,support,customer service,False
+p020,u20,The public health meeting starts at 10:00. More: https://example.org,2025-01-07T08:00:00,en,Forum,47,11,6,neutral,calm,neutral,public health,False
+p021,u21,"Great, another broken transport app... just what we needed.",2025-01-07T16:00:00,de,Microblog,34,22,2,negative,anger,oppose,transport,False
+p022,u22,"Fast, friendly, and reliable electric vehicles support!",2025-01-08T00:00:00,en,Mastodon,81,5,7,positive,joy,support,electric vehicles,False
+p023,u23,The university meeting starts at 10:00. More: https://example.org,2025-01-08T08:00:00,en,Forum,59,12,8,neutral,calm,neutral,university,True
+p024,u24,"Great, another broken customer service app... just what we needed.",2025-01-08T16:00:00,en,Microblog,88,17,7,negative,anger,oppose,customer service,False
+p025,u25,"Fast, friendly, and reliable public health support!",2025-01-09T00:00:00,,Mastodon,41,26,1,positive,joy,support,public health,False
+p026,u26,The transport meeting starts at 10:00. More: https://example.org,2025-01-09T08:00:00,en,Forum,4,25,10,neutral,calm,neutral,transport,False
+p027,u27,Very disappointed with the electric vehicles update. #fail,2025-01-09T16:00:00,en,Microblog,34,2,6,negative,anger,oppose,electric vehicles,False
+p028,u28,"Fast, friendly, and reliable university support!",2025-01-10T00:00:00,en,Mastodon,91,10,6,positive,joy,support,university,False
+p029,u29,@cityhelp shared a report about customer service.,2025-01-10T08:00:00,en,Forum,63,12,14,neutral,calm,neutral,customer service,False
+p030,u30,The public health service is not good and soooo slow 😠,2025-01-10T16:00:00,en,Microblog,33,4,7,negative,anger,oppose,public health,False
+p031,u31,"Fast, friendly, and reliable transport support!",2025-01-11T00:00:00,de,Mastodon,71,17,8,positive,joy,support,transport,False
+p032,u32,@cityhelp shared a report about electric vehicles.,2025-01-11T08:00:00,en,Forum,74,13,12,neutral,calm,neutral,electric vehicles,False
+p033,u33,Very disappointed with the university update. #fail,2025-01-11T16:00:00,en,Microblog,28,4,15,negative,anger,oppose,university,False
+p034,u34,I love the new customer service service! Great work 😊 #BetterCity,2025-01-12T00:00:00,en,Mastodon,96,1,3,positive,joy,support,customer service,True
+p035,u35,The public health meeting starts at 10:00. More: https://example.org,2025-01-12T08:00:00,en,Forum,80,5,13,neutral,calm,neutral,public health,False
+p036,u36,"Great, another broken transport app... just what we needed.",2025-01-12T16:00:00,en,Microblog,8,12,12,negative,anger,oppose,transport,False
+p037,u37,"Fast, friendly, and reliable electric vehicles support!",2025-01-13T00:00:00,en,Mastodon,59,16,8,positive,joy,support,electric vehicles,False
+p038,u38,@cityhelp shared a report about university.,2025-01-13T08:00:00,en,Forum,1,21,3,neutral,calm,neutral,university,False
+p039,u39,"Great, another broken customer service app... just what we needed.",2025-01-13T16:00:00,en,Microblog,68,24,8,negative,anger,oppose,customer service,False
+p040,u40,"Fast, friendly, and reliable public health support!",2025-01-14T00:00:00,en,Mastodon,43,3,9,positive,joy,support,public health,False
+p041,u41,New transport information was posted today.,2025-01-14T08:00:00,de,Forum,20,14,0,neutral,calm,neutral,transport,False
+p042,u42,"Great, another broken electric vehicles app... just what we needed.",2025-01-14T16:00:00,en,Microblog,92,8,5,negative,anger,oppose,electric vehicles,False
+p043,u43,"Fast, friendly, and reliable university support!",2025-01-15T00:00:00,en,Mastodon,13,27,9,positive,joy,support,university,False
+p044,u44,@cityhelp shared a report about customer service.,2025-01-15T08:00:00,en,Forum,64,19,6,neutral,calm,neutral,customer service,False
+p045,u45,The public health service is not good and soooo slow 😠,2025-01-15T16:00:00,en,Microblog,47,24,5,negative,anger,oppose,public health,True
+p046,u01,"Fast, friendly, and reliable transport support!",2025-01-16T00:00:00,en,Mastodon,99,29,0,positive,joy,support,transport,False
+p047,u02,@cityhelp shared a report about electric vehicles.,2025-01-16T08:00:00,en,Forum,41,15,0,neutral,calm,neutral,electric vehicles,False
+p048,u03,The university service is not good and soooo slow 😠,2025-01-16T16:00:00,en,Microblog,46,28,9,negative,anger,oppose,university,False
+p049,u04,I love the new customer service service! Great work 😊 #BetterCity,2025-01-17T00:00:00,en,Mastodon,7,7,2,positive,joy,support,customer service,False
+p050,u05,The public health meeting starts at 10:00. More: https://example.org,2025-01-17T08:00:00,en,Forum,93,15,2,neutral,calm,neutral,public health,False
+p051,u06,"Great, another broken transport app... just what we needed.",2025-01-17T16:00:00,de,Microblog,98,4,4,negative,anger,oppose,transport,False
+p052,u07,"Fast, friendly, and reliable electric vehicles support!",2025-01-18T00:00:00,en,Mastodon,60,30,5,positive,joy,support,electric vehicles,False
+p053,u08,New university information was posted today.,2025-01-18T08:00:00,en,Forum,67,27,13,neutral,calm,neutral,university,False
+p054,u09,The customer service service is not good and soooo slow 😠,2025-01-18T16:00:00,en,Microblog,69,24,6,negative,anger,oppose,customer service,False
+p055,u10,"Fast, friendly, and reliable public health support!",2025-01-19T00:00:00,en,Mastodon,39,12,11,positive,joy,support,public health,False
+p056,u11,New transport information was posted today.,2025-01-19T08:00:00,en,Forum,66,14,3,neutral,calm,neutral,transport,True
+p057,u12,The electric vehicles service is not good and soooo slow 😠,2025-01-19T16:00:00,en,Microblog,28,2,10,negative,anger,oppose,electric vehicles,False
+p058,u13,I love the new university service! Great work 😊 #BetterCity,2025-01-20T00:00:00,en,Mastodon,75,17,7,positive,joy,support,university,False
+p059,u14,@cityhelp shared a report about customer service.,2025-01-20T08:00:00,en,Forum,28,0,2,neutral,calm,neutral,customer service,False
+p060,u15,"Great, another broken public health app... just what we needed.",2025-01-20T16:00:00,en,Microblog,80,1,7,negative,anger,oppose,public health,False
+p061,u16,I love the new transport service! Great work 😊 #BetterCity,2025-01-21T00:00:00,de,Mastodon,4,27,10,positive,joy,support,transport,False
+p062,u17,The electric vehicles meeting starts at 10:00. More: https://example.org,2025-01-21T08:00:00,en,Forum,65,7,8,neutral,calm,neutral,electric vehicles,False
+p063,u18,"Great, another broken university app... just what we needed.",2025-01-21T16:00:00,en,Microblog,62,6,4,negative,anger,oppose,university,False
+p064,u19,"Fast, friendly, and reliable customer service support!",2025-01-22T00:00:00,en,Mastodon,73,18,15,positive,joy,support,customer service,False
+p065,u20,The public health meeting starts at 10:00. More: https://example.org,2025-01-22T08:00:00,en,Forum,100,15,13,neutral,calm,neutral,public health,False
+p066,u21,The transport service is not good and soooo slow 😠,2025-01-22T16:00:00,en,Microblog,12,3,13,negative,anger,oppose,transport,False
+p067,u22,The electric vehicles update is excellent and very useful.,2025-01-23T00:00:00,en,Mastodon,54,13,14,positive,joy,support,electric vehicles,True
+p068,u23,@cityhelp shared a report about university.,2025-01-23T08:00:00,en,Forum,6,21,3,neutral,calm,neutral,university,False
+p069,u24,The customer service service is not good and soooo slow 😠,2025-01-23T16:00:00,en,Microblog,51,23,10,negative,anger,oppose,customer service,False
+p070,u25,I love the new public health service! Great work 😊 #BetterCity,2025-01-24T00:00:00,en,Mastodon,31,6,6,positive,joy,support,public health,False
+p071,u26,@cityhelp shared a report about transport.,2025-01-24T08:00:00,de,Forum,57,4,13,neutral,calm,neutral,transport,False
+p072,u27,The electric vehicles service is not good and soooo slow 😠,2025-01-24T16:00:00,en,Microblog,35,14,7,negative,anger,oppose,electric vehicles,False
+p073,u28,I love the new university service! Great work 😊 #BetterCity,2025-01-25T00:00:00,en,Mastodon,56,25,3,positive,joy,support,university,False
+p074,u29,The customer service meeting starts at 10:00. More: https://example.org,2025-01-25T08:00:00,en,Forum,83,17,0,neutral,calm,neutral,customer service,False
+p075,u30,The public health service is not good and soooo slow 😠,2025-01-25T16:00:00,en,Microblog,96,27,7,negative,anger,oppose,public health,False
+p076,u31,I love the new transport service! Great work 😊 #BetterCity,2025-01-26T00:00:00,en,Mastodon,52,15,15,positive,joy,support,transport,False
+p077,u32,The electric vehicles meeting starts at 10:00. More: https://example.org,2025-01-26T08:00:00,en,Forum,51,28,1,neutral,calm,neutral,electric vehicles,False
+p078,u33,The university service is not good and soooo slow 😠,2025-01-26T16:00:00,en,Microblog,48,0,12,negative,anger,oppose,university,True
+p079,u34,The customer service update is excellent and very useful.,2025-01-27T00:00:00,en,Mastodon,100,25,14,positive,joy,support,customer service,False
+p080,u35,New public health information was posted today.,2025-01-27T08:00:00,en,Forum,54,22,15,neutral,calm,neutral,public health,False
+p081,u36,The transport service is not good and soooo slow 😠,2025-01-27T16:00:00,de,Microblog,24,9,6,negative,anger,oppose,transport,False
+p082,u37,I love the new electric vehicles service! Great work 😊 #BetterCity,2025-01-28T00:00:00,en,Mastodon,74,23,1,positive,joy,support,electric vehicles,False
+p083,u38,@cityhelp shared a report about university.,2025-01-28T08:00:00,en,Forum,40,1,1,neutral,calm,neutral,university,False
+p084,u39,"Great, another broken customer service app... just what we needed.",2025-01-28T16:00:00,en,Microblog,61,16,5,negative,anger,oppose,customer service,False
+p085,u40,I love the new public health service! Great work 😊 #BetterCity,2025-01-29T00:00:00,en,Mastodon,65,2,5,positive,joy,support,public health,False
+p086,u41,The transport meeting starts at 10:00. More: https://example.org,2025-01-29T08:00:00,en,Forum,76,2,7,neutral,calm,neutral,transport,False
+p087,u42,Very disappointed with the electric vehicles update. #fail,2025-01-29T16:00:00,en,Microblog,15,30,7,negative,anger,oppose,electric vehicles,False
+p088,u43,"Fast, friendly, and reliable university support!",2025-01-30T00:00:00,en,Mastodon,76,1,2,positive,joy,support,university,False
+p089,u44,New customer service information was posted today.,2025-01-30T08:00:00,en,Forum,84,18,10,neutral,calm,neutral,customer service,True
+p090,u45,Very disappointed with the public health update. #fail,2025-01-30T16:00:00,en,Microblog,26,21,10,negative,anger,oppose,public health,False
+p091,u01,I love the new transport service! Great work 😊 #BetterCity,2025-01-31T00:00:00,de,Mastodon,33,12,4,positive,joy,support,transport,False
+p092,u02,@cityhelp shared a report about electric vehicles.,2025-01-31T08:00:00,en,Forum,82,9,14,neutral,calm,neutral,electric vehicles,False
+p093,u03,Very disappointed with the university update. #fail,2025-01-31T16:00:00,en,Microblog,96,29,2,negative,anger,oppose,university,False
+p094,u04,I love the new customer service service! Great work 😊 #BetterCity,2025-02-01T00:00:00,en,Mastodon,58,19,3,positive,joy,support,customer service,False
+p095,u05,The public health meeting starts at 10:00. More: https://example.org,2025-02-01T08:00:00,en,Forum,68,6,8,neutral,calm,neutral,public health,False
+p096,u06,The transport service is not good and soooo slow 😠,2025-02-01T16:00:00,en,Microblog,44,28,2,negative,anger,oppose,transport,False
+p097,u07,I love the new electric vehicles service! Great work 😊 #BetterCity,2025-02-02T00:00:00,en,Mastodon,47,9,5,positive,joy,support,electric vehicles,False
+p098,u08,New university information was posted today.,2025-02-02T08:00:00,en,Forum,69,22,9,neutral,calm,neutral,university,False
+p099,u09,"Great, another broken customer service app... just what we needed.",2025-02-02T16:00:00,en,Microblog,83,16,0,negative,anger,oppose,customer service,False
+p100,u10,"Fast, friendly, and reliable public health support!",2025-02-03T00:00:00,en,Mastodon,70,9,3,positive,joy,support,public health,True
+p101,u11,The transport meeting starts at 10:00. More: https://example.org,2025-02-03T08:00:00,de,Forum,33,3,3,neutral,calm,neutral,transport,False
+p102,u12,"Great, another broken electric vehicles app... just what we needed.",2025-02-03T16:00:00,en,Microblog,70,4,8,negative,anger,oppose,electric vehicles,False
+p103,u13,The university update is excellent and very useful.,2025-02-04T00:00:00,en,Mastodon,77,6,10,positive,joy,support,university,False
+p104,u14,The customer service meeting starts at 10:00. More: https://example.org,2025-02-04T08:00:00,en,Forum,87,20,8,neutral,calm,neutral,customer service,False
+p105,u15,"Great, another broken public health app... just what we needed.",2025-02-04T16:00:00,en,Microblog,62,8,1,negative,anger,oppose,public health,False
+p106,u16,I love the new transport service! Great work 😊 #BetterCity,2025-02-05T00:00:00,en,Mastodon,81,13,8,positive,joy,support,transport,False
+p107,u17,The electric vehicles meeting starts at 10:00. More: https://example.org,2025-02-05T08:00:00,en,Forum,0,10,4,neutral,calm,neutral,electric vehicles,False
+p108,u18,"Great, another broken university app... just what we needed.",2025-02-05T16:00:00,en,Microblog,33,5,14,negative,anger,oppose,university,False
+p109,u19,"Fast, friendly, and reliable customer service support!",2025-02-06T00:00:00,en,Mastodon,90,13,0,positive,joy,support,customer service,False
+p110,u20,The public health meeting starts at 10:00. More: https://example.org,2025-02-06T08:00:00,en,Forum,9,30,4,neutral,calm,neutral,public health,False
+p111,u21,"Great, another broken transport app... just what we needed.",2025-02-06T16:00:00,de,Microblog,4,26,11,negative,anger,oppose,transport,True
+p112,u22,"Fast, friendly, and reliable electric vehicles support!",2025-02-07T00:00:00,en,Mastodon,70,4,13,positive,joy,support,electric vehicles,False
+p113,u23,The university meeting starts at 10:00. More: https://example.org,2025-02-07T08:00:00,en,Forum,5,9,11,neutral,calm,neutral,university,False
+p114,u24,The customer service service is not good and soooo slow 😠,2025-02-07T16:00:00,en,Microblog,45,6,7,negative,anger,oppose,customer service,False
+p115,u25,"Fast, friendly, and reliable public health support!",2025-02-08T00:00:00,en,Mastodon,13,11,13,positive,joy,support,public health,False
+p116,u26,@cityhelp shared a report about transport.,2025-02-08T08:00:00,en,Forum,95,4,7,neutral,calm,neutral,transport,False
+p117,u27,The electric vehicles service is not good and soooo slow 😠,2025-02-08T16:00:00,en,Microblog,22,28,13,negative,anger,oppose,electric vehicles,False
+p118,u28,I love the new university service! Great work 😊 #BetterCity,2025-02-09T00:00:00,en,Mastodon,22,23,10,positive,joy,support,university,False
+p119,u29,New customer service information was posted today.,2025-02-09T08:00:00,en,Forum,85,27,7,neutral,calm,neutral,customer service,False
+p120,u30,Very disappointed with the public health update. #fail,2025-02-09T16:00:00,en,Microblog,20,25,3,negative,anger,oppose,public health,False
+p121,u31,The transport update is excellent and very useful.,2025-02-10T00:00:00,de,Mastodon,4,27,15,positive,joy,support,transport,False
+p122,u32,The electric vehicles meeting starts at 10:00. More: https://example.org,2025-02-10T08:00:00,en,Forum,25,26,14,neutral,calm,neutral,electric vehicles,True
+p123,u33,Very disappointed with the university update. #fail,2025-02-10T16:00:00,en,Microblog,39,26,7,negative,anger,oppose,university,False
+p124,u34,I love the new customer service service! Great work 😊 #BetterCity,2025-02-11T00:00:00,en,Mastodon,3,21,6,positive,joy,support,customer service,False
+p125,u35,New public health information was posted today.,2025-02-11T08:00:00,en,Forum,42,8,2,neutral,calm,neutral,public health,False
+p126,u36,Very disappointed with the transport update. #fail,2025-02-11T16:00:00,en,Microblog,44,20,12,negative,anger,oppose,transport,False
+p127,u37,"Fast, friendly, and reliable electric vehicles support!",2025-02-12T00:00:00,en,Mastodon,68,10,0,positive,joy,support,electric vehicles,False
+p128,u38,The university meeting starts at 10:00. More: https://example.org,2025-02-12T08:00:00,en,Forum,33,5,8,neutral,calm,neutral,university,False
+p129,u39,The customer service service is not good and soooo slow 😠,2025-02-12T16:00:00,en,Microblog,13,19,13,negative,anger,oppose,customer service,False
+p130,u40,The public health update is excellent and very useful.,2025-02-13T00:00:00,en,Mastodon,93,25,10,positive,joy,support,public health,False
+p131,u41,New transport information was posted today.,2025-02-13T08:00:00,de,Forum,77,16,3,neutral,calm,neutral,transport,False
+p132,u42,Very disappointed with the electric vehicles update. #fail,2025-02-13T16:00:00,en,Microblog,73,6,8,negative,anger,oppose,electric vehicles,False
+p133,u43,I love the new university service! Great work 😊 #BetterCity,2025-02-14T00:00:00,en,Mastodon,90,13,0,positive,joy,support,university,True
+p134,u44,@cityhelp shared a report about customer service.,2025-02-14T08:00:00,en,Forum,68,21,6,neutral,calm,neutral,customer service,False
+p135,u45,Very disappointed with the public health update. #fail,2025-02-14T16:00:00,en,Microblog,55,2,10,negative,anger,oppose,public health,False
+p136,u01,"Fast, friendly, and reliable transport support!",2025-02-15T00:00:00,en,Mastodon,40,21,3,positive,joy,support,transport,False
+p137,u02,@cityhelp shared a report about electric vehicles.,2025-02-15T08:00:00,en,Forum,38,16,9,neutral,calm,neutral,electric vehicles,False
+p138,u03,"Great, another broken university app... just what we needed.",2025-02-15T16:00:00,en,Microblog,52,10,12,negative,anger,oppose,university,False
+p139,u04,"Fast, friendly, and reliable customer service support!",2025-02-16T00:00:00,en,Mastodon,37,17,4,positive,joy,support,customer service,False
+p140,u05,The public health meeting starts at 10:00. More: https://example.org,2025-02-16T08:00:00,en,Forum,53,21,12,neutral,calm,neutral,public health,False
+p141,u06,"Great, another broken transport app... just what we needed.",2025-02-16T16:00:00,de,Microblog,95,28,5,negative,anger,oppose,transport,False
+p142,u07,"Fast, friendly, and reliable electric vehicles support!",2025-02-17T00:00:00,en,Mastodon,72,9,12,positive,joy,support,electric vehicles,False
+p143,u08,@cityhelp shared a report about university.,2025-02-17T08:00:00,en,Forum,0,9,9,neutral,calm,neutral,university,False
+p144,u09,The customer service service is not good and soooo slow 😠,2025-02-17T16:00:00,en,Microblog,55,25,10,negative,anger,oppose,customer service,True
+p145,u10,The public health update is excellent and very useful.,2025-02-18T00:00:00,en,Mastodon,56,14,6,positive,joy,support,public health,False
+p146,u11,@cityhelp shared a report about transport.,2025-02-18T08:00:00,en,Forum,60,25,5,neutral,calm,neutral,transport,False
+p147,u12,"Great, another broken electric vehicles app... just what we needed.",2025-02-18T16:00:00,en,Microblog,10,9,10,negative,anger,oppose,electric vehicles,False
+p148,u13,I love the new university service! Great work 😊 #BetterCity,2025-02-19T00:00:00,en,Mastodon,96,7,9,positive,joy,support,university,False
+p149,u14,The customer service meeting starts at 10:00. More: https://example.org,2025-02-19T08:00:00,en,Forum,25,4,0,neutral,calm,neutral,customer service,False
+p150,u15,The public health service is not good and soooo slow 😠,2025-02-19T16:00:00,en,Microblog,31,15,2,negative,anger,oppose,public health,False
+p151,u16,The transport update is excellent and very useful.,2025-02-20T00:00:00,de,Mastodon,53,28,6,positive,joy,support,transport,False
+p152,u17,@cityhelp shared a report about electric vehicles.,2025-02-20T08:00:00,en,Forum,89,12,15,neutral,calm,neutral,electric vehicles,False
+p153,u18,Very disappointed with the university update. #fail,2025-02-20T16:00:00,en,Microblog,31,4,0,negative,anger,oppose,university,False
+p154,u19,I love the new customer service service! Great work 😊 #BetterCity,2025-02-21T00:00:00,en,Mastodon,99,13,7,positive,joy,support,customer service,False
+p155,u20,The public health meeting starts at 10:00. More: https://example.org,2025-02-21T08:00:00,en,Forum,89,16,14,neutral,calm,neutral,public health,True
+p156,u21,The transport service is not good and soooo slow 😠,2025-02-21T16:00:00,en,Microblog,71,7,3,negative,anger,oppose,transport,False
+p157,u22,The electric vehicles update is excellent and very useful.,2025-02-22T00:00:00,en,Mastodon,17,25,14,positive,joy,support,electric vehicles,False
+p158,u23,@cityhelp shared a report about university.,2025-02-22T08:00:00,en,Forum,67,17,10,neutral,calm,neutral,university,False
+p159,u24,Very disappointed with the customer service update. #fail,2025-02-22T16:00:00,en,Microblog,78,26,13,negative,anger,oppose,customer service,False
+p160,u25,"Fast, friendly, and reliable public health support!",2025-02-23T00:00:00,en,Mastodon,57,28,5,positive,joy,support,public health,False
+p161,u26,@cityhelp shared a report about transport.,2025-02-23T08:00:00,de,Forum,60,14,8,neutral,calm,neutral,transport,False
+p162,u27,The electric vehicles service is not good and soooo slow 😠,2025-02-23T16:00:00,en,Microblog,81,8,15,negative,anger,oppose,electric vehicles,False
+p163,u28,"Fast, friendly, and reliable university support!",2025-02-24T00:00:00,en,Mastodon,30,8,14,positive,joy,support,university,False
+p164,u29,The customer service meeting starts at 10:00. More: https://example.org,2025-02-24T08:00:00,en,Forum,91,9,7,neutral,calm,neutral,customer service,False
+p165,u30,Very disappointed with the public health update. #fail,2025-02-24T16:00:00,en,Microblog,42,10,2,negative,anger,oppose,public health,False
+p166,u31,I love the new transport service! Great work 😊 #BetterCity,2025-02-25T00:00:00,en,Mastodon,19,7,12,positive,joy,support,transport,True
+p167,u32,@cityhelp shared a report about electric vehicles.,2025-02-25T08:00:00,en,Forum,19,22,6,neutral,calm,neutral,electric vehicles,False
+p168,u33,The university service is not good and soooo slow 😠,2025-02-25T16:00:00,en,Microblog,53,13,10,negative,anger,oppose,university,False
+p169,u34,"Fast, friendly, and reliable customer service support!",2025-02-26T00:00:00,en,Mastodon,59,13,1,positive,joy,support,customer service,False
+p170,u35,The public health meeting starts at 10:00. More: https://example.org,2025-02-26T08:00:00,en,Forum,53,12,0,neutral,calm,neutral,public health,False
+p171,u36,"Great, another broken transport app... just what we needed.",2025-02-26T16:00:00,de,Microblog,48,15,0,negative,anger,oppose,transport,False
+p172,u37,The electric vehicles update is excellent and very useful.,2025-02-27T00:00:00,en,Mastodon,38,24,12,positive,joy,support,electric vehicles,False
+p173,u38,New university information was posted today.,2025-02-27T08:00:00,en,Forum,68,23,7,neutral,calm,neutral,university,False
+p174,u39,Very disappointed with the customer service update. #fail,2025-02-27T16:00:00,en,Microblog,28,8,13,negative,anger,oppose,customer service,False
+p175,u40,The public health update is excellent and very useful.,2025-02-28T00:00:00,en,Mastodon,3,12,10,positive,joy,support,public health,False
+p176,u41,@cityhelp shared a report about transport.,2025-02-28T08:00:00,en,Forum,86,25,12,neutral,calm,neutral,transport,False
+p177,u42,"Great, another broken electric vehicles app... just what we needed.",2025-02-28T16:00:00,en,Microblog,21,26,14,negative,anger,oppose,electric vehicles,True
+p178,u43,I love the new university service! Great work 😊 #BetterCity,2025-03-01T00:00:00,en,Mastodon,79,17,0,positive,joy,support,university,False
+p179,u44,New customer service information was posted today.,2025-03-01T08:00:00,en,Forum,75,18,0,neutral,calm,neutral,customer service,False
+p180,u45,The public health service is not good and soooo slow 😠,2025-03-01T16:00:00,en,Microblog,82,13,4,negative,anger,oppose,public health,False
+p006,u06,"Great, another broken transport app... just what we needed.",2025-01-02T16:00:00,en,Microblog,25,22,13,negative,anger,oppose,transport,False
+p018,u18,The university service is not good and soooo slow 😠,2025-01-06T16:00:00,en,Microblog,29,27,3,negative,anger,oppose,university,False
