@@ -1,0 +1,985 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ch1 · Foundations of Social Media Analytics</title>
+<style>:root{
+  --bg:#f7f5f2; --surface:#ffffff; --surface2:#f1eee9; --ink:#1f1d1a; --muted:#5f5a53; --line:#e3ded6;
+  --accent:#c2255c; --accent-soft:#fce4ec; --blue:#1f5fa8; --blue-soft:#e6eef8; --green:#21794f; --green-soft:#e2f2ea;
+  --amber:#9a5a0f; --amber-soft:#fbf0de; --purple:#5a43a6; --purple-soft:#ece8f8; --red:#b42318; --red-soft:#fde8e6;
+  --code-bg:#1e1f24; --code-ink:#e8e6e3; --shadow:0 1px 2px rgba(0,0,0,.05),0 4px 16px rgba(0,0,0,.05);
+  --radius:14px; --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#141312; --surface:#1d1c1a; --surface2:#262421; --ink:#eeebe6; --muted:#a8a29a; --line:#35322e;
+  --accent:#f06595; --accent-soft:#3a1a26; --blue:#7fb0ec; --blue-soft:#1a2738; --green:#6fcf9f; --green-soft:#173027;
+  --amber:#e8b062; --amber-soft:#33281a; --purple:#b3a3f0; --purple-soft:#26213a; --red:#f2877d; --red-soft:#3a1d1a;
+  --code-bg:#0f0f11; --shadow:0 1px 2px rgba(0,0,0,.4);
+}}
+:root[data-theme="dark"]{
+  --bg:#141312; --surface:#1d1c1a; --surface2:#262421; --ink:#eeebe6; --muted:#a8a29a; --line:#35322e;
+  --accent:#f06595; --accent-soft:#3a1a26; --blue:#7fb0ec; --blue-soft:#1a2738; --green:#6fcf9f; --green-soft:#173027;
+  --amber:#e8b062; --amber-soft:#33281a; --purple:#b3a3f0; --purple-soft:#26213a; --red:#f2877d; --red-soft:#3a1d1a;
+  --code-bg:#0f0f11; --shadow:0 1px 2px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+code{font-family:var(--mono);font-size:.88em;background:var(--surface2);padding:.1em .35em;border-radius:5px}
+h1,h2,h3,h4{line-height:1.25;margin:0 0 .5em}
+h2{font-size:1.65rem;letter-spacing:-.01em}
+h3{font-size:1.15rem}
+p{margin:0 0 1em}
+.topbar{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topbar-inner{max-width:1240px;margin:0 auto;display:flex;align-items:center;gap:16px;padding:10px 20px}
+.brand{font-weight:700;color:var(--accent);text-decoration:none;white-space:nowrap}
+.chapnav{display:flex;gap:6px;overflow-x:auto;flex:1}
+.chapnav a{padding:6px 12px;border-radius:999px;text-decoration:none;color:var(--muted);font-size:.9rem;white-space:nowrap;border:1px solid transparent}
+.chapnav a.on{background:var(--accent-soft);color:var(--accent);border-color:color-mix(in srgb,var(--accent) 30%,transparent);font-weight:600}
+.iconbtn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 12px;cursor:pointer;font-size:.85rem}
+.progress{height:3px;background:var(--accent);width:0;transition:width .1s}
+.hero{max-width:1240px;margin:0 auto;padding:48px 20px 24px}
+.hero .kicker{color:var(--accent);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.8rem}
+.hero h1{font-size:clamp(1.9rem,4vw,2.8rem);letter-spacing:-.02em;margin:.2em 0 .35em}
+.hero p.lead{font-size:1.12rem;color:var(--muted);max-width:760px}
+.objectives{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:20px}
+.objectives div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:.93rem}
+.objectives b{display:block;color:var(--accent);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase}
+.layout{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:230px minmax(0,1fr);gap:32px;padding:0 20px 80px}
+.toc{position:sticky;top:76px;align-self:start;max-height:calc(100vh - 96px);overflow:auto;font-size:.9rem}
+.toc h4{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.toc a{display:flex;gap:8px;align-items:center;padding:5px 8px;border-radius:8px;color:var(--muted);text-decoration:none;border-left:2px solid transparent}
+.toc a.active{color:var(--ink);background:var(--surface);border-left-color:var(--accent)}
+.toc a .dot{width:8px;height:8px;border-radius:50%;border:1.5px solid var(--line);flex:none}
+.toc a.done .dot{background:var(--green);border-color:var(--green)}
+section.chap{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:28px;margin-bottom:24px;box-shadow:var(--shadow)}
+section.chap > .sec-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:8px}
+.secnum{color:var(--accent);font-weight:700;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase}
+.donebtn{border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:999px;padding:4px 10px;font-size:.8rem;cursor:pointer;white-space:nowrap}
+.donebtn.on{background:var(--green-soft);color:var(--green);border-color:var(--green)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.card{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:16px}
+.card h4{margin-bottom:.3em}
+.card p:last-child{margin-bottom:0}
+.callout{border-left:4px solid var(--accent);background:var(--accent-soft);padding:12px 16px;border-radius:0 10px 10px 0;margin:16px 0}
+.callout.green{border-color:var(--green);background:var(--green-soft)}
+.callout.blue{border-color:var(--blue);background:var(--blue-soft)}
+.callout.amber{border-color:var(--amber);background:var(--amber-soft)}
+.callout b:first-child{display:block;margin-bottom:2px}
+.analogy{display:flex;gap:12px;background:var(--purple-soft);border-radius:12px;padding:14px 16px;margin:16px 0}
+.analogy .ico{font-size:1.5rem;line-height:1}
+.tag{display:inline-block;padding:2px 9px;border-radius:999px;font-size:.78rem;font-weight:600;background:var(--surface2);border:1px solid var(--line);color:var(--muted)}
+.tag.blue{background:var(--blue-soft);color:var(--blue);border-color:transparent}
+.tag.green{background:var(--green-soft);color:var(--green);border-color:transparent}
+.tag.amber{background:var(--amber-soft);color:var(--amber);border-color:transparent}
+.tag.red{background:var(--red-soft);color:var(--red);border-color:transparent}
+.tag.purple{background:var(--purple-soft);color:var(--purple);border-color:transparent}
+.widget{border:1px dashed color-mix(in srgb,var(--accent) 45%,var(--line));border-radius:12px;padding:18px;margin:18px 0;background:var(--bg)}
+.widget > .wtitle{display:flex;align-items:center;gap:8px;font-weight:700;margin-bottom:10px}
+.widget > .wtitle::before{content:"▶ TRY IT";font-size:.7rem;letter-spacing:.08em;background:var(--accent);color:#fff;padding:2px 8px;border-radius:999px}
+.btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:7px 14px;border-radius:9px;cursor:pointer;font:inherit;font-size:.92rem}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.sel{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);font-weight:600}
+.btnrow{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+input[type=text],input[type=number],select,textarea{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:7px 10px}
+textarea{font-family:var(--mono);font-size:.85rem;width:100%}
+label{font-size:.9rem}
+input[type=range]{accent-color:var(--accent);width:100%}
+.tablewrap{overflow-x:auto;margin:10px 0}
+table{border-collapse:collapse;width:100%;font-size:.88rem}
+th,td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--surface2);font-weight:600;white-space:nowrap}
+td.bad,span.bad{background:var(--red-soft);color:var(--red)}
+td.good{background:var(--green-soft);color:var(--green)}
+td.warn{background:var(--amber-soft);color:var(--amber)}
+tr.hl td{background:var(--accent-soft)}
+td[contenteditable]{outline:none;cursor:text}
+td[contenteditable]:focus{box-shadow:inset 0 0 0 2px var(--accent)}
+pre{background:var(--code-bg);color:var(--code-ink);border-radius:10px;padding:14px 16px;overflow:auto;font:13px/1.55 var(--mono);position:relative;margin:10px 0}
+pre code{background:none;padding:0;color:inherit;font-size:inherit}
+pre .copy{position:absolute;top:8px;right:8px;font-size:.72rem;background:#ffffff1a;color:#ddd;border:1px solid #ffffff30;border-radius:6px;padding:2px 8px;cursor:pointer}
+.c-k{color:#f4a261}.c-s{color:#9ad59a}.c-c{color:#8b8f98;font-style:italic}.c-n{color:#82b8ff}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:14px;overflow-x:auto}
+.tabs button{border:0;background:none;color:var(--muted);padding:9px 14px;cursor:pointer;font:inherit;font-size:.93rem;border-bottom:2px solid transparent;white-space:nowrap}
+.tabs button.on{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+.tabpanel{display:none}.tabpanel.on{display:block}
+details.reveal{background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:8px 0}
+details.reveal summary{cursor:pointer;font-weight:600}
+.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.links a{display:block;text-decoration:none;color:var(--ink);background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;transition:border-color .15s,transform .15s}
+.links a:hover{border-color:var(--accent);transform:translateY(-1px)}
+.links a b{display:block;color:var(--accent);font-size:.95rem}
+.links a span{font-size:.84rem;color:var(--muted)}
+.quiz .q{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:10px 0}
+.quiz .q p{font-weight:600;margin-bottom:8px}
+.quiz .opts{display:grid;gap:6px}
+.quiz .opts button{text-align:left;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:9px;padding:8px 12px;cursor:pointer;font:inherit;font-size:.93rem}
+.quiz .opts button.right{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.quiz .opts button.wrong{background:var(--red-soft);border-color:var(--red);color:var(--red)}
+.quiz .why{display:none;margin-top:8px;font-size:.9rem;color:var(--muted)}
+.quiz .q.answered .why{display:block}
+.score{font-weight:700;color:var(--accent)}
+.flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;margin:12px 0}
+.flow .step{flex:1 1 130px;background:var(--surface2);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer;transition:all .15s;position:relative}
+.flow .step small{display:block;color:var(--muted);font-size:.8rem}
+.flow .step.on{border-color:var(--accent);background:var(--accent-soft)}
+.flow .arrow{align-self:center;color:var(--muted)}
+.feedback{margin-top:10px;padding:10px 12px;border-radius:9px;font-size:.92rem;display:none}
+.feedback.show{display:block}
+.feedback.ok{background:var(--green-soft);color:var(--green)}
+.feedback.no{background:var(--red-soft);color:var(--red)}
+.feedback.info{background:var(--blue-soft);color:var(--blue)}
+.meter{height:10px;background:var(--surface2);border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+.meter > div{height:100%;background:var(--green);transition:width .3s}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:10px 0}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.kpi .v{font-size:1.5rem;font-weight:700}
+.kpi .l{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.sorter{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.bucket{min-height:110px;border:2px dashed var(--line);border-radius:10px;padding:8px}
+.bucket h5{margin:0 0 6px;font-size:.85rem}
+.bucket.over{border-color:var(--accent);background:var(--accent-soft)}
+.chip{display:inline-block;margin:3px;padding:5px 10px;border-radius:8px;background:var(--surface);border:1px solid var(--line);font-size:.85rem;cursor:grab;user-select:none}
+.chip.sel{outline:2px solid var(--accent)}
+.chip.right{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.chip.wrong{background:var(--red-soft);border-color:var(--red);color:var(--red)}
+.pool{min-height:50px;padding:8px;border-radius:10px;background:var(--surface2);margin-bottom:10px}
+.small{font-size:.86rem;color:var(--muted)}
+.foot{max-width:1240px;margin:0 auto;padding:20px;color:var(--muted);font-size:.85rem;text-align:center}
+svg text{font-family:inherit}
+@media (max-width:900px){
+  .layout{grid-template-columns:minmax(0,1fr)}
+  .toc{display:none}
+  section.chap{padding:18px}
+  .hero{padding:28px 16px 16px}
+  .layout{padding:0 16px 60px}
+  .topbar-inner{padding:8px 16px}
+}
+@media print{.topbar,.toc,.widget,.donebtn{display:none}.layout{display:block}}
+@media (max-width:700px){#doneCount{display:none}.brand{display:none}}
+
+
+/* ---------- additions for the Social Media Analytics guides ---------- */
+.post{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;max-width:560px;box-shadow:var(--shadow)}
+.post .ph{display:flex;gap:10px;align-items:center}
+.post .av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--purple));flex:none}
+.post .nm{font-weight:700}.post .meta{font-size:.82rem;color:var(--muted)}
+.post .tx{margin:10px 0;font-size:1.02rem}
+.post .eng{display:flex;gap:18px;font-size:.88rem;color:var(--muted)}
+.hot{cursor:pointer;border-radius:6px;padding:1px 3px;transition:background .15s,box-shadow .15s}
+.hot:hover{background:var(--accent-soft)}
+.hot.on{background:var(--accent-soft);box-shadow:0 0 0 2px var(--accent)}
+.zone{cursor:pointer;border-radius:10px;transition:box-shadow .15s}
+.zone.on{box-shadow:0 0 0 2px var(--accent)}
+.flipgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.flip{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;min-height:92px;transition:border-color .15s}
+.flip:hover{border-color:var(--accent)}
+.flip .b{display:none;color:var(--muted);font-size:.9rem;margin-top:6px}
+.flip.open .b{display:block}
+.flip .h{font-weight:700}
+.flip .h::after{content:" ＋";color:var(--accent);font-weight:400}
+.flip.open .h::after{content:" −"}
+.gsvg{width:100%;height:auto;display:block;background:var(--surface);border:1px solid var(--line);border-radius:12px;touch-action:manipulation}
+.gsvg line{stroke:var(--line);stroke-width:1.4}
+.gsvg line.hl{stroke:var(--accent);stroke-width:2.6}
+.gsvg line.cross{stroke:var(--red);stroke-width:2.2}
+.gsvg line.fail{stroke:var(--red);stroke-dasharray:4 3}
+.gsvg circle{stroke:var(--surface);stroke-width:1.5;cursor:pointer;transition:r .2s}
+.gsvg circle.sel{stroke:var(--ink);stroke-width:3}
+.gsvg text{font-size:10px;fill:var(--ink);pointer-events:none;text-anchor:middle;dominant-baseline:central}
+.gsvg text.on{fill:#fff;font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:.85rem;color:var(--muted);margin:6px 0}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.bars{display:grid;gap:6px;margin:8px 0}
+.bars .row{display:grid;grid-template-columns:minmax(90px,170px) 1fr 64px;gap:8px;align-items:center;font-size:.88rem}
+.bars .track{background:var(--surface2);border-radius:6px;height:18px;overflow:hidden;border:1px solid var(--line)}
+.bars .fill{height:100%;background:var(--accent);transition:width .35s}
+.bars .fill.g{background:var(--green)}.bars .fill.b{background:var(--blue)}.bars .fill.a{background:var(--amber)}.bars .fill.p{background:var(--purple)}.bars .fill.r{background:var(--red)}.bars .fill.m{background:var(--muted)}
+.bars .val{font-variant-numeric:tabular-nums;text-align:right}
+.mono{font-family:var(--mono);font-size:.86rem}
+.out{background:var(--surface2);border:1px solid var(--line);border-radius:9px;padding:9px 12px;font-family:var(--mono);font-size:.85rem;white-space:pre-wrap;word-break:break-word;margin:6px 0}
+.pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:.8rem;font-weight:600}
+.pill.pos{background:var(--green-soft);color:var(--green)}.pill.neg{background:var(--red-soft);color:var(--red)}.pill.neu{background:var(--surface2);color:var(--muted);border:1px solid var(--line)}.pill.mix{background:var(--amber-soft);color:var(--amber)}
+.tok{display:inline-block;margin:2px;padding:2px 7px;border-radius:7px;background:var(--surface2);border:1px solid var(--line);font-family:var(--mono);font-size:.82rem}
+.tok.pos{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.tok.neg{background:var(--red-soft);border-color:var(--red);color:var(--red)}
+.tok.gone{text-decoration:line-through;opacity:.55;background:var(--red-soft)}
+.tok.keep{background:var(--blue-soft);border-color:var(--blue);color:var(--blue)}
+.gauge{position:relative;height:16px;border-radius:99px;background:linear-gradient(90deg,var(--red),var(--surface2) 50%,var(--green));border:1px solid var(--line);margin:22px 0 8px}
+.gauge .needle{position:absolute;top:-6px;width:4px;height:28px;background:var(--ink);border-radius:2px;transition:left .3s;transform:translateX(-2px)}
+.gauge .lab{position:absolute;top:-22px;transform:translateX(-50%);font-weight:700;font-size:.85rem;white-space:nowrap;transition:left .3s}
+.check{display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px dashed var(--line)}
+.check input{margin-top:5px;accent-color:var(--accent)}
+.canvas8{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.canvas8 label{display:block;background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:10px}
+.canvas8 label b{display:block;font-size:.8rem;color:var(--accent);letter-spacing:.05em;text-transform:uppercase}
+.canvas8 textarea{font-family:inherit;font-size:.9rem;min-height:70px;margin-top:6px}
+.matrix input{width:64px;text-align:center}
+.cm td{text-align:center;font-variant-numeric:tabular-nums}
+.timeline{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.timeline .t{flex:1 0 120px;background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:10px;font-size:.88rem}
+.timeline .t b{display:block;color:var(--accent);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase}
+.timeline .t.now{border-color:var(--accent);background:var(--accent-soft)}
+select.lbl{font-size:.85rem;padding:4px 6px}
+td.ok{background:var(--green-soft)}td.no{background:var(--red-soft)}
+.big{font-size:2rem;font-weight:800;letter-spacing:-.02em}
+.dash{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:14px}
+.kicker2{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+</style></head>
+<body data-chapter="1">
+<div class="topbar"><div class="topbar-inner"><a class="brand" href="index.html">Social Media Analytics</a><nav class="chapnav"><a href="Chapter1_Foundations.html" class="on">Ch 1 · Foundations</a><a href="Chapter2_Preprocessing_Classical_Sentiment.html" class="">Ch 2 · Preprocessing & VADER</a><a href="Chapter3_Transformers_LLMs.html" class="">Ch 3 · Transformers & LLMs</a><a href="Chapter4_Networks_Influence_Communities.html" class="">Ch 4 · Networks I</a><a href="Chapter5_Information_Diffusion.html" class="">Ch 5 · Diffusion</a><a href="Chapter6_Advanced_Topics_Project.html" class="">Ch 6 · Topics & Project</a></nav><span class="small" id="doneCount"></span><button class="iconbtn" id="themeBtn">☾ Dark</button></div><div class="progress" id="progress"></div></div>
+<header class="hero" id="top">
+  <div class="kicker">Chapter 1 · Interactive study guide</div>
+  <h1>Foundations of Social Media Analytics &amp; Sentiment Analysis</h1>
+  <p class="lead">Every day, billions of people post, comment, like and share. Together these traces show <b>what people think, how they feel, and how ideas move between them</b>. This chapter gives you the foundation: what the field is, what social media data looks like, why it is hard, and how to work with it responsibly. <b>Social media data is rich, fast and personal — understand it before you model it.</b></p>
+  <div class="objectives">
+    <div><b>You will be able to</b>Explain social media analytics and sentiment analysis</div>
+    <div><b>You will be able to</b>Take a post apart into text, metadata, engagement and network</div>
+    <div><b>You will be able to</b>Choose label sets and levels; separate sentiment, emotion and stance</div>
+    <div><b>You will be able to</b>Name ethics, GDPR and bias risks — and profile a dataset in pandas</div>
+  </div>
+</header>
+<div class="layout">
+<aside class="toc"><h4>In this chapter</h4><nav id="tocList"></nav></aside>
+<main>
+
+<section class="chap" id="warmup" data-title="Warm-up & course map">
+  <div class="sec-head"><div><div class="secnum">Section 1</div><h2>Warm-up &amp; the course map</h2></div></div>
+  <div class="callout blue"><b>Warm-up (2 minutes)</b>What comes to mind when you hear “social media analytics”? One word or a short phrase. Follow-up: <i>has a post ever changed your opinion about a product, a person or a policy?</i> If yes, you have already experienced the effect this course measures.</div>
+  <div class="widget"><div class="wtitle">Your word cloud</div>
+    <p class="small">Type words separated by commas (e.g. <i>sentiment, likes, influencers, trends, fake news</i>). They are grouped by the course chapter that deals with them.</p>
+    <input type="text" id="wcIn" style="width:100%" value="sentiment, likes, influencers, trends, marketing, fake news, hashtags, emojis, bots, communities, viral, privacy">
+    <div id="wcOut" style="margin-top:10px"></div>
+  </div>
+  <h3>A six-chapter path from posts to trustworthy insight</h3>
+  <div class="flow" id="courseFlow"></div>
+  <div class="feedback show info" id="courseMsg"></div>
+  <div class="kpis" style="margin-top:16px">
+    <div class="kpi"><div class="v">5.66 bn</div><div class="l">social media user identities (Oct 2025)</div></div>
+    <div class="kpi"><div class="v">68.7%</div><div class="l">of world population (identities ÷ population)</div></div>
+    <div class="kpi"><div class="v">2.5 h+</div><div class="l">per day on social &amp; video platforms</div></div>
+    <div class="kpi"><div class="v">6.75</div><div class="l">platforms used each month (online adults)</div></div>
+  </div>
+  <p class="small">Source: DataReportal, <i>Digital 2026 Global Overview Report</i> (Kepios; GWI). Note: user <b>identities</b> are not unique people — one person can hold several accounts.</p>
+  <div class="grid2" style="margin-top:10px">
+    <div class="card"><h4>Grading</h4><div id="gradeBars"></div></div>
+    <div class="card"><h4>Where to find things</h4><p class="small"><b>Moodle</b> — slides, labs, exercises, project task, all submissions (submit <u>only</u> via Moodle).<br><b>GitHub</b> — notebooks, datasets and these interactive pages.<br><b>MS Teams</b> — quick questions and group coordination.</p></div>
+  </div>
+</section>
+
+<section class="chap" id="why" data-title="Why careful analysis matters">
+  <div class="sec-head"><div><div class="secnum">Section 2</div><h2>Why careful social media analysis matters</h2></div></div>
+  <p>Social media gives <b>fast answers — sometimes to the wrong question</b>. Click each card to see what goes wrong without care.</p>
+  <div class="flipgrid">
+    <div class="flip"><div class="h">Misread opinions</div><div class="b">Sarcasm and negation flip the meaning: <i>“Great, another delay”</i> is a complaint, not praise.</div></div>
+    <div class="flip"><div class="h">Unrepresentative samples</div><div class="b">The loudest users of one platform are not “the public”. Students tweeting about a university policy may be far more vocal than everyone else.</div></div>
+    <div class="flip"><div class="h">Inflated signals</div><div class="b">Bots, spam and duplicates make a topic look bigger. One person with many bot accounts can turn a small issue into a “major public concern”.</div></div>
+    <div class="flip"><div class="h">Privacy harm</div><div class="b">Quoting or profiling identifiable users can hurt real people and break GDPR — even if the post is public.</div></div>
+  </div>
+  <h3 style="margin-top:20px">From posts to insight — the whole course on one line</h3>
+  <div class="flow" id="pipeFlow"></div>
+  <div class="feedback show info" id="pipeMsg"></div>
+  <div class="callout amber"><b>Every step: ethics, GDPR &amp; bias</b><b>Data minimisation</b> — collect only what your question needs. <b>Pseudonymisation</b> — replace usernames/IDs. <b>Representativeness</b> — whose voices are missing? <b>Transparency</b> — say where data came from, how you processed it, and its limits.</div>
+</section>
+
+<section class="chap" id="defs" data-title="SMA vs. sentiment analysis">
+  <div class="sec-head"><div><div class="secnum">Section 3</div><h2>What is social media analytics — and sentiment analysis?</h2></div></div>
+  <div class="grid2">
+    <div class="card"><h4>Social media analytics (SMA)</h4><p>The process of <b>collecting, preparing, analysing and interpreting</b> social media data to understand people, opinions and interactions. It combines NLP, machine learning, statistics, visualization and network science.</p></div>
+    <div class="card"><h4>Sentiment analysis (SA)</h4><p>The automatic identification of <b>opinions, attitudes and evaluations</b> in text. The most common task is <b>polarity classification</b>: positive · neutral · negative.</p></div>
+  </div>
+  <div class="flow" id="smaFlow"></div>
+  <div class="feedback show info" id="smaMsg"></div>
+  <div class="tablewrap"><table>
+    <tr><th>Text</th><th>Label</th><th>Why</th></tr>
+    <tr><td>“This course is really useful.”</td><td><span class="pill pos">positive</span></td><td>clear positive evaluation</td></tr>
+    <tr><td>“The course starts at 9:30.”</td><td><span class="pill neu">neutral</span></td><td>a fact, no evaluation</td></tr>
+    <tr><td>“The course is confusing and too fast.”</td><td><span class="pill neg">negative</span></td><td>clear negative evaluation</td></tr>
+  </table></div>
+  <div class="analogy"><div class="ico">🔍</div><div><b>Sentiment analysis sits inside social media analytics.</b> SMA asks about topics, influence, engagement, spread and communities. SA zooms in on one question: <i>is the opinion positive, neutral or negative — and how does that change?</i></div></div>
+  <div class="widget"><div class="wtitle">Which field asks this question?</div><div id="sortField"></div></div>
+</section>
+
+<section class="chap" id="different" data-title="Why the data is different">
+  <div class="sec-head"><div><div class="secnum">Section 4</div><h2>Why social media data is different</h2></div></div>
+  <p>Social media text is <b>not newspaper text</b>. Click a property to see a real-style example.</p>
+  <div class="flipgrid">
+    <div class="flip"><div class="h">⚡ Fast</div><div class="b">A complaint about a delayed train can trend within an hour; topics change within hours.</div></div>
+    <div class="flip"><div class="h">💬 Informal</div><div class="b">“omg this app is sooo bad 😭” — slang, creative spelling, emojis.</div></div>
+    <div class="flip"><div class="h">📢 Noisy</div><div class="b">The same advert posted many times by bots or spam accounts; typos everywhere.</div></div>
+    <div class="flip"><div class="h">✂️ Short</div><div class="b">“Not again!” — almost no information without context.</div></div>
+    <div class="flip"><div class="h">🌍 Multilingual</div><div class="b">“Das Konzert was amazing!” — German and English in one post.</div></div>
+    <div class="flip"><div class="h">🕸 Networked</div><div class="b">Posts reply to, mention and share others; popularity comes from the network.</div></div>
+    <div class="flip"><div class="h">🖼 Multimodal</div><div class="b">A photo of a broken product with the caption “Very disappointed.”</div></div>
+    <div class="flip"><div class="h">🧭 Context-dependent</div><div class="b">“Great job!” can be praise or sarcasm depending on the thread.</div></div>
+  </div>
+</section>
+
+<section class="chap" id="anatomy" data-title="Anatomy of a post">
+  <div class="sec-head"><div><div class="secnum">Section 5</div><h2>Anatomy of a social media post</h2></div></div>
+  <p>A post is <b>much more than its text</b>. Click the coloured parts of the post — or the buttons — to see which kind of data each part is.</p>
+  <div class="grid2">
+    <div>
+      <div class="post">
+        <div class="ph zone" data-z="meta"><div class="av"></div><div><div class="nm">EV Driver <span class="meta">@ev_driver_92</span></div><div class="meta">14:05 · 4 Mar 2026 · English · mobile app</div></div></div>
+        <div class="meta zone" data-z="net" style="margin-top:6px">Replying to <span style="color:var(--blue)">@news_daily</span></div>
+        <div class="tx zone" data-z="text">Range dropped 30% in the cold again 🥶 <span style="color:var(--blue)" class="zone" data-z="net">@CarBrand</span> really? <span style="color:var(--blue)">#EV #winter</span> not impressed <span style="color:var(--blue)">https://t.co/x7…</span></div>
+        <div class="eng zone" data-z="eng"><span>💬 12</span><span>🔁 37</span><span>❤️ 128</span><span>👁 4.1k</span></div>
+      </div>
+      <div class="btnrow" id="zoneBtns" style="margin-top:12px"></div>
+    </div>
+    <div><div class="card" id="zoneInfo" style="min-height:220px"></div></div>
+  </div>
+</section>
+
+<section class="chap" id="fourtypes" data-title="Four kinds of data">
+  <div class="sec-head"><div><div class="secnum">Section 6</div><h2>Four kinds of social media data</h2></div></div>
+  <div class="tablewrap"><table>
+    <tr><th>Aspect</th><th>Text — what is said</th><th>Metadata — context</th><th>Engagement — reactions</th><th>Network — who connects</th></tr>
+    <tr><td>Example fields</td><td>text, hashtags, emojis, URLs</td><td>created_at, lang, platform, user_id</td><td>likes, shares, replies, views</td><td>follows, mentions, replies, reposts</td></tr>
+    <tr><td>Typical pandas type</td><td><code>object</code> (string)</td><td><code>datetime64</code>, <code>category</code></td><td><code>int64</code> (counts)</td><td>edge list: source → target</td></tr>
+    <tr><td>Questions it answers</td><td>What do people say and feel?</td><td>When, where, which language?</td><td>Which posts resonate?</td><td>Who influences whom?</td></tr>
+    <tr><td>Main chapters</td><td>2–3</td><td>1 (profiling)</td><td>1 &amp; 6</td><td>4–5</td></tr>
+  </table></div>
+  <div class="widget"><div class="wtitle">Sort the fields into the four kinds of data</div><div id="sortTypes"></div></div>
+</section>
+
+<section class="chap" id="difficult" data-title="Why sentiment is difficult">
+  <div class="sec-head"><div><div class="secnum">Section 7</div><h2>Why social media sentiment is difficult</h2></div></div>
+  <p>Meaning is often <b>indirect</b>, so simple keyword matching fails. Below is a deliberately naive <b>keyword matcher</b> (it counts words from a tiny positive and negative list). Pick a challenge or type your own post — and compare the matcher with the real meaning.</p>
+  <div class="widget"><div class="wtitle">Keyword matcher vs. real meaning</div>
+    <div class="btnrow" id="kwBtns"></div>
+    <input type="text" id="kwIn" style="width:100%">
+    <div id="kwOut" style="margin-top:10px"></div>
+  </div>
+  <div class="callout"><b>Key message</b>Context, not keywords, decides the sentiment. Chapter 2 shows a smarter lexicon (VADER) — and Chapter 3 shows models that read context.</div>
+</section>
+
+<section class="chap" id="labels" data-title="Labels & levels">
+  <div class="sec-head"><div><div class="secnum">Section 8</div><h2>Types of sentiment labels &amp; levels of analysis</h2></div></div>
+  <div class="tabs" data-group="lab"><button class="on" data-tab="l3">3-class</button><button data-tab="l5">5-class</button><button data-tab="lx">Extra labels</button><button data-tab="lq">Questions about labels</button></div>
+  <div class="tabpanel on" data-group="lab" data-tab="l3"><p>The most common setting: <span class="pill neg">negative</span> <span class="pill neu">neutral</span> <span class="pill pos">positive</span>. “Love the new update!” → positive · “The event starts at 8:00.” → neutral · “This app keeps crashing.” → negative.</p></div>
+  <div class="tabpanel" data-group="lab" data-tab="l5"><p>Fine-grained sentiment, similar to 1–5-star ratings: very negative · negative · neutral · positive · very positive. More detail, but annotators disagree more on neighbouring classes.</p></div>
+  <div class="tabpanel" data-group="lab" data-tab="lx"><div class="tablewrap"><table><tr><th>Label</th><th>Meaning</th><th>Example</th></tr><tr><td><span class="pill mix">mixed</span></td><td>positive and negative together</td><td>“Good design but bad battery.”</td></tr><tr><td>unknown</td><td>annotators could not decide</td><td>“Well, that happened.”</td></tr><tr><td>not relevant</td><td>off-topic, spam or advertising</td><td>“Click here for free coins”</td></tr></table></div></div>
+  <div class="tabpanel" data-group="lab" data-tab="lq"><ul><li>Who created the labels — <b>humans or a model</b>?</li><li>Are the classes <b>balanced</b>?</li><li>Do annotators <b>agree</b>?</li></ul><div class="callout"><b>A label set is a design decision, not a fact.</b></div></div>
+  <h3 style="margin-top:18px">Levels of sentiment analysis</h3>
+  <div class="widget"><div class="wtitle">Zoom from document to aspect</div>
+    <div class="btnrow" id="lvlBtns"></div>
+    <div class="post" style="max-width:none"><div class="tx" id="lvlText"></div></div>
+    <div id="lvlOut" style="margin-top:10px"></div>
+    <p class="small">The finer the level, the more useful — and the harder for a model.</p>
+  </div>
+</section>
+
+<section class="chap" id="ses" data-title="Sentiment, emotion, stance">
+  <div class="sec-head"><div><div class="secnum">Section 9</div><h2>Sentiment, emotion and stance</h2></div></div>
+  <div class="post" style="max-width:none"><div class="tx">“I am worried about electric cars, but I fully support the new subsidy policy.”</div></div>
+  <div class="grid3" style="margin-top:12px">
+    <div class="card"><h4>Sentiment</h4><p class="small">Is the evaluation positive, neutral or negative?<br>Labels: positive · neutral · negative · mixed</p><p>Output: <span class="pill mix">mixed</span></p></div>
+    <div class="card"><h4>Emotion</h4><p class="small">Which feeling is expressed?<br>Labels: joy · anger · fear · sadness · surprise · disgust</p><p>Output: <b>fear (worry)</b></p></div>
+    <div class="card"><h4>Stance</h4><p class="small">Is the author in favour of or against a <b>target</b>?<br>Labels: favour · against · none (target: subsidy policy)</p><p>Output: <b>favour</b></p></div>
+  </div>
+  <div class="callout"><b>Same post, three questions, three different labels.</b>Emotion is not sentiment, and stance always needs a target.</div>
+  <div class="widget"><div class="wtitle">Activity 1.1 — label six posts about a city’s new e-scooter ban</div>
+    <p class="small">Label each post for sentiment, emotion and stance (target: the scooter ban). Then compare with the sample answer. Disagreement on posts 4–6 is expected — that is why real datasets need annotation guidelines and agreement checks.</p>
+    <div id="scooterLab"></div>
+  </div>
+  <div class="callout blue"><b>In class (pairs, 15 min)</b>Choose a topic, find a public Reddit or YouTube discussion, remove user names, label six short comments for sentiment, emotion and stance, then discuss every disagreement with your partner.</div>
+</section>
+
+<section class="chap" id="uses" data-title="Use cases">
+  <div class="sec-head"><div><div class="secnum">Section 10</div><h2>Use cases in research and industry</h2></div></div>
+  <div class="grid2">
+    <div class="card"><h4>Research</h4><p><b>Public health</b> — vaccine hesitancy, symptom reports<br><b>Politics &amp; society</b> — polarisation in election debates<br><b>Crisis informatics</b> — needs and damage reports in disasters<br><b>Misinformation</b> — how false claims spread and get corrected</p></div>
+    <div class="card"><h4>Industry</h4><p><b>Brand monitoring</b> — reputation, early crisis detection<br><b>Customer feedback</b> — complaints and feature requests at scale<br><b>Product insight</b> — aspect-level opinions on design, price, battery<br><b>Campaign evaluation</b> — reach, engagement, reactions</p></div>
+  </div>
+  <div class="callout"><b>Same methods, different questions.</b>For your project, start with the question.</div>
+  <h3>Real-world examples</h3>
+  <div class="links">
+    <a href="https://www.who.int/publications/i/item/9789240108202" target="_blank" rel="noopener"><b>WHO social listening</b><span>From posts to public-health guidance</span></a>
+    <a href="https://crisisnlp.qcri.org/humaid_dataset.html" target="_blank" rel="noopener"><b>HumAID crisis dataset</b><span>From disaster posts to a crisis map and response</span></a>
+    <a href="https://www.brandwatch.com/case-studies/monzo/" target="_blank" rel="noopener"><b>Monzo customer feedback</b><span>From feedback to a dashboard and action</span></a>
+    <a href="https://www.brandwatch.com/case-studies/skyscanner/" target="_blank" rel="noopener"><b>Skyscanner product insight</b><span>From traveller posts to product insight</span></a>
+  </div>
+</section>
+
+<section class="chap" id="network" data-title="From interactions to a graph">
+  <div class="sec-head"><div><div class="secnum">Section 11</div><h2>Social networks: from interactions to a graph</h2></div></div>
+  <p>Social network analytics studies relationships between social media entities as a <b>graph</b>: <b>nodes</b> (users, posts, hashtags, pages), <b>edges</b> (follows, mentions, replies, shares), a <b>weight</b> (how often) and a <b>direction</b> (who mentions whom). Chapters 4–5 answer: who is influential? who connects communities? how do communities form? do similar users connect (homophily)? how does information spread (diffusion)?</p>
+  <div class="widget"><div class="wtitle">Interaction log → weighted edge list → directed graph</div>
+    <div class="btnrow">
+      <select id="gSrc"></select><span>→</span><select id="gTgt"></select>
+      <select id="gType"><option>reply</option><option>mention</option><option>share</option></select>
+      <button class="btn primary" id="gAdd">Add interaction</button><button class="btn" id="gReset">Reset to slide example</button>
+    </div>
+    <div class="grid3">
+      <div><b class="small">1 · Interaction log</b><div class="tablewrap"><table id="gLog"></table></div></div>
+      <div><b class="small">2 · Weighted edge list</b><div class="tablewrap"><table id="gEdges"></table></div></div>
+      <div><b class="small">3 · Directed graph</b><svg id="gSvg" viewBox="0 0 260 220" class="gsvg"></svg></div>
+    </div>
+    <div class="feedback show info" id="gMsg"></div>
+    <pre><code data-hl="py">edges = log.groupby(["source", "target"]).size().reset_index(name="weight")
+G = nx.from_pandas_edgelist(edges, "source", "target", "weight", create_using=nx.DiGraph)</code></pre>
+  </div>
+</section>
+
+<section class="chap" id="dataset" data-title="From platform to dataset">
+  <div class="sec-head"><div><div class="secnum">Section 12</div><h2>From platform to dataset — and what to inspect first</h2></div></div>
+  <div class="grid2">
+    <div class="card"><h4>Possible sources for student projects</h4><p class="small">Instructor-provided CSV/JSON · Reddit posts and comments · YouTube comments · Kaggle datasets · Hugging Face datasets · public benchmarks such as TweetEval · live APIs — <b>only</b> if privacy and platform rules allow.</p></div>
+    <div class="card"><h4>Available data ≠ usable data</h4><p class="small">Check licence and terms, personal data, documentation and labels before you start. <b>Choose the dataset for the question — not the question for the dataset.</b></p></div>
+  </div>
+  <div class="widget"><div class="wtitle">Profile the real course dataset: ev_posts.csv</div>
+    <p class="small">2,400 synthetic teaching posts about electric vehicles (the Lab 1.1 file). Every number below is computed from the real file. Pick a check from the list — the pandas code and the result appear.</p>
+    <div class="btnrow" id="profBtns"></div>
+    <pre><code id="profCode"></code></pre>
+    <div id="profOut"></div>
+    <div class="feedback show info" id="profMsg"></div>
+  </div>
+  <details class="reveal"><summary>Peek at 8 random rows (pseudonymised, synthetic)</summary><div class="tablewrap"><table id="profSample"></table></div></details>
+</section>
+
+<section class="chap" id="ethics" data-title="Ethics, privacy & GDPR">
+  <div class="sec-head"><div><div class="secnum">Section 13</div><h2>Ethics, privacy and GDPR</h2></div></div>
+  <p>Responsible analytics starts <b>before</b> coding. <b>Public ≠ free to use</b>: public posts are still personal data under GDPR.</p>
+  <div class="tablewrap"><table>
+    <tr><th>Principle</th><th>The risk</th><th>What helps</th></tr>
+    <tr><td><b>Data minimisation</b></td><td>Collecting full user profiles “just in case”.</td><td>Keep only the fields your question needs (GDPR Art. 5(1)(c)).</td></tr>
+    <tr><td><b>Pseudonymisation</b></td><td>Usernames, quotes and screenshots can identify people.</td><td>Replace user IDs, paraphrase quotes, report aggregates.</td></tr>
+    <tr><td><b>Platform rules</b></td><td>Scraping can break terms of service and API licences.</td><td>Use official APIs or published datasets; read the licence.</td></tr>
+    <tr><td><b>Sensitive inference</b></td><td>Inferring health, religion or political views from posts.</td><td>Avoid special-category inference (Art. 9 GDPR) without a lawful basis and ethics approval.</td></tr>
+  </table></div>
+  <div class="widget"><div class="wtitle">Pseudonymise a post</div>
+    <p class="small">Paste or edit a post. The tool replaces @handles with stable pseudonyms (USER_1, USER_2…), masks URLs and e-mail addresses, and flags quotes that could still be searched for.</p>
+    <textarea id="psIn" rows="3">@lena_k92 told me the charger at Bismarckplatz is broken again. Ask @CityRail or mail lena.k@uni-example.de — pics: https://t.co/abc123 @lena_k92</textarea>
+    <div class="out" id="psOut"></div>
+    <div class="feedback show info" id="psMsg"></div>
+  </div>
+  <div class="widget"><div class="wtitle">OK or risky?</div><div id="sortEthics"></div></div>
+</section>
+
+<section class="chap" id="bias" data-title="Sampling & bias">
+  <div class="sec-head"><div><div class="secnum">Section 14</div><h2>Sampling and bias</h2></div></div>
+  <p>Social media data is <b>not a neutral mirror of society</b> — every step filters who and what we see. Click each layer of the funnel.</p>
+  <div class="grid2">
+    <svg id="funnel" viewBox="0 0 420 330" width="100%"></svg>
+    <div class="card" id="funnelInfo"></div>
+  </div>
+  <div class="callout"><b>Teaching question</b>Can we generalise one platform’s opinion to an entire country? Usually not — ask who is represented and who is missing.</div>
+  <div class="widget"><div class="wtitle">Name the bias</div><div id="sortBias"></div></div>
+</section>
+
+<section class="chap" id="lab" data-title="Lab 1.1: data profile">
+  <div class="sec-head"><div><div class="secnum">Section 15</div><h2>Lab 1.1 — your first social media data profile</h2></div></div>
+  <p><b>Goal:</b> profile a social media dataset and inspect its sentiment labels <b>before any modelling</b>. Groups of 3–5 · start in class (~45 min) · finish before Chapter 2 · submit one ZIP (notebook + worksheet PDF) via Moodle.</p>
+  <div class="timeline">
+    <div class="t"><b>Walkthrough</b>Load ev_posts.csv; shape, columns, dtypes</div>
+    <div class="t"><b>Challenge 1</b>Data quality: missing values, duplicates, time range</div>
+    <div class="t"><b>Challenge 2</b>Text and labels: length, languages, sentiment</div>
+    <div class="t"><b>Challenge 3</b>Sentiment × engagement: likes and replies</div>
+    <div class="t"><b>Research question</b>One testable question + one bias risk</div>
+  </div>
+  <h3 style="margin-top:16px">Python walkthrough — a data profile in ten lines</h3>
+  <pre><code data-hl="py">import pandas as pd
+df = pd.read_csv("ev_posts.csv", parse_dates=["created_at"])
+df.shape                          # (2400, 9)
+df.dtypes                         # column types
+df.isna().sum()                   # missing values
+df.duplicated("text").sum()       # 37
+df["created_at"].agg(["min", "max"])
+df["text_len"] = df["text"].str.len()
+df["text_len"].median()           # 142.0
+df["sentiment"].value_counts(normalize=True)
+df.groupby("sentiment")["likes"].median()</code></pre>
+  <div class="widget"><div class="wtitle">Fill in your data profile card</div>
+    <p class="small">Your answers are saved in this browser only. Download them as a text file for your worksheet.</p>
+    <div class="canvas8" id="profileCard"></div>
+    <div class="btnrow"><button class="btn primary" id="pcDl">Download as .txt</button><button class="btn" id="pcSample">Show sample answer</button></div>
+    <div id="pcSampleOut"></div>
+  </div>
+  <div class="callout green"><b>Why the sample answer is strong</b>Every number comes with the code that produced it; missing values are <i>interpreted</i> (reply_to is missing by design), the bias risk is specific, and the research question is testable.</div>
+</section>
+
+<section class="chap" id="summary" data-title="Summary">
+  <div class="sec-head"><div><div class="secnum">Section 16</div><h2>Theory summary</h2></div></div>
+  <div class="grid3">
+    <div class="card"><h4>1 · Social media analytics</h4><p>studies posts, users, engagement, topics and networks.</p></div>
+    <div class="card"><h4>2 · Sentiment analysis</h4><p>identifies opinions and attitudes in text.</p></div>
+    <div class="card"><h4>3 · A post is more than text</h4><p>text + metadata + engagement + network context.</p></div>
+    <div class="card"><h4>4 · Labels and levels</h4><p>positive, neutral, negative, mixed — per document, sentence or aspect.</p></div>
+    <div class="card"><h4>5 · Social media text is hard</h4><p>sarcasm, emojis, slang and missing context.</p></div>
+    <div class="card"><h4>6 · Ethics, GDPR and bias</h4><p>are part of the analytical design, not an add-on.</p></div>
+  </div>
+</section>
+
+<section class="chap" id="links" data-title="Real-world links">
+  <div class="sec-head"><div><div class="secnum">Section 17</div><h2>Explore real tools &amp; resources</h2></div></div>
+  <div class="links">
+    <a href="https://datareportal.com/" target="_blank" rel="noopener"><b>DataReportal</b><span>Global social media statistics</span></a>
+    <a href="https://pandas.pydata.org/docs/user_guide/10min.html" target="_blank" rel="noopener"><b>pandas in 10 minutes</b><span>The profiling toolkit for Lab 1.1</span></a>
+    <a href="https://huggingface.co/datasets/cardiffnlp/tweet_eval" target="_blank" rel="noopener"><b>TweetEval</b><span>Public social NLP benchmark</span></a>
+    <a href="https://huggingface.co/datasets" target="_blank" rel="noopener"><b>Hugging Face datasets</b><span>Thousands of labelled text datasets</span></a>
+    <a href="https://www.kaggle.com/datasets?search=sentiment" target="_blank" rel="noopener"><b>Kaggle sentiment datasets</b><span>Practice data for projects</span></a>
+    <a href="https://gdpr-info.eu/art-5-gdpr/" target="_blank" rel="noopener"><b>GDPR Article 5</b><span>Principles incl. data minimisation</span></a>
+    <a href="https://gdpr-info.eu/art-9-gdpr/" target="_blank" rel="noopener"><b>GDPR Article 9</b><span>Special categories of personal data</span></a>
+    <a href="https://aoir.org/ethics/" target="_blank" rel="noopener"><b>AoIR internet research ethics</b><span>Guidelines for researchers</span></a>
+    <a href="https://networkx.org/documentation/stable/tutorial.html" target="_blank" rel="noopener"><b>NetworkX tutorial</b><span>From edge lists to graphs</span></a>
+    <a href="https://github.com/MehrdadJalali-AI/SocialMediaAnayltics" target="_blank" rel="noopener"><b>Course repository</b><span>Notebooks &amp; datasets</span></a>
+  </div>
+</section>
+
+<section class="chap" id="quiz" data-title="Self-check quiz">
+  <div class="sec-head"><div><div class="secnum">Section 18</div><h2>Self-check quiz</h2></div></div>
+  <div id="quizBox"></div>
+</section>
+</main></div>
+
+<footer class="foot">Social Media Analytics and Sentiment Analysis · Prof. Dr. Mehrdad Jalali · SRH University of Applied Sciences Heidelberg · Course repository: <a href="https://github.com/MehrdadJalali-AI/SocialMediaAnayltics" target="_blank" rel="noopener">github.com/MehrdadJalali-AI/SocialMediaAnayltics</a></footer>
+<script>const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+// theme
+(function () {
+  const saved = store.get('sma-theme', null);
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+  const b = $('#themeBtn');
+  if (!b) return;
+  const label = () => {
+    const t = document.documentElement.getAttribute('data-theme') ||
+      (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    b.textContent = t === 'dark' ? '☀ Light' : '☾ Dark';
+  };
+  label();
+  b.onclick = () => {
+    const cur = document.documentElement.getAttribute('data-theme') ||
+      (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    const nxt = cur === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', nxt);
+    store.set('sma-theme', nxt); label();
+  };
+})();
+
+// TOC, scroll spy, progress, "mark as understood"
+(function () {
+  const toc = $('#tocList'); const secs = $$('section.chap');
+  const key = 'sma-done-' + (document.body.dataset.chapter || 'x');
+  const done = new Set(store.get(key, []));
+  secs.forEach((s, i) => {
+    const a = document.createElement('a');
+    a.href = '#' + s.id; a.innerHTML = '<span class="dot"></span>' + esc(s.dataset.title || s.id);
+    if (done.has(s.id)) a.classList.add('done');
+    toc && toc.appendChild(a);
+    const head = s.querySelector('.sec-head');
+    if (head) {
+      const b = document.createElement('button'); b.className = 'donebtn';
+      const paint = () => { b.classList.toggle('on', done.has(s.id)); b.textContent = done.has(s.id) ? '✓ Understood' : 'Mark as understood'; a.classList.toggle('done', done.has(s.id)); updCount(); };
+      b.onclick = () => { done.has(s.id) ? done.delete(s.id) : done.add(s.id); store.set(key, [...done]); paint(); };
+      head.appendChild(b); setTimeout(paint);
+    }
+  });
+  function updCount() { const c = $('#doneCount'); if (c) c.textContent = done.size + ' / ' + secs.length + ' sections understood'; }
+  const links = toc ? $$('a', toc) : [];
+  const onScroll = () => {
+    const h = document.documentElement; const p = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
+    const bar = $('#progress'); if (bar) bar.style.width = (p * 100) + '%';
+    let cur = 0; secs.forEach((s, i) => { if (s.getBoundingClientRect().top < 140) cur = i; });
+    links.forEach((l, i) => l.classList.toggle('active', i === cur));
+  };
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+})();
+
+// tabs: <div class="tabs" data-group="x"><button data-tab="a">..</button></div> + <div class="tabpanel" data-group="x" data-tab="a">
+document.addEventListener('click', e => {
+  const b = e.target.closest('.tabs button'); if (!b) return;
+  const g = b.parentElement.dataset.group;
+  $$('.tabs[data-group="' + g + '"] button').forEach(x => x.classList.toggle('on', x === b));
+  $$('.tabpanel[data-group="' + g + '"]').forEach(p => p.classList.toggle('on', p.dataset.tab === b.dataset.tab));
+});
+
+// copy buttons on code
+function addCopy(root = document) {
+  $$('pre', root).forEach(p => {
+    if (p.querySelector('.copy')) return;
+    const b = document.createElement('button'); b.className = 'copy'; b.textContent = 'Copy';
+    b.onclick = () => { const t = p.querySelector('code') ? p.querySelector('code').innerText : p.innerText.replace(/Copy$/, ''); navigator.clipboard && navigator.clipboard.writeText(t); b.textContent = 'Copied'; setTimeout(() => b.textContent = 'Copy', 1200); };
+    p.appendChild(b);
+  });
+}
+addCopy();
+
+// quiz engine: renderQuiz('#el', [{q, opts:[...], a: idx, why}])
+function renderQuiz(sel, items) {
+  const root = $(sel); if (!root) return; root.classList.add('quiz');
+  let right = 0, answered = 0;
+  const sc = document.createElement('p'); sc.className = 'score';
+  const upd = () => sc.textContent = `Score: ${right} / ${items.length}` + (answered === items.length ? (right === items.length ? ' — perfect! 🎉' : ' — review the explanations and try again.') : '');
+  items.forEach((it, qi) => {
+    const d = document.createElement('div'); d.className = 'q';
+    d.innerHTML = `<p>${qi + 1}. ${it.q}</p><div class="opts"></div><div class="why">💡 ${it.why}</div>`;
+    const o = d.querySelector('.opts');
+    it.opts.forEach((t, i) => {
+      const b = document.createElement('button'); b.innerHTML = t;
+      b.onclick = () => {
+        if (d.classList.contains('answered')) return;
+        d.classList.add('answered'); answered++;
+        if (i === it.a) { b.classList.add('right'); right++; } else { b.classList.add('wrong'); o.children[it.a].classList.add('right'); }
+        upd();
+      };
+      o.appendChild(b);
+    });
+    root.appendChild(d);
+  });
+  const r = document.createElement('button'); r.className = 'btn'; r.textContent = '↺ Reset quiz';
+  r.onclick = () => { root.innerHTML = ''; renderQuiz(sel, items); };
+  root.appendChild(sc); root.appendChild(r); upd();
+}
+
+// sorter engine (click a chip, then click a bucket — or drag): makeSorter('#el', cats:[{id,label}], items:[{t, c, why?}])
+function makeSorter(sel, cats, items) {
+  const root = $(sel); if (!root) return;
+  root.innerHTML = `<div class="pool small">Click an item, then click the box it belongs to (or drag it).</div><div class="sorter"></div><div class="btnrow"><button class="btn primary chk">Check answers</button><button class="btn rst">Reset</button></div><div class="feedback"></div>`;
+  const pool = $('.pool', root), sorter = $('.sorter', root), fb = $('.feedback', root);
+  let selected = null;
+  const shuffled = items.map((x, i) => ({ ...x, i })).sort(() => Math.random() - .5);
+  shuffled.forEach(it => {
+    const c = document.createElement('span'); c.className = 'chip'; c.textContent = it.t; c.draggable = true; c.dataset.c = it.c; c.dataset.i = it.i;
+    if (it.why) c.title = it.why;
+    c.onclick = e => { e.stopPropagation(); $$('.chip', root).forEach(x => x.classList.remove('sel')); selected = c; c.classList.add('sel'); };
+    c.ondragstart = ev => { selected = c; ev.dataTransfer.setData('text', it.i); };
+    pool.appendChild(c);
+  });
+  cats.forEach(cat => {
+    const b = document.createElement('div'); b.className = 'bucket'; b.dataset.id = cat.id; b.innerHTML = `<h5>${cat.label}</h5>`;
+    const drop = () => { if (selected) { b.appendChild(selected); selected.classList.remove('sel', 'right', 'wrong'); selected = null; } };
+    b.onclick = drop;
+    b.ondragover = e => { e.preventDefault(); b.classList.add('over'); };
+    b.ondragleave = () => b.classList.remove('over');
+    b.ondrop = e => { e.preventDefault(); b.classList.remove('over'); drop(); };
+    sorter.appendChild(b);
+  });
+  pool.onclick = () => { if (selected) { pool.appendChild(selected); selected.classList.remove('sel'); selected = null; } };
+  $('.chk', root).onclick = () => {
+    let ok = 0, placed = 0;
+    $$('.bucket .chip', root).forEach(c => { placed++; const good = c.parentElement.dataset.id === c.dataset.c; c.classList.toggle('right', good); c.classList.toggle('wrong', !good); if (good) ok++; });
+    fb.className = 'feedback show ' + (ok === items.length ? 'ok' : 'info');
+    fb.textContent = ok === items.length ? `All ${ok} correct — well done!` : `${ok} of ${items.length} correct (${items.length - placed} not placed yet). Red items are in the wrong box — hover them for a hint.`;
+  };
+  $('.rst', root).onclick = () => makeSorter(sel, cats, items);
+}
+
+// tiny syntax highlighter for python / sql / yaml snippets marked data-hl
+function hl(code, lang) {
+  let s = esc(code);
+  if (lang === 'py' || lang === 'sql') {
+    s = s.replace(/(#.*|--.*)$/gm, '<span class="c-c">$1</span>');
+    s = s.replace(/(&quot;.*?&quot;|'[^'\n]*')/g, '<span class="c-s">$1</span>');
+    const kw = lang === 'py' ? 'def|return|import|from|as|for|in|if|else|try|except|with|lambda|True|False|None|print' : 'SELECT|FROM|WHERE|GROUP BY|ORDER BY|JOIN|LEFT JOIN|ON|AS|WITH|SUM|COUNT|AND|OR|MATCH|RETURN|PREFIX';
+    s = s.replace(new RegExp('\\b(' + kw + ')\\b', 'g'), '<span class="c-k">$1</span>');
+  } else if (lang === 'yaml') {
+    s = s.replace(/(#.*)$/gm, '<span class="c-c">$1</span>').replace(/^(\s*-?\s*)([\w_]+):/gm, '$1<span class="c-k">$2</span>:');
+  }
+  return s;
+}
+$$('pre code[data-hl]').forEach(c => { c.innerHTML = hl(c.textContent, c.dataset.hl); });
+
+// ---------- extra shared helpers (Social Media Analytics guides) ----------
+const fmt = (x, d = 2) => (x === null || x === undefined || isNaN(x)) ? '—' : (+x).toFixed(d);
+const pct = (x, d = 0) => (x * 100).toFixed(d) + '%';
+const mean = a => a.reduce((s, x) => s + x, 0) / (a.length || 1);
+const sdp = a => { const m = mean(a); return Math.sqrt(a.reduce((s, x) => s + (x - m) ** 2, 0) / (a.length || 1)); };
+const tbl = (head, rows, cls) => '<tr>' + head.map(h => `<th>${h}</th>`).join('') + '</tr>' + rows.map((r, i) => '<tr>' + r.map((c, j) => `<td class="${cls ? cls(i, j, c) || '' : ''}">${c === null || c === '' ? '<span class="small">∅</span>' : c}</td>`).join('') + '</tr>').join('');
+const pill = l => `<span class="pill ${({ positive: 'pos', negative: 'neg', neutral: 'neu', mixed: 'mix' })[l] || 'neu'}">${l}</span>`;
+// horizontal bar list: bars('#el', [{l, v, max?, c?, t?}])
+function bars(sel, rows, max) {
+  const el = typeof sel === 'string' ? $(sel) : sel; if (!el) return;
+  const m = max || Math.max(...rows.map(r => r.v), 1e-9);
+  el.className = 'bars';
+  el.innerHTML = rows.map(r => `<div class="row"><span>${r.l}</span><div class="track"><div class="fill ${r.c || ''}" style="width:${Math.max(0, r.v / m * 100)}%"></div></div><span class="val">${r.t !== undefined ? r.t : r.v}</span></div>`).join('');
+}
+// flip cards: click to reveal
+document.addEventListener('click', e => { const f = e.target.closest('.flip'); if (f) f.classList.toggle('open'); });
+// seeded RNG (mulberry32)
+function rngSeed(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+// "pick the label" tables: makeLabeler('#el', rows:[{t, cols:{name:answer}}], options:{name:[...]}, notes)
+function makeLabeler(sel, rows, options, opts = {}) {
+  const root = $(sel); if (!root) return;
+  const cols = Object.keys(options);
+  root.innerHTML = `<div class="tablewrap"><table><tr><th>#</th><th>${opts.textHead || 'Post'}</th>${cols.map(c => `<th>${c}</th>`).join('')}${opts.noteHead ? `<th>${opts.noteHead}</th>` : ''}</tr>${rows.map((r, i) => `<tr><td>${i + 1}</td><td>${r.t}</td>${cols.map(c => `<td data-c="${c}" data-i="${i}"><select class="lbl"><option value="">—</option>${options[c].map(o => `<option>${o}</option>`).join('')}</select></td>`).join('')}${opts.noteHead ? `<td class="small nt" data-i="${i}"></td>` : ''}</tr>`).join('')}</table></div><div class="btnrow"><button class="btn primary chk">Compare with the sample answer</button><button class="btn rst">Reset</button></div><div class="feedback"></div>`;
+  $('.chk', root).onclick = () => {
+    let ok = 0, tot = 0;
+    $$('td[data-c]', root).forEach(td => {
+      const r = rows[+td.dataset.i], ans = r.cols[td.dataset.c], v = $('select', td).value; tot++;
+      const good = Array.isArray(ans) ? ans.includes(v) : v === ans; if (good) ok++;
+      td.className = good ? 'ok' : 'no'; td.title = 'Sample answer: ' + (Array.isArray(ans) ? ans.join(' / ') : ans);
+    });
+    $$('.nt', root).forEach(n => n.textContent = rows[+n.dataset.i].note || '');
+    const fb = $('.feedback', root); fb.className = 'feedback show ' + (ok === tot ? 'ok' : 'info');
+    fb.innerHTML = `${ok} of ${tot} cells match the sample answer. Hover a red cell to see the sample label. ${opts.after || ''}`;
+  };
+  $('.rst', root).onclick = () => makeLabeler(sel, rows, options, opts);
+}
+// simple persistent checklist: makeChecklist('#el', key, items[])
+function makeChecklist(sel, key, items) {
+  const root = $(sel); if (!root) return;
+  const st = new Set(store.get(key, []));
+  const draw = () => {
+    root.innerHTML = items.map((t, i) => `<label class="check"><input type="checkbox" data-i="${i}" ${st.has(i) ? 'checked' : ''}><span>${t}</span></label>`).join('') + `<div class="meter" style="margin-top:10px"><div style="width:${st.size / items.length * 100}%"></div></div><p class="small">${st.size} of ${items.length} done</p>`;
+    $$('input', root).forEach(c => c.onchange = () => { c.checked ? st.add(+c.dataset.i) : st.delete(+c.dataset.i); store.set(key, [...st]); draw(); });
+  };
+  draw();
+}
+// download text as a file
+function downloadText(name, text) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type: 'text/plain' })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
+</script>
+<script>const EVP={"shape": [2400, 9], "dtypes": {"post_id": "object", "created_at": "datetime64[ns, UTC]", "text": "object", "lang": "object", "sentiment": "object", "likes": "int64", "replies": "int64", "reply_to": "object", "user_location": "object"}, "missing": {"post_id": 0, "created_at": 0, "text": 0, "lang": 48, "sentiment": 0, "likes": 0, "replies": 0, "reply_to": 1560, "user_location": 1130}, "nunique": {"post_id": 2400, "created_at": 1680, "text": 2363, "lang": 7, "sentiment": 3, "likes": 10, "replies": 6, "reply_to": 1, "user_location": 8}, "dups": 37, "range": ["2026-03-01 00:00:00+00:00", "2026-03-14 23:49:13+00:00"], "len_median": 142.0, "len_hist": [[0, 0], [20, 0], [40, 0], [60, 70], [80, 60], [100, 83], [120, 821], [140, 1366]], "sent": {"negative": 912, "neutral": 864, "positive": 624}, "lang": {"en": 1440, "de": 576, "mixed": 192, "fr": 48, "nan": 48, "es": 48, "it": 24, "tr": 24}, "daily": {"2026-03-01": 140, "2026-03-02": 140, "2026-03-03": 140, "2026-03-04": 580, "2026-03-05": 140, "2026-03-06": 140, "2026-03-07": 140, "2026-03-08": 140, "2026-03-09": 140, "2026-03-10": 140, "2026-03-11": 140, "2026-03-12": 140, "2026-03-13": 140, "2026-03-14": 140}, "eng": {"negative": {"likes_med": 6.0, "likes_mean": 6.02, "replies_med": 2.0, "n": 912}, "neutral": {"likes_med": 2.0, "likes_mean": 2.19, "replies_med": 1.0, "n": 864}, "positive": {"likes_med": 4.0, "likes_mean": 3.9, "replies_med": 1.5, "n": 624}}, "eng_no4": {"negative": 6.0, "neutral": 2.0, "positive": 4.0}, "sent4": {"negative": 223, "neutral": 196, "positive": 161}, "sample": [["p1414", "2026-03-07 03:21:57+00:00", "Nach 23 Tagen nervt mich design beim E-Auto wieder. Die Fahrt dauerte länger und die App erklärte den Fehler nicht. #EV Trip diary 1414.", "de", "negative", 5, 3, "p0001", "Frankfurt"], ["p0639", "2026-03-01 02:46:22+00:00", "Laut Händler kommt am Montag ein Update zu price für das E-Auto. Das ist nur eine Information für Interessierte. #EV Trip diary 0639.", "de", "neutral", 4, 2, "p0001", "Dresden"], ["p1184", "2026-03-06 01:11:47+00:00", "Not great today: charging beim E-Auto made a short trip harder than it should be after 25 days. #EV Trip diary 1184.", "mixed", "negative", 3, 1, null, null], ["p1666", "2026-03-09 15:45:45+00:00", "Logged 14 km with the EV today. The design was recorded in the app; I will compare it with next week. #EV Trip diary 1666.", "en", "neutral", 1, 2, null, "Hamburg"], ["p2069", "2026-03-12 04:56:32+00:00", "Laut Händler kommt am Montag ein Update zu public chargers für das E-Auto. Das ist nur eine Information für Interessierte. #EV Trip diary 2069.", "de", "neutral", 0, 0, null, "Leipzig"], ["p0790", "2026-03-02 03:33:21+00:00", "Logged 8 km with the EV today. The design was recorded in the app; I will compare it with next week. #EV Trip diary 0790.", "en", "neutral", 3, 3, null, null], ["p1990", "2026-03-12 03:33:21+00:00", "Logged 19 km with the EV today. The design was recorded in the app; I will compare it with next week. #EV Trip diary 1990.", "en", "neutral", 4, 3, null, "Frankfurt"], ["p1583", "2026-03-09 10:14:38+00:00", "Laut Händler kommt am Montag ein Update zu public chargers für das E-Auto. Das ist nur eine Information für Interessierte. #EV Trip diary 1583.", "de", "neutral", 0, 1, null, null]], "dupex": [["p2379", "2026-03-14 14:46:22+00:00", "After 17 days, the EV design has been better than expected. Smooth, practical, and less stressful than my old petrol car. #EV Trip diary 0016."], ["p0016", "2026-03-04 09:15:15+00:00", "After 17 days, the EV design has been better than expected. Smooth, practical, and less stressful than my old petrol car. #EV Trip diary 0016."], ["p2365", "2026-03-14 12:48:36+00:00", "After 3 days, the EV charging has been better than expected. Smooth, practical, and less stressful than my old petrol car. #EV Trip diary 0002."], ["p0002", "2026-03-04 07:17:29+00:00", "After 3 days, the EV charging has been better than expected. Smooth, practical, and less stressful than my old petrol car. #EV Trip diary 0002."]]};
+</script>
+<script>
+// ---------- Section 1: word cloud + course map ----------
+const WC_MAP = [
+  [1, 'Foundations', /privacy|gdpr|ethic|bias|data|platform|user|post|label|profil|statistic/i],
+  [2, 'Preprocessing & classical', /hashtag|emoji|slang|clean|vader|lexicon|tf.?idf|stopword|spam|text|word/i],
+  [3, 'Transformers & LLMs', /sentiment|emotion|stance|opinion|bert|llm|gpt|transformer|sarcas|mood|feel/i],
+  [4, 'Networks I', /influenc|communit|follower|friend|network|connect|homophil|echo|polari|bubble/i],
+  [5, 'Diffusion', /viral|spread|trend|fake|rumou?r|misinfo|share|retweet|repost|cascade|meme/i],
+  [6, 'Topics & project', /topic|bot|dashboard|marketing|brand|campaign|market|business|insight|decision|ad/i]
+];
+function drawWC() {
+  const words = $('#wcIn').value.split(',').map(s => s.trim()).filter(Boolean);
+  const groups = {};
+  words.forEach(w => { const m = WC_MAP.find(x => x[2].test(w)); const k = m ? 'Ch ' + m[0] + ' · ' + m[1] : 'Not sure yet — ask in class!'; (groups[k] = groups[k] || []).push(w); });
+  $('#wcOut').innerHTML = Object.keys(groups).sort().map(k => `<div style="margin:4px 0"><span class="tag ${k.startsWith('Ch') ? 'blue' : 'amber'}">${esc(k)}</span> ${groups[k].map(w => `<span class="chip" style="cursor:default">${esc(w)}</span>`).join('')}</div>`).join('');
+}
+$('#wcIn').oninput = drawWC; drawWC();
+
+const COURSE = [
+  ['1', 'Foundations & Introduction', 'Data types, sentiment basics, ethics', 'Explain SMA and sentiment analysis — data types, labels, ethics and bias.'],
+  ['2', 'Preprocessing & Classical Sentiment', 'Social media text, VADER, TF-IDF', 'Preprocess social media text and build transparent baselines (VADER → TF-IDF classifiers) with error analysis.'],
+  ['3', 'Transformers: Sentiment, Emotion & Stance', 'Pre-trained models & LLMs', 'Apply transformers and LLMs to sentiment, emotion and stance — and compare them honestly with the baselines.'],
+  ['4', 'Social Network Analytics I', 'Influence, communities, homophily', 'Identify influencers, communities and homophily with centrality, community detection and assortativity.'],
+  ['5', 'Social Network Analytics II', 'Information diffusion & cascades', 'Analyse and simulate diffusion: cascades, Independent Cascade and Linear Threshold models.'],
+  ['6', 'Advanced Topics & Project Kick-off', 'Applications & project', 'Design a responsible end-to-end study — kick off, discuss and refine your group project.'],
+  ['★', 'Examination Project', 'End-to-end, documented study', 'Combine the methods in one reproducible, responsible study: oral presentation + written documentation (50%).']
+];
+$('#courseFlow').innerHTML = COURSE.map((c, i) => `<div class="step ${i === 0 ? 'on' : ''}" data-i="${i}"><b>${c[0] === '★' ? 'FINAL' : 'Ch ' + c[0]}</b><br>${c[1]}<small>${c[2]}</small></div>`).join('');
+const courseMsg = i => $('#courseMsg').innerHTML = `<b>${COURSE[i][0] === '★' ? 'Final project' : 'Chapter ' + COURSE[i][0]}:</b> ${COURSE[i][3]}`;
+$$('#courseFlow .step').forEach(s => s.onclick = () => { $$('#courseFlow .step').forEach(x => x.classList.toggle('on', x === s)); courseMsg(+s.dataset.i); });
+courseMsg(0);
+bars('#gradeBars', [{ l: 'Attendance & participation', v: 10, t: '10%', c: 'b' }, { l: 'Exercises (Python)', v: 30, t: '30%', c: 'g' }, { l: 'In-class activities', v: 10, t: '10%', c: 'a' }, { l: 'Final project', v: 50, t: '50%' }], 50);
+
+const PIPE = [
+  ['Posts & platforms', 'Sources', 'Platforms and the posts people create every day.'],
+  ['Collect & describe', 'Ch 1', 'Collect responsibly and describe what you have: data types, profiling, context.'],
+  ['Preprocess & baseline', 'Ch 2', 'Clean deliberately and build simple, transparent baselines: VADER and TF-IDF.'],
+  ['Transformers', 'Ch 3', 'Sentiment, emotion and stance in context. If a transformer errs, revisit preprocessing and labels — don’t just accept it.'],
+  ['Analyse networks', 'Ch 4–5', 'Who connects with whom, who influences others, and how information spreads.'],
+  ['Insight & project', 'Ch 6', 'Turn the analysis into a defensible insight — posts → evidence.']
+];
+$('#pipeFlow').innerHTML = PIPE.map((p, i) => (i ? '<span class="arrow">→</span>' : '') + `<div class="step ${i === 0 ? 'on' : ''}" data-i="${i}">${p[0]}<small>${p[1]}</small></div>`).join('');
+$$('#pipeFlow .step').forEach(s => s.onclick = () => { $$('#pipeFlow .step').forEach(x => x.classList.toggle('on', x === s)); $('#pipeMsg').textContent = PIPE[+s.dataset.i][2]; });
+$('#pipeMsg').textContent = PIPE[0][2];
+
+// ---------- Section 3 ----------
+const SMA = [['01 Collecting', 'Posts, comments and metadata from platforms or datasets.'], ['02 Preparing', 'Clean text, handle emojis, remove duplicates.'], ['03 Analysing', 'Sentiment, topics, engagement and networks.'], ['04 Interpreting', 'Turn patterns into careful, evidence-based claims.']];
+$('#smaFlow').innerHTML = SMA.map((p, i) => (i ? '<span class="arrow">→</span>' : '') + `<div class="step ${i === 0 ? 'on' : ''}" data-i="${i}">${p[0]}</div>`).join('');
+$$('#smaFlow .step').forEach(s => s.onclick = () => { $$('#smaFlow .step').forEach(x => x.classList.toggle('on', x === s)); $('#smaMsg').textContent = SMA[+s.dataset.i][1]; });
+$('#smaMsg').textContent = SMA[0][1];
+makeSorter('#sortField', [{ id: 'sma', label: 'Social media analytics (broader field)' }, { id: 'sa', label: 'Sentiment analysis' }], [
+  { t: 'What topics are discussed?', c: 'sma' }, { t: 'Who is influential?', c: 'sma' }, { t: 'How does information spread?', c: 'sma' }, { t: 'How do communities form?', c: 'sma' },
+  { t: 'Which posts receive engagement?', c: 'sma' }, { t: 'Is the opinion positive, neutral or negative?', c: 'sa' }, { t: 'How does sentiment change over time?', c: 'sa' },
+  { t: 'Which topics attract negative sentiment?', c: 'sa', why: 'Topic × polarity is still a sentiment question.' }, { t: 'Is this review praising or criticising the battery?', c: 'sa' }
+]);
+
+// ---------- Section 5: anatomy ----------
+const ZONES = {
+  meta: ['Metadata', 'blue', 'Time, language, platform and user fields: “Posted on 4 March 2026 at 14:05, in English, from the mobile app.” Answers <i>when, where, which language</i>.'],
+  text: ['Text', 'green', 'The message itself plus hashtags, emojis, links and mentions: “Range dropped 30% in the cold again 🥶 #EV #winter.” Answers <i>what is said and felt</i>.'],
+  eng: ['Engagement', 'amber', 'Likes, shares, replies and views: 12 replies · 37 reposts · 128 likes · 4.1k views. Answers <i>which posts resonate</i>.'],
+  net: ['Network context', 'purple', 'It replies to <b>@news_daily</b> and mentions <b>@CarBrand</b> — two potential edges. Answers <i>who connects to whom</i>.'],
+  lab: ['Labels (added by us)', 'red', 'Not in the post — <b>we</b> add them: <span class="pill neg">negative</span> sentiment · emotion: <b>frustration</b> · topic: <b>battery range</b>. Every label is a design decision.']
+};
+function showZone(z) {
+  $$('#anatomy .zone').forEach(x => x.classList.toggle('on', x.dataset.z === z));
+  $$('#zoneBtns .btn').forEach(b => b.classList.toggle('sel', b.dataset.z === z));
+  const Z = ZONES[z]; $('#zoneInfo').innerHTML = `<span class="tag ${Z[1]}">${Z[0]}</span><p style="margin-top:10px">${Z[2]}</p><p class="small">A social media post is more than text: one post, five kinds of information.</p>`;
+}
+$('#zoneBtns').innerHTML = Object.entries(ZONES).map(([k, v]) => `<button class="btn" data-z="${k}">${v[0]}</button>`).join('');
+$$('#zoneBtns .btn').forEach(b => b.onclick = () => showZone(b.dataset.z));
+$$('#anatomy .zone').forEach(z => z.onclick = e => { e.stopPropagation(); showZone(z.dataset.z); });
+showZone('text');
+
+makeSorter('#sortTypes', [{ id: 'text', label: 'Text' }, { id: 'meta', label: 'Metadata' }, { id: 'eng', label: 'Engagement' }, { id: 'net', label: 'Network' }], [
+  { t: '#hashtags', c: 'text' }, { t: 'emoji 😂', c: 'text' }, { t: 'URL in the post', c: 'text' }, { t: 'created_at', c: 'meta' }, { t: 'lang', c: 'meta' }, { t: 'platform', c: 'meta' },
+  { t: 'likes', c: 'eng' }, { t: 'views', c: 'eng' }, { t: 'number of replies', c: 'eng' }, { t: 'A follows B', c: 'net' }, { t: 'A reposts B', c: 'net' }, { t: 'reply_to (who answers whom)', c: 'net' }
+]);
+
+// ---------- Section 7: keyword matcher ----------
+const POSW = ['great', 'perfect', 'love', 'good', 'better', 'best', 'amazing', 'nice', 'happy', 'thanks', 'awesome', 'like', 'excellent', 'cool', 'fine', 'support'];
+const NEGW = ['bad', 'hate', 'terrible', 'worst', 'awful', 'sick', 'broken', 'delay', 'poor', 'sad', 'angry', 'crash', 'crashing', 'problem', 'problems', 'worried', 'fail'];
+const KW = [
+  ['Sarcasm', 'Great, another two-hour delay. Just perfect.', 'negative', 'Positive words, negative meaning.'],
+  ['Negation', 'The update is not bad at all.', 'positive', '“not … at all” flips “bad”.'],
+  ['Emojis', 'Battery died again 💀', 'negative', 'No sentiment word — the emoji carries it.'],
+  ['Slang', 'This new camera is sick!', 'positive', '“sick” = very good in slang.'],
+  ['Mixed', 'Love the camera, hate the battery.', 'mixed', 'Aspect-dependent: + camera, − battery.'],
+  ['Missing context', 'Well, that went exactly as expected.', 'depends', 'Sincere or sarcastic? Depends on the thread.'],
+  ['Target-dependent', 'Brand A is way better than Brand B.', '+A / −B', 'Two targets, two opposite sentiments.'],
+  ['Multilingual', 'Das Update ist echt mies, sorry', 'negative', '“mies” = lousy; an English word list sees nothing.']
+];
+function runKW(text, truth, why) {
+  const toks = text.toLowerCase().match(/[a-zäöüß']+/g) || [];
+  let p = 0, n = 0;
+  const html = toks.map(t => { if (POSW.includes(t)) { p++; return `<span class="tok pos">${esc(t)}</span>`; } if (NEGW.includes(t)) { n++; return `<span class="tok neg">${esc(t)}</span>`; } return `<span class="tok">${esc(t)}</span>`; }).join('');
+  const lab = p > n ? 'positive' : n > p ? 'negative' : 'neutral';
+  $('#kwOut').innerHTML = `<div>${html}</div><p style="margin-top:8px">Keyword matcher: <b>+${p}</b> positive, <b>−${n}</b> negative → ${pill(lab)}${truth ? ` &nbsp; | &nbsp; Actual meaning: ${pill(truth)} <span class="small">${why}</span>` : ''}</p>` + (truth ? `<div class="feedback show ${truth === lab ? 'ok' : 'no'}">${truth === lab ? 'The matcher happens to be right here.' : 'The matcher is wrong — context, not keywords, decides.'}</div>` : '<p class="small">Your own post — decide yourself: is the matcher right?</p>');
+}
+$('#kwBtns').innerHTML = KW.map((k, i) => `<button class="btn" data-i="${i}">${k[0]}</button>`).join('');
+$$('#kwBtns .btn').forEach(b => b.onclick = () => { const k = KW[+b.dataset.i]; $$('#kwBtns .btn').forEach(x => x.classList.toggle('sel', x === b)); $('#kwIn').value = k[1]; runKW(k[1], k[2], k[3]); });
+$('#kwIn').oninput = () => { $$('#kwBtns .btn').forEach(x => x.classList.remove('sel')); runKW($('#kwIn').value); };
+$('#kwBtns .btn').click();
+
+// ---------- Section 8: levels ----------
+const LV = {
+  doc: { h: 'Document level — what is the overall sentiment of the whole post?', spans: [['The design is beautiful. But the battery is terrible and charging takes forever.', 'mix']], out: 'Whole post → <span class="pill mix">mixed</span>, leaning <span class="pill neg">negative</span> (the problems are serious).' },
+  sen: { h: 'Sentence level — the sentiment of each sentence', spans: [['The design is beautiful.', 'pos'], [' But the battery is terrible and charging takes forever.', 'neg']], out: 'S1 → <span class="pill pos">positive</span> · S2 → <span class="pill neg">negative</span>' },
+  asp: { h: 'Aspect level — the sentiment toward each feature', spans: [['The ', ''], ['design', 'pos'], [' is beautiful. But the ', ''], ['battery', 'neg'], [' is terrible and ', ''], ['charging', 'neg'], [' takes forever.', '']], out: 'design → <span class="pill pos">positive</span> · battery → <span class="pill neg">negative</span> · charging → <span class="pill neg">negative</span>' }
+};
+$('#lvlBtns').innerHTML = [['doc', 'Document'], ['sen', 'Sentence'], ['asp', 'Aspect']].map(([k, l]) => `<button class="btn" data-k="${k}">${l} level</button>`).join('');
+$$('#lvlBtns .btn').forEach(b => b.onclick = () => {
+  $$('#lvlBtns .btn').forEach(x => x.classList.toggle('sel', x === b)); const L = LV[b.dataset.k];
+  $('#lvlText').innerHTML = L.spans.map(([t, c]) => c ? `<span class="tok ${c === 'mix' ? '' : c}" style="font-family:inherit;font-size:1rem;${c === 'mix' ? 'background:var(--amber-soft);border-color:var(--amber)' : ''}">${t}</span>` : t).join('');
+  $('#lvlOut').innerHTML = `<b>${L.h}</b><br>${L.out}`;
+});
+$('#lvlBtns .btn').click();
+
+// ---------- Section 9: scooter labels ----------
+makeLabeler('#scooterLab', [
+  { t: 'Finally! No more scooters blocking the sidewalk. #ScooterBan', cols: { Sentiment: 'positive', Emotion: 'joy', Stance: 'favour' }, note: 'clear case' },
+  { t: 'Great, now I need 40 minutes to get to campus. Thanks a lot, city council.', cols: { Sentiment: 'negative', Emotion: 'anger', Stance: 'against' }, note: 'sarcasm: “great”, “thanks”' },
+  { t: 'The ban starts on 1 June and applies to all rental scooters.', cols: { Sentiment: 'neutral', Emotion: 'none', Stance: 'none' }, note: 'factual' },
+  { t: 'I get why they did it, but students will suffer the most.', cols: { Sentiment: 'mixed', Emotion: 'sadness', Stance: 'against' }, note: 'often disputed' },
+  { t: 'Scared every time I walk at night with scooters flying past. Good decision.', cols: { Sentiment: 'positive', Emotion: 'fear', Stance: 'favour' }, note: 'emotion ≠ sentiment' },
+  { t: 'lol the ban is so dumb 😂😂', cols: { Sentiment: 'negative', Emotion: ['joy', 'anger'], Stance: 'against' }, note: 'emoji ≠ sentiment' }
+], { Sentiment: ['positive', 'neutral', 'negative', 'mixed'], Emotion: ['joy', 'anger', 'fear', 'sadness', 'surprise', 'none'], Stance: ['favour', 'against', 'none'] }, { noteHead: 'Note', after: 'Posts 4–6 are where annotators typically disagree.' });
+
+// ---------- Section 11: interaction graph ----------
+const G0 = [['u1', 'u2', 'reply'], ['u1', 'u2', 'mention'], ['u2', 'u3', 'share'], ['u3', 'u1', 'reply'], ['u4', 'u1', 'mention'], ['u4', 'u2', 'share'], ['u1', 'u2', 'share']];
+let GLOG = G0.map(r => [...r]);
+const USERS = ['u1', 'u2', 'u3', 'u4', 'u5'];
+const GP = { u1: [60, 60], u2: [200, 60], u3: [200, 170], u4: [60, 170], u5: [130, 115] };
+$('#gSrc').innerHTML = USERS.map(u => `<option>${u}</option>`).join(''); $('#gTgt').innerHTML = USERS.map((u, i) => `<option ${i === 1 ? 'selected' : ''}>${u}</option>`).join('');
+function drawG() {
+  $('#gLog').innerHTML = tbl(['source', 'target', 'type'], GLOG);
+  const w = {}; GLOG.forEach(([s, t]) => { const k = s + '→' + t; w[k] = (w[k] || 0) + 1; });
+  const E = Object.entries(w).map(([k, v]) => [...k.split('→'), v]).sort();
+  $('#gEdges').innerHTML = tbl(['source', 'target', 'weight'], E);
+  const indeg = {}; USERS.forEach(u => indeg[u] = 0); E.forEach(([s, t, v]) => indeg[t] += v);
+  const used = new Set(E.flatMap(e => [e[0], e[1]]));
+  let h = '<defs><marker id="ar" viewBox="0 0 10 10" refX="10" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker></defs>';
+  E.forEach(([s, t, v]) => {
+    const [x1, y1] = GP[s], [x2, y2] = GP[t]; const dx = x2 - x1, dy = y2 - y1, L = Math.hypot(dx, dy) || 1;
+    const back = w[t + '→' + s] ? 7 : 0; const ox = -dy / L * back, oy = dx / L * back;
+    h += `<line x1="${x1 + dx / L * 20 + ox}" y1="${y1 + dy / L * 20 + oy}" x2="${x2 - dx / L * 22 + ox}" y2="${y2 - dy / L * 22 + oy}" style="stroke:var(--accent);stroke-width:${1 + v * 1.3}" marker-end="url(#ar)"/>`;
+    if (v > 1) h += `<text x="${(x1 + x2) / 2 + ox * 2.4}" y="${(y1 + y2) / 2 + oy * 2.4 - 12}" style="font-size:11px;font-weight:700">w=${v}</text>`;
+  });
+  const top = USERS.reduce((a, b) => indeg[b] > indeg[a] ? b : a);
+  USERS.forEach(u => { if (!used.has(u)) return; const [x, y] = GP[u]; h += `<circle cx="${x}" cy="${y}" r="${18}" fill="${u === top ? 'var(--accent)' : 'var(--blue)'}"></circle><text x="${x}" y="${y}" class="on" style="font-size:12px">${u}</text>`; });
+  $('#gSvg').innerHTML = h;
+  $('#gMsg').innerHTML = `<b>${top}</b> receives the most interactions (weighted in-degree = ${indeg[top]}). ${GLOG.length} interactions collapse into ${E.length} weighted edges.`;
+}
+$('#gAdd').onclick = () => { const s = $('#gSrc').value, t = $('#gTgt').value; if (s === t) { $('#gMsg').textContent = 'A self-loop is not useful here — pick two different users.'; return; } GLOG.push([s, t, $('#gType').value]); drawG(); };
+$('#gReset').onclick = () => { GLOG = G0.map(r => [...r]); drawG(); };
+drawG();
+
+// ---------- Section 12: dataset profile ----------
+const PROF = [
+  ['Size', 'df.shape', () => `<div class="kpis"><div class="kpi"><div class="v">${EVP.shape[0].toLocaleString()}</div><div class="l">posts (rows)</div></div><div class="kpi"><div class="v">${EVP.shape[1]}</div><div class="l">columns</div></div></div>`, 'One row = one post. Enough for a train/test split later.'],
+  ['Types', 'df.dtypes', () => `<div class="tablewrap"><table>${tbl(['column', 'dtype', 'unique values'], Object.keys(EVP.dtypes).map(c => [c, EVP.dtypes[c].replace('datetime64[ns, UTC]', 'datetime64[ns, UTC]'), EVP.nunique[c]]))}</table></div>`, 'created_at is parsed as datetime because we passed parse_dates. Text columns are <code>object</code>.'],
+  ['Missing values', 'df.isna().sum()', () => { const d = document.createElement('div'); bars(d, Object.entries(EVP.missing).map(([k, v]) => ({ l: k, v, c: v > 1000 ? 'r' : v ? 'a' : 'g' })), EVP.shape[0]); return d.outerHTML; }, '<b>reply_to</b> is missing for 1,560 posts — <i>by design</i>: those posts are not replies. <b>user_location</b> is missing for 1,130 — and it is personal data. Do we even need it? <b>lang</b> is missing for 48 posts.'],
+  ['Duplicates', 'df.duplicated("text").sum()', () => `<div class="kpis"><div class="kpi"><div class="v">${EVP.dups}</div><div class="l">duplicated texts</div></div></div><div class="tablewrap"><table>${tbl(['post_id', 'created_at', 'text'], EVP.dupex.map(r => [r[0], r[1].slice(0, 16), esc(r[2].slice(0, 80)) + '…']))}</table></div>`, 'Same text, different post_id and time — bots, reposts or copy-paste campaigns? Investigate before you delete.'],
+  ['Time range', 'df["created_at"].agg(["min", "max"])', () => { const d = document.createElement('div'); bars(d, Object.entries(EVP.daily).map(([k, v]) => ({ l: k.slice(5), v, c: v > 200 ? '' : 'b' }))); return `<p><b>${EVP.range[0].slice(0, 10)}</b> → <b>${EVP.range[1].slice(0, 10)}</b> (posts per day)</p>` + d.outerHTML; }, 'There is a spike on <b>4 March</b> (580 posts vs. 140 on other days). If we ignore it, that one day dominates the results — temporal bias.'],
+  ['Text length', 'df["text"].str.len().median()', () => { const d = document.createElement('div'); bars(d, EVP.len_hist.filter(x => x[1]).map(([b, c]) => ({ l: b + '–' + (b + 19), v: c, c: 'p' }))); return `<p>Median length: <b>${EVP.len_median}</b> characters</p>` + d.outerHTML; }, 'Short posts → little context. Check whether your method needs longer texts.'],
+  ['Languages', 'df["lang"].value_counts(normalize=True, dropna=False)', () => { const d = document.createElement('div'); bars(d, Object.entries(EVP.lang).map(([k, v]) => ({ l: k === 'nan' ? 'missing' : k, v, t: pct(v / EVP.shape[0]), c: 'b' }))); return d.outerHTML; }, 'Only about 60% English — German and mixed posts need a language decision (Chapter 2–3).'],
+  ['Sentiment balance', 'df["sentiment"].value_counts(normalize=True)', () => { const d = document.createElement('div'); const c = { negative: 'r', neutral: 'm', positive: 'g' }; bars(d, Object.entries(EVP.sent).map(([k, v]) => ({ l: k, v, t: pct(v / EVP.shape[0]), c: c[k] }))); return d.outerHTML; }, 'negative 38% · neutral 36% · positive 26% — not perfectly balanced. Remember this for macro-F1 in Chapter 2.'],
+  ['Sentiment × engagement', 'df.groupby("sentiment")["likes"].median()', () => { const d = document.createElement('div'); const c = { negative: 'r', neutral: 'm', positive: 'g' }; bars(d, Object.entries(EVP.eng).map(([k, v]) => ({ l: k, v: v.likes_med, t: v.likes_med + ' likes', c: c[k] }))); return d.outerHTML; }, 'Negative posts get the highest median likes (6 vs. 4 vs. 2). Is it real, or driven by the 4 March spike? Excluding 4 March the medians stay 6 / 4 / 2 — but “more likes” is still not “people agree”.']
+];
+$('#profBtns').innerHTML = PROF.map((p, i) => `<button class="btn" data-i="${i}">${p[0]}</button>`).join('');
+$$('#profBtns .btn').forEach(b => b.onclick = () => {
+  const p = PROF[+b.dataset.i]; $$('#profBtns .btn').forEach(x => x.classList.toggle('sel', x === b));
+  $('#profCode').innerHTML = hl(p[1], 'py'); $('#profOut').innerHTML = p[2](); $('#profMsg').innerHTML = p[3];
+});
+$('#profBtns .btn').click();
+$('#profSample').innerHTML = tbl(['post_id', 'created_at', 'text', 'lang', 'sentiment', 'likes', 'replies', 'reply_to', 'user_location'], EVP.sample.map(r => r.map((c, j) => c === null ? '' : j === 2 ? esc(String(c).slice(0, 70)) + '…' : j === 1 ? String(c).slice(0, 16) : esc(String(c)))));
+
+// ---------- Section 13: pseudonymiser + sorter ----------
+function pseudo() {
+  const t = $('#psIn').value; const map = {}; let n = 0;
+  let o = t.replace(/[\w.+-]+@[\w-]+\.[\w.]+/g, '[EMAIL]').replace(/https?:\/\/\S+/g, '[URL]').replace(/@(\w+)/g, (m, h) => { if (!map[h]) map[h] = 'USER_' + (++n); return '@' + map[h]; });
+  $('#psOut').textContent = o;
+  const issues = [];
+  if (/\b[A-ZÄÖÜ][a-zäöüß]+(platz|straße|strasse|str\.|weg)\b/i.test(o)) issues.push('a specific <b>place name</b> remains — combined with a time, it can re-identify someone');
+  if (o.split(/\s+/).length > 8) issues.push('the <b>exact wording</b> can be searched online — paraphrase quotes in reports');
+  $('#psMsg').innerHTML = `${n} handle(s) pseudonymised consistently (same person → same pseudonym, so network analysis still works).` + (issues.length ? ' Still risky: ' + issues.join('; ') + '.' : '');
+}
+$('#psIn').oninput = pseudo; pseudo();
+makeSorter('#sortEthics', [{ id: 'ok', label: '✅ Acceptable practice' }, { id: 'risk', label: '⚠️ Risky / not allowed' }], [
+  { t: 'Keep only post text, time and language for a sentiment question', c: 'ok' }, { t: 'Replace user IDs with stable pseudonyms', c: 'ok' }, { t: 'Report aggregate shares per day instead of individual users', c: 'ok' },
+  { t: 'Use a published dataset and read its licence', c: 'ok' }, { t: 'Collect full user profiles “just in case”', c: 'risk' }, { t: 'Paste a screenshot with usernames into your slides', c: 'risk' },
+  { t: 'Scrape a platform against its terms of service', c: 'risk' }, { t: 'Infer users’ religion or health from their posts', c: 'risk', why: 'Special-category data, GDPR Art. 9.' }, { t: '“It is public, so I can quote it word for word with the username”', c: 'risk' }
+]);
+
+// ---------- Section 14: bias funnel ----------
+const FUN = [
+  ['Society', '', 'Everyone whose opinion we would like to know.'],
+  ['People on the platform', 'Platform bias', 'Different groups use different platforms. Reddit opinions may not represent older people who do not use Reddit.'],
+  ['People who post', 'Self-selection bias', 'Active posters differ from silent readers. Unhappy students may post a lot while satisfied students say nothing.'],
+  ['Posts visible via the API', 'API bias', 'Platform rules decide what can be collected: public posts yes, private groups and deleted posts no.'],
+  ['Posts in our time window', 'Temporal bias', 'Events shift the distribution: anger about train delays peaks on the day of a major disruption.'],
+  ['Labels & model outputs', 'Model bias', 'Models can amplify imbalances: a model trained mainly on English may misclassify German-English posts.'],
+  ['Our conclusions', '', 'What survives every filter. Ask: who is represented — and who is missing?']
+];
+function drawFunnel(sel = 1) {
+  let h = ''; const n = FUN.length;
+  FUN.forEach((f, i) => { const w = 400 - i * 46, x = (420 - w) / 2, y = 6 + i * 46; h += `<g style="cursor:pointer" data-i="${i}"><rect x="${x}" y="${y}" width="${w}" height="40" rx="8" fill="${i === sel ? 'var(--accent)' : i === n - 1 ? 'var(--green-soft)' : 'var(--surface2)'}" stroke="var(--line)"/><text x="210" y="${y + 20}" text-anchor="middle" dominant-baseline="central" style="font-size:13px;fill:${i === sel ? '#fff' : 'var(--ink)'};font-weight:${i === sel ? 700 : 400}">${f[0]}</text></g>`; });
+  $('#funnel').innerHTML = h;
+  $$('#funnel g').forEach(g => g.onclick = () => drawFunnel(+g.dataset.i));
+  const f = FUN[sel]; $('#funnelInfo').innerHTML = `${f[1] ? `<span class="tag red">${f[1]}</span>` : '<span class="tag">Layer</span>'}<h4 style="margin-top:8px">${f[0]}</h4><p>${f[2]}</p>`;
+}
+drawFunnel();
+makeSorter('#sortBias', [{ id: 'plat', label: 'Platform bias' }, { id: 'self', label: 'Self-selection' }, { id: 'api', label: 'API bias' }, { id: 'temp', label: 'Temporal bias' }, { id: 'model', label: 'Model bias' }], [
+  { t: 'Only TikTok data for a question about all voters', c: 'plat' }, { t: 'Only the angriest customers bother to post', c: 'self' }, { t: 'The free API returns a 1% sample and no deleted posts', c: 'api' },
+  { t: 'Data collected only during the week of a product recall', c: 'temp' }, { t: 'An English-trained model labels German posts “neutral”', c: 'model' }, { t: 'Silent readers never appear in the data', c: 'self' },
+  { t: 'Private Facebook groups cannot be collected', c: 'api' }, { t: 'A spike on 4 March dominates the averages', c: 'temp' }
+]);
+
+// ---------- Section 15: profile card ----------
+const PC = [['dataset', 'Dataset & source'], ['size', 'Size (posts × columns)'], ['time', 'Time range'], ['missing', 'Missing values (top 2)'], ['dups', 'Duplicates'], ['langs', 'Languages'], ['len', 'Median text length'], ['sent', 'Sentiment distribution'], ['eng', 'Sentiment × engagement'], ['risk', 'One bias or ethics risk'], ['rq', 'Research question']];
+const PCS = { dataset: 'ev_posts.csv — EV discussion, instructor-provided (synthetic) · pd.read_csv(...)', size: '2,400 × 9 · df.shape', time: '1–14 March 2026 (spike on 4 March) · df["created_at"].agg(["min","max"])', missing: 'reply_to 1,560 (by design: not a reply) · user_location 1,130 · df.isna().sum()', dups: '37 identical texts → possible bots or reposts · df.duplicated("text").sum()', langs: 'en 60% · de 24% · mixed 8% · other 6% · missing 2% · value_counts(normalize=True, dropna=False)', len: '142 characters · df["text"].str.len().median()', sent: 'negative 38% · neutral 36% · positive 26% · value_counts(normalize=True)', eng: 'median likes: negative 6 · neutral 2 · positive 4 · groupby("sentiment")["likes"].median()', risk: 'Temporal bias: the 4 March spike dominates; locations could identify users', rq: 'Do negative posts about battery range receive more likes than positive posts?' };
+const pcState = store.get('sma-ch1-card', {});
+$('#profileCard').innerHTML = PC.map(([k, l]) => `<label><b>${l}</b><textarea data-k="${k}" placeholder="finding + pandas code">${esc(pcState[k] || '')}</textarea></label>`).join('');
+$$('#profileCard textarea').forEach(t => t.oninput = () => { pcState[t.dataset.k] = t.value; store.set('sma-ch1-card', pcState); });
+$('#pcDl').onclick = () => downloadText('Lab1.1_profile_card.txt', PC.map(([k, l]) => `${l}: ${pcState[k] || ''}`).join('\n'));
+$('#pcSample').onclick = () => { $('#pcSampleOut').innerHTML = $('#pcSampleOut').innerHTML ? '' : `<div class="tablewrap"><table>${tbl(['Field', 'Sample finding · code'], PC.map(([k, l]) => [l, esc(PCS[k])]))}</table></div>`; };
+
+// ---------- quiz ----------
+renderQuiz('#quizBox', [
+  { q: 'Which statement best describes the relationship between SMA and sentiment analysis?', opts: ['They are the same thing', 'Sentiment analysis is one part of the broader field of social media analytics', 'SMA is a sub-task of sentiment analysis', 'SMA only studies networks'], a: 1, why: 'SMA covers topics, influence, engagement, spread and communities; sentiment analysis focuses on opinions and polarity.' },
+  { q: 'In ev_posts.csv, <code>reply_to</code> is missing for 1,560 posts. What is the best interpretation?', opts: ['A data error — drop these rows', 'Missing by design: those posts are not replies', 'Impute it with the most common value', 'The API failed'], a: 1, why: 'Always ask whether a missing value is an error or by design before you act on it.' },
+  { q: '“Great, another two-hour delay. Just perfect.” A keyword matcher says positive. Why is it wrong?', opts: ['Negation', 'Sarcasm — positive words with negative meaning', 'Multilingual text', 'Missing emojis'], a: 1, why: 'Sarcasm flips the meaning of positive words; context decides.' },
+  { q: '“I am worried about electric cars, but I fully support the new subsidy policy.” What is the stance toward the subsidy policy?', opts: ['against', 'none', 'favour', 'mixed'], a: 2, why: 'Stance is about a target: the author supports the policy, even though the emotion is fear.' },
+  { q: 'Which field belongs to the <b>network</b> kind of data?', opts: ['created_at', 'likes', '#hashtags', 'A replies to B'], a: 3, why: 'Network data records who connects to whom: follows, mentions, replies, reposts.' },
+  { q: 'Which level of sentiment analysis tells you that “design” is positive but “battery” is negative in the same post?', opts: ['Document level', 'Sentence level', 'Aspect level', 'Corpus level'], a: 2, why: 'Aspect-level analysis assigns sentiment per feature or topic.' },
+  { q: 'A post is public on X. Which statement is correct under GDPR?', opts: ['Public posts are not personal data', 'Public posts are still personal data — minimise and pseudonymise', 'You may quote it with the username in any report', 'Consent is never required for research'], a: 1, why: 'Public ≠ free to use.' },
+  { q: 'Active posters differ from silent readers. Which bias is this?', opts: ['API bias', 'Temporal bias', 'Self-selection bias', 'Model bias'], a: 2, why: 'People who choose to post are not a random sample of platform users.' },
+  { q: 'Why do we inspect the dataset before modelling?', opts: ['Because pandas requires it', 'Every number (duplicates, spikes, missing fields, balance) leads to a modelling decision', 'To make the notebook longer', 'To find the best model automatically'], a: 1, why: 'Inspect before you model.' },
+  { q: 'Seven interaction rows u1→u2 (reply, mention, share) … become how many weighted edges between u1 and u2?', opts: ['3 edges of weight 1', '1 edge with weight 3', '0 edges', '1 edge with weight 1'], a: 1, why: 'groupby(["source","target"]).size() collapses repeated interactions into one weighted edge.' }
+]);
+
+addCopy();
+</script>
+</body></html>

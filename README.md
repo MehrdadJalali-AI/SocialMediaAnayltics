@@ -2,6 +2,19 @@
 
 An MSc-level, notebook-first course combining text, sentiment, networks, diffusion, and responsible research practice. The four CSV files are **synthetic teaching data** generated with seed 42 and contain no real private users.
 
+## Interactive study guides
+
+Open these in your browser. Each page explains the chapter's concepts with examples, interactive exercises, links to real tools and a self-check quiz.
+
+| Chapter | Topic | Open |
+|---|---|---|
+| 1 | Foundations & Introduction | [Open page](https://mehrdadjalali-ai.github.io/SocialMediaAnayltics/interactive/Chapter1_Foundations.html) |
+| 2 | Preprocessing & Classical Sentiment | [Open page](https://mehrdadjalali-ai.github.io/SocialMediaAnayltics/interactive/Chapter2_Preprocessing_Classical_Sentiment.html) |
+
+All pages: <https://mehrdadjalali-ai.github.io/SocialMediaAnayltics/interactive/>
+
+Offline: download the `.html` files from the [`interactive/`](interactive/) folder and open them in any browser.
+
 ## Seven chapters
 
 | # | Notebook | Focus |
