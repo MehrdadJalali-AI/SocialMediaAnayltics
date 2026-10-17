@@ -1,0 +1,844 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ch6 · Advanced Topics & Project Kick-off</title>
+<style>:root{
+  --bg:#f7f5f2; --surface:#ffffff; --surface2:#f1eee9; --ink:#1f1d1a; --muted:#5f5a53; --line:#e3ded6;
+  --accent:#c2255c; --accent-soft:#fce4ec; --blue:#1f5fa8; --blue-soft:#e6eef8; --green:#21794f; --green-soft:#e2f2ea;
+  --amber:#9a5a0f; --amber-soft:#fbf0de; --purple:#5a43a6; --purple-soft:#ece8f8; --red:#b42318; --red-soft:#fde8e6;
+  --code-bg:#1e1f24; --code-ink:#e8e6e3; --shadow:0 1px 2px rgba(0,0,0,.05),0 4px 16px rgba(0,0,0,.05);
+  --radius:14px; --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#141312; --surface:#1d1c1a; --surface2:#262421; --ink:#eeebe6; --muted:#a8a29a; --line:#35322e;
+  --accent:#f06595; --accent-soft:#3a1a26; --blue:#7fb0ec; --blue-soft:#1a2738; --green:#6fcf9f; --green-soft:#173027;
+  --amber:#e8b062; --amber-soft:#33281a; --purple:#b3a3f0; --purple-soft:#26213a; --red:#f2877d; --red-soft:#3a1d1a;
+  --code-bg:#0f0f11; --shadow:0 1px 2px rgba(0,0,0,.4);
+}}
+:root[data-theme="dark"]{
+  --bg:#141312; --surface:#1d1c1a; --surface2:#262421; --ink:#eeebe6; --muted:#a8a29a; --line:#35322e;
+  --accent:#f06595; --accent-soft:#3a1a26; --blue:#7fb0ec; --blue-soft:#1a2738; --green:#6fcf9f; --green-soft:#173027;
+  --amber:#e8b062; --amber-soft:#33281a; --purple:#b3a3f0; --purple-soft:#26213a; --red:#f2877d; --red-soft:#3a1d1a;
+  --code-bg:#0f0f11; --shadow:0 1px 2px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+code{font-family:var(--mono);font-size:.88em;background:var(--surface2);padding:.1em .35em;border-radius:5px}
+h1,h2,h3,h4{line-height:1.25;margin:0 0 .5em}
+h2{font-size:1.65rem;letter-spacing:-.01em}
+h3{font-size:1.15rem}
+p{margin:0 0 1em}
+.topbar{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topbar-inner{max-width:1240px;margin:0 auto;display:flex;align-items:center;gap:16px;padding:10px 20px}
+.brand{font-weight:700;color:var(--accent);text-decoration:none;white-space:nowrap}
+.chapnav{display:flex;gap:6px;overflow-x:auto;flex:1}
+.chapnav a{padding:6px 12px;border-radius:999px;text-decoration:none;color:var(--muted);font-size:.9rem;white-space:nowrap;border:1px solid transparent}
+.chapnav a.on{background:var(--accent-soft);color:var(--accent);border-color:color-mix(in srgb,var(--accent) 30%,transparent);font-weight:600}
+.iconbtn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 12px;cursor:pointer;font-size:.85rem}
+.progress{height:3px;background:var(--accent);width:0;transition:width .1s}
+.hero{max-width:1240px;margin:0 auto;padding:48px 20px 24px}
+.hero .kicker{color:var(--accent);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.8rem}
+.hero h1{font-size:clamp(1.9rem,4vw,2.8rem);letter-spacing:-.02em;margin:.2em 0 .35em}
+.hero p.lead{font-size:1.12rem;color:var(--muted);max-width:760px}
+.objectives{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:20px}
+.objectives div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:.93rem}
+.objectives b{display:block;color:var(--accent);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase}
+.layout{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:230px minmax(0,1fr);gap:32px;padding:0 20px 80px}
+.toc{position:sticky;top:76px;align-self:start;max-height:calc(100vh - 96px);overflow:auto;font-size:.9rem}
+.toc h4{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.toc a{display:flex;gap:8px;align-items:center;padding:5px 8px;border-radius:8px;color:var(--muted);text-decoration:none;border-left:2px solid transparent}
+.toc a.active{color:var(--ink);background:var(--surface);border-left-color:var(--accent)}
+.toc a .dot{width:8px;height:8px;border-radius:50%;border:1.5px solid var(--line);flex:none}
+.toc a.done .dot{background:var(--green);border-color:var(--green)}
+section.chap{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:28px;margin-bottom:24px;box-shadow:var(--shadow)}
+section.chap > .sec-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:8px}
+.secnum{color:var(--accent);font-weight:700;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase}
+.donebtn{border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:999px;padding:4px 10px;font-size:.8rem;cursor:pointer;white-space:nowrap}
+.donebtn.on{background:var(--green-soft);color:var(--green);border-color:var(--green)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.card{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:16px}
+.card h4{margin-bottom:.3em}
+.card p:last-child{margin-bottom:0}
+.callout{border-left:4px solid var(--accent);background:var(--accent-soft);padding:12px 16px;border-radius:0 10px 10px 0;margin:16px 0}
+.callout.green{border-color:var(--green);background:var(--green-soft)}
+.callout.blue{border-color:var(--blue);background:var(--blue-soft)}
+.callout.amber{border-color:var(--amber);background:var(--amber-soft)}
+.callout b:first-child{display:block;margin-bottom:2px}
+.analogy{display:flex;gap:12px;background:var(--purple-soft);border-radius:12px;padding:14px 16px;margin:16px 0}
+.analogy .ico{font-size:1.5rem;line-height:1}
+.tag{display:inline-block;padding:2px 9px;border-radius:999px;font-size:.78rem;font-weight:600;background:var(--surface2);border:1px solid var(--line);color:var(--muted)}
+.tag.blue{background:var(--blue-soft);color:var(--blue);border-color:transparent}
+.tag.green{background:var(--green-soft);color:var(--green);border-color:transparent}
+.tag.amber{background:var(--amber-soft);color:var(--amber);border-color:transparent}
+.tag.red{background:var(--red-soft);color:var(--red);border-color:transparent}
+.tag.purple{background:var(--purple-soft);color:var(--purple);border-color:transparent}
+.widget{border:1px dashed color-mix(in srgb,var(--accent) 45%,var(--line));border-radius:12px;padding:18px;margin:18px 0;background:var(--bg)}
+.widget > .wtitle{display:flex;align-items:center;gap:8px;font-weight:700;margin-bottom:10px}
+.widget > .wtitle::before{content:"▶ TRY IT";font-size:.7rem;letter-spacing:.08em;background:var(--accent);color:#fff;padding:2px 8px;border-radius:999px}
+.btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:7px 14px;border-radius:9px;cursor:pointer;font:inherit;font-size:.92rem}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.sel{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);font-weight:600}
+.btnrow{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+input[type=text],input[type=number],select,textarea{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:7px 10px}
+textarea{font-family:var(--mono);font-size:.85rem;width:100%}
+label{font-size:.9rem}
+input[type=range]{accent-color:var(--accent);width:100%}
+.tablewrap{overflow-x:auto;margin:10px 0}
+table{border-collapse:collapse;width:100%;font-size:.88rem}
+th,td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--surface2);font-weight:600;white-space:nowrap}
+td.bad,span.bad{background:var(--red-soft);color:var(--red)}
+td.good{background:var(--green-soft);color:var(--green)}
+td.warn{background:var(--amber-soft);color:var(--amber)}
+tr.hl td{background:var(--accent-soft)}
+td[contenteditable]{outline:none;cursor:text}
+td[contenteditable]:focus{box-shadow:inset 0 0 0 2px var(--accent)}
+pre{background:var(--code-bg);color:var(--code-ink);border-radius:10px;padding:14px 16px;overflow:auto;font:13px/1.55 var(--mono);position:relative;margin:10px 0}
+pre code{background:none;padding:0;color:inherit;font-size:inherit}
+pre .copy{position:absolute;top:8px;right:8px;font-size:.72rem;background:#ffffff1a;color:#ddd;border:1px solid #ffffff30;border-radius:6px;padding:2px 8px;cursor:pointer}
+.c-k{color:#f4a261}.c-s{color:#9ad59a}.c-c{color:#8b8f98;font-style:italic}.c-n{color:#82b8ff}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:14px;overflow-x:auto}
+.tabs button{border:0;background:none;color:var(--muted);padding:9px 14px;cursor:pointer;font:inherit;font-size:.93rem;border-bottom:2px solid transparent;white-space:nowrap}
+.tabs button.on{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+.tabpanel{display:none}.tabpanel.on{display:block}
+details.reveal{background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:8px 0}
+details.reveal summary{cursor:pointer;font-weight:600}
+.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.links a{display:block;text-decoration:none;color:var(--ink);background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;transition:border-color .15s,transform .15s}
+.links a:hover{border-color:var(--accent);transform:translateY(-1px)}
+.links a b{display:block;color:var(--accent);font-size:.95rem}
+.links a span{font-size:.84rem;color:var(--muted)}
+.quiz .q{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:10px 0}
+.quiz .q p{font-weight:600;margin-bottom:8px}
+.quiz .opts{display:grid;gap:6px}
+.quiz .opts button{text-align:left;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:9px;padding:8px 12px;cursor:pointer;font:inherit;font-size:.93rem}
+.quiz .opts button.right{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.quiz .opts button.wrong{background:var(--red-soft);border-color:var(--red);color:var(--red)}
+.quiz .why{display:none;margin-top:8px;font-size:.9rem;color:var(--muted)}
+.quiz .q.answered .why{display:block}
+.score{font-weight:700;color:var(--accent)}
+.flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;margin:12px 0}
+.flow .step{flex:1 1 130px;background:var(--surface2);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer;transition:all .15s;position:relative}
+.flow .step small{display:block;color:var(--muted);font-size:.8rem}
+.flow .step.on{border-color:var(--accent);background:var(--accent-soft)}
+.flow .arrow{align-self:center;color:var(--muted)}
+.feedback{margin-top:10px;padding:10px 12px;border-radius:9px;font-size:.92rem;display:none}
+.feedback.show{display:block}
+.feedback.ok{background:var(--green-soft);color:var(--green)}
+.feedback.no{background:var(--red-soft);color:var(--red)}
+.feedback.info{background:var(--blue-soft);color:var(--blue)}
+.meter{height:10px;background:var(--surface2);border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+.meter > div{height:100%;background:var(--green);transition:width .3s}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:10px 0}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.kpi .v{font-size:1.5rem;font-weight:700}
+.kpi .l{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.sorter{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.bucket{min-height:110px;border:2px dashed var(--line);border-radius:10px;padding:8px}
+.bucket h5{margin:0 0 6px;font-size:.85rem}
+.bucket.over{border-color:var(--accent);background:var(--accent-soft)}
+.chip{display:inline-block;margin:3px;padding:5px 10px;border-radius:8px;background:var(--surface);border:1px solid var(--line);font-size:.85rem;cursor:grab;user-select:none}
+.chip.sel{outline:2px solid var(--accent)}
+.chip.right{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.chip.wrong{background:var(--red-soft);border-color:var(--red);color:var(--red)}
+.pool{min-height:50px;padding:8px;border-radius:10px;background:var(--surface2);margin-bottom:10px}
+.small{font-size:.86rem;color:var(--muted)}
+.foot{max-width:1240px;margin:0 auto;padding:20px;color:var(--muted);font-size:.85rem;text-align:center}
+svg text{font-family:inherit}
+@media (max-width:900px){
+  .layout{grid-template-columns:minmax(0,1fr)}
+  .toc{display:none}
+  section.chap{padding:18px}
+  .hero{padding:28px 16px 16px}
+  .layout{padding:0 16px 60px}
+  .topbar-inner{padding:8px 16px}
+}
+@media print{.topbar,.toc,.widget,.donebtn{display:none}.layout{display:block}}
+@media (max-width:700px){#doneCount{display:none}.brand{display:none}}
+
+
+/* ---------- additions for the Social Media Analytics guides ---------- */
+.post{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;max-width:560px;box-shadow:var(--shadow)}
+.post .ph{display:flex;gap:10px;align-items:center}
+.post .av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--purple));flex:none}
+.post .nm{font-weight:700}.post .meta{font-size:.82rem;color:var(--muted)}
+.post .tx{margin:10px 0;font-size:1.02rem}
+.post .eng{display:flex;gap:18px;font-size:.88rem;color:var(--muted)}
+.hot{cursor:pointer;border-radius:6px;padding:1px 3px;transition:background .15s,box-shadow .15s}
+.hot:hover{background:var(--accent-soft)}
+.hot.on{background:var(--accent-soft);box-shadow:0 0 0 2px var(--accent)}
+.zone{cursor:pointer;border-radius:10px;transition:box-shadow .15s}
+.zone.on{box-shadow:0 0 0 2px var(--accent)}
+.flipgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.flip{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;min-height:92px;transition:border-color .15s}
+.flip:hover{border-color:var(--accent)}
+.flip .b{display:none;color:var(--muted);font-size:.9rem;margin-top:6px}
+.flip.open .b{display:block}
+.flip .h{font-weight:700}
+.flip .h::after{content:" ＋";color:var(--accent);font-weight:400}
+.flip.open .h::after{content:" −"}
+.gsvg{width:100%;height:auto;display:block;background:var(--surface);border:1px solid var(--line);border-radius:12px;touch-action:manipulation}
+.gsvg line{stroke:var(--line);stroke-width:1.4}
+.gsvg line.hl{stroke:var(--accent);stroke-width:2.6}
+.gsvg line.cross{stroke:var(--red);stroke-width:2.2}
+.gsvg line.fail{stroke:var(--red);stroke-dasharray:4 3}
+.gsvg circle{stroke:var(--surface);stroke-width:1.5;cursor:pointer;transition:r .2s}
+.gsvg circle.sel{stroke:var(--ink);stroke-width:3}
+.gsvg text{font-size:10px;fill:var(--ink);pointer-events:none;text-anchor:middle;dominant-baseline:central}
+.gsvg text.on{fill:#fff;font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:.85rem;color:var(--muted);margin:6px 0}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.bars{display:grid;gap:6px;margin:8px 0}
+.bars .row{display:grid;grid-template-columns:minmax(90px,170px) 1fr 64px;gap:8px;align-items:center;font-size:.88rem}
+.bars .track{background:var(--surface2);border-radius:6px;height:18px;overflow:hidden;border:1px solid var(--line)}
+.bars .fill{height:100%;background:var(--accent);transition:width .35s}
+.bars .fill.g{background:var(--green)}.bars .fill.b{background:var(--blue)}.bars .fill.a{background:var(--amber)}.bars .fill.p{background:var(--purple)}.bars .fill.r{background:var(--red)}.bars .fill.m{background:var(--muted)}
+.bars .val{font-variant-numeric:tabular-nums;text-align:right}
+.mono{font-family:var(--mono);font-size:.86rem}
+.out{background:var(--surface2);border:1px solid var(--line);border-radius:9px;padding:9px 12px;font-family:var(--mono);font-size:.85rem;white-space:pre-wrap;word-break:break-word;margin:6px 0}
+.pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:.8rem;font-weight:600}
+.pill.pos{background:var(--green-soft);color:var(--green)}.pill.neg{background:var(--red-soft);color:var(--red)}.pill.neu{background:var(--surface2);color:var(--muted);border:1px solid var(--line)}.pill.mix{background:var(--amber-soft);color:var(--amber)}
+.tok{display:inline-block;margin:2px;padding:2px 7px;border-radius:7px;background:var(--surface2);border:1px solid var(--line);font-family:var(--mono);font-size:.82rem}
+.tok.pos{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.tok.neg{background:var(--red-soft);border-color:var(--red);color:var(--red)}
+.tok.gone{text-decoration:line-through;opacity:.55;background:var(--red-soft)}
+.tok.keep{background:var(--blue-soft);border-color:var(--blue);color:var(--blue)}
+.gauge{position:relative;height:16px;border-radius:99px;background:linear-gradient(90deg,var(--red),var(--surface2) 50%,var(--green));border:1px solid var(--line);margin:22px 0 8px}
+.gauge .needle{position:absolute;top:-6px;width:4px;height:28px;background:var(--ink);border-radius:2px;transition:left .3s;transform:translateX(-2px)}
+.gauge .lab{position:absolute;top:-22px;transform:translateX(-50%);font-weight:700;font-size:.85rem;white-space:nowrap;transition:left .3s}
+.check{display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px dashed var(--line)}
+.check input{margin-top:5px;accent-color:var(--accent)}
+.canvas8{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.canvas8 label{display:block;background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:10px}
+.canvas8 label b{display:block;font-size:.8rem;color:var(--accent);letter-spacing:.05em;text-transform:uppercase}
+.canvas8 textarea{font-family:inherit;font-size:.9rem;min-height:70px;margin-top:6px}
+.matrix input{width:64px;text-align:center}
+.cm td{text-align:center;font-variant-numeric:tabular-nums}
+.timeline{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.timeline .t{flex:1 0 120px;background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:10px;font-size:.88rem}
+.timeline .t b{display:block;color:var(--accent);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase}
+.timeline .t.now{border-color:var(--accent);background:var(--accent-soft)}
+select.lbl{font-size:.85rem;padding:4px 6px}
+td.ok{background:var(--green-soft)}td.no{background:var(--red-soft)}
+.big{font-size:2rem;font-weight:800;letter-spacing:-.02em}
+.dash{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:14px}
+.kicker2{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+</style></head>
+<body data-chapter="6">
+<div class="topbar"><div class="topbar-inner"><a class="brand" href="index.html">Social Media Analytics</a><nav class="chapnav"><a href="Chapter1_Foundations.html" class="">Ch 1 · Foundations</a><a href="Chapter2_Preprocessing_Classical_Sentiment.html" class="">Ch 2 · Preprocessing & VADER</a><a href="Chapter3_Transformers_LLMs.html" class="">Ch 3 · Transformers & LLMs</a><a href="Chapter4_Networks_Influence_Communities.html" class="">Ch 4 · Networks I</a><a href="Chapter5_Information_Diffusion.html" class="">Ch 5 · Diffusion</a><a href="Chapter6_Advanced_Topics_Project.html" class="on">Ch 6 · Topics & Project</a></nav><span class="small" id="doneCount"></span><button class="iconbtn" id="themeBtn">☾ Dark</button></div><div class="progress" id="progress"></div></div>
+<header class="hero" id="top">
+  <div class="kicker">Chapter 6 · Interactive study guide</div>
+  <h1>Advanced Topics &amp; Project Kick-off</h1>
+  <p class="lead">The last chapter has two parts. <b>Part A</b>: combining methods into one integrated analysis, topic discovery, and signals of misinformation and bots. <b>Part B</b> — the main part: your examination project. You form a research question, fill in a proposal canvas, pitch your idea and get feedback. <b>A strong project is not the one with the most methods — it is the one with a clear question, honest evidence and a responsible recommendation.</b></p>
+  <div class="objectives">
+    <div><b>Part A · Advanced</b>Combine methods; discover, name and validate topics</div>
+    <div><b>Part A · Advanced</b>Recognise misinformation, bot and coordination signals — and their limits</div>
+    <div><b>Part B · Project</b>Formulate an answerable research question; plan data, methods and ethics</div>
+    <div><b>Part B · Project</b>Tell a defensible story with evidence and uncertainty</div>
+  </div>
+  <p class="small" style="margin-top:12px">💾 Everything you type into the planning tools on this page (ethics plan, storyboard, proposal canvas) is saved in your browser only and can be downloaded as a text file.</p>
+</header>
+<div class="layout">
+<aside class="toc"><h4>In this chapter</h4><nav id="tocList"></nav></aside>
+<main>
+
+<section class="chap" id="warmup" data-title="Warm-up: fix the dashboard">
+  <div class="sec-head"><div><div class="secnum">Section 1 · Part A</div><h2>Warm-up: what would you decide — and what is missing?</h2></div></div>
+  <p>Your manager shows you this dashboard. Find at least three problems, then switch on the fixes one by one.</p>
+  <div class="widget"><div class="wtitle">Fix the Brand Mood Monitor</div>
+    <div class="grid2">
+      <div class="dash">
+        <div class="kicker2">Brand Mood Monitor · this week</div>
+        <div class="big" id="dbBig"></div>
+        <div id="dbHead" style="font-weight:700;margin:4px 0 8px"></div>
+        <svg id="dbSvg" viewBox="0 0 300 180" width="100%"></svg>
+        <p class="small" id="dbFoot"></p>
+      </div>
+      <div id="dbFix"></div>
+    </div>
+    <div class="feedback show" id="dbMsg"></div>
+  </div>
+  <div class="timeline"><div class="t"><b>From Ch 1–5</b>data profiles, baselines, transformers, networks and diffusion</div><div class="t now"><b>Ch 6 — you build</b>one integrated view · your project question &amp; proposal · a first storyboard</div><div class="t"><b>Your project delivers</b>an oral presentation + written documentation (50%)</div></div>
+</section>
+
+<section class="chap" id="integrated" data-title="Integrated intelligence">
+  <div class="sec-head"><div><div class="secnum">Section 2</div><h2>Integrated social media intelligence</h2></div></div>
+  <p>Real problems rarely need only one method. Click the layers to build one finding from several kinds of evidence (illustrative).</p>
+  <div class="widget"><div class="wtitle">One finding, many kinds of evidence</div>
+    <div class="btnrow" id="layBtns"></div>
+    <div id="layOut"></div>
+    <div class="meter"><div id="layMeter" style="width:0"></div></div>
+    <div class="feedback show info" id="layMsg"></div>
+  </div>
+</section>
+
+<section class="chap" id="topics" data-title="Topic discovery">
+  <div class="sec-head"><div><div class="secnum">Section 3</div><h2>Topic discovery: what are people talking about?</h2></div></div>
+  <div class="tablewrap"><table>
+    <tr><th>Approach</th><th>Input</th><th>Strength on social media</th><th>Watch out</th></tr>
+    <tr><td><b>NMF</b></td><td>TF-IDF matrix (Ch 2)</td><td>fast, stable, easy top words</td><td>needs a fixed number of topics</td></tr>
+    <tr><td>LDA</td><td>word counts</td><td>topic mixtures per document</td><td>unstable on very short posts</td></tr>
+    <tr><td>Embeddings + clustering (BERTopic)</td><td>sentence embeddings (Ch 3)</td><td>groups posts with similar meaning, not only same words</td><td>more parameters; clusters hard to name</td></tr>
+  </table></div>
+  <div class="widget"><div class="wtitle">Real NMF topics on ev_posts.csv — name them yourself</div>
+    <p class="small">Computed in Python: <code>TfidfVectorizer(min_df=5, max_df=0.5)</code> with a custom stopword list that keeps negation, <code>NMF(n_components=k, random_state=42)</code>, on the 2,363 deduplicated posts. Choose k, read the representative posts, and give each topic a name.</p>
+    <label class="small">Number of topics k = <b id="kV"></b><input type="range" id="kR" min="4" max="8" value="6"></label>
+    <div id="tpOut"></div>
+    <div class="feedback show info" id="tpMsg"></div>
+  </div>
+  <div class="grid2">
+    <div class="card"><h4>Four checks per topic</h4><p class="small"><b>Top words</b> — do they belong together? · <b>Representative posts</b> — read 5–10 · <b>Size</b> — tiny topics may be noise · <b>Distinct</b> — different from the others?</p></div>
+    <div class="card"><h4>Bad vs. better names</h4><p class="small">“Topic 1” → “Waiting at chargers” · “Battery” → “Battery recall and safety” · “Money” → “Subsidy and price debate” · “Positive” → “Driving experience and range”</p></div>
+  </div>
+  <div class="callout"><b>The model finds patterns — people give them names.</b>Too few topics merge themes; too many fragment them. Try several k and choose the one you can name.</div>
+  <h3>Topics combined with everything else</h3>
+  <div class="tablewrap"><table>
+    <tr><th>Combine topics with</th><th>Example question</th><th>From</th></tr>
+    <tr><td>Sentiment</td><td>Which topic drives the overall dissatisfaction?</td><td>Ch 2–3</td></tr>
+    <tr><td>Emotion</td><td>Are negative topics angry — or worried?</td><td>Ch 3</td></tr>
+    <tr><td>Stance</td><td>Negative about the battery but still in favour of EVs?</td><td>Ch 3</td></tr>
+    <tr><td>Network</td><td>Which communities discuss which topics? Who carries topics across?</td><td>Ch 4</td></tr>
+    <tr><td>Diffusion</td><td>Which topics spread fastest and reach most communities?</td><td>Ch 5</td></tr>
+  </table></div>
+</section>
+
+<section class="chap" id="beyond" data-title="Beyond text, bots & misinformation">
+  <div class="sec-head"><div><div class="secnum">Section 4</div><h2>Beyond text: images, conversations, events — and bots</h2></div></div>
+  <div class="tabs" data-group="bt"><button class="on" data-tab="mm">Multimodal posts</button><button data-tab="cv">Conversational context</button><button data-tab="ev">Events and time</button></div>
+  <div class="tabpanel on" data-group="bt" data-tab="mm"><p>“Very disappointed.” + a photo of a broken charger. Image and text together carry the meaning — text-only models miss half the post. Multimodal models exist — validate carefully.</p></div>
+  <div class="tabpanel" data-group="bt" data-tab="cv"><p>“Exactly what I expected.” — sincere or sarcastic? The parent post often decides. Add the parent text as model input; sample whole threads, not single posts.</p></div>
+  <div class="tabpanel" data-group="bt" data-tab="ev"><p>A recall on 4 March changes everything after it. Compare before/after windows, mark known events on every time plot — and beware: events change <i>who</i> posts.</p></div>
+  <div class="tablewrap"><table>
+    <tr><th>Phenomenon</th><th>Possible signals</th><th>Caution</th></tr>
+    <tr><td>Misinformation</td><td>claims contradicted by reliable sources; fast, deep cascades (Ch 5)</td><td>labels need fact-checks, not a model’s opinion</td></tr>
+    <tr><td>Bots</td><td>posting around the clock, extreme volume, identical texts, new accounts</td><td>many real users look “bot-like”; detection tools disagree</td></tr>
+    <tr><td>Coordinated campaigns</td><td>many accounts posting the same text or link within minutes</td><td>coordination ≠ inauthenticity (fan clubs, activists)</td></tr>
+  </table></div>
+  <div class="widget"><div class="wtitle">Signal (evidence) or verdict (claim)?</div><div id="sortSig"></div></div>
+  <div class="callout"><b>Describe the pattern — be careful with the label.</b>“37 identical posts from 12 accounts within 10 minutes” is evidence. “These are foreign bots” is a claim you cannot support.</div>
+</section>
+
+<section class="chap" id="story" data-title="From analysis to story">
+  <div class="sec-head"><div><div class="secnum">Section 5</div><h2>From analysis to story</h2></div></div>
+  <div class="flow" id="storyFlow"></div>
+  <div class="feedback show info" id="storyMsg"></div>
+  <div class="widget"><div class="wtitle">Build a responsible recommendation</div>
+    <p class="small">Tick the parts your statement contains. Watch it turn from a headline into a defensible claim.</p>
+    <div class="btnrow" id="clParts"></div>
+    <div class="out" id="clOut" style="font-family:inherit;font-size:1rem"></div>
+    <div class="feedback show" id="clMsg"></div>
+  </div>
+  <div class="callout"><b>Evidence + scope + uncertainty + limitation = a responsible recommendation.</b></div>
+</section>
+
+<section class="chap" id="kickoff" data-title="Project kick-off & requirements">
+  <div class="sec-head"><div><div class="secnum">Section 6 · Part B</div><h2>Project kick-off: your examination project</h2></div></div>
+  <p><b>Answer one real question about social media data — end to end, responsibly, as a group.</b> 50% of the final grade · oral presentation + written documentation.</p>
+  <div class="kpis"><div class="kpi"><div class="v">3–5</div><div class="l">students per group</div></div><div class="kpi"><div class="v">public</div><div class="l">data — your choice, our rules</div></div><div class="kpi"><div class="v">Ch 1–6</div><div class="l">methods</div></div><div class="kpi"><div class="v">Moodle</div><div class="l">only, by the group representative</div></div></div>
+  <h3>Roadmap</h3>
+  <div class="timeline">
+    <div class="t now"><b>0 · Today</b>Kick-off: groups, topic ideas, proposal canvas</div>
+    <div class="t"><b>1 · Proposal</b>question, data plan, ethics check</div>
+    <div class="t"><b>2 · Check-in</b>first results: profile + baseline</div>
+    <div class="t"><b>3 · Presentation</b>story, evidence, recommendation</div>
+    <div class="t"><b>4 · Documentation</b>report, notebook, AI disclosure</div>
+  </div>
+  <p class="small">Exact dates and assessment criteria are on Moodle. Small, early results beat a perfect plan.</p>
+  <h3>What your project must contain — track your progress</h3>
+  <div class="tablewrap"><table id="reqTbl"></table></div>
+  <div class="callout"><b>Depth beats breadth</b> — do fewer methods, but do them properly.</div>
+</section>
+
+<section class="chap" id="rq" data-title="A strong research question">
+  <div class="sec-head"><div><div class="secnum">Section 7</div><h2>A strong research question</h2></div></div>
+  <div class="tablewrap"><table>
+    <tr><th>Weak</th><th>Why it is weak</th><th>Stronger</th></tr>
+    <tr><td>“What do people think about EVs?”</td><td>too broad, not measurable</td><td>“How did sentiment about EV battery safety change in the two weeks after the March recall?”</td></tr>
+    <tr><td>“Who is the most influential user?”</td><td>no definition of influence</td><td>“Which users connect the German and English EV communities, and what do they share?”</td></tr>
+    <tr><td>“Do bots spread fake news?”</td><td>not answerable with your data</td><td>“Do posts with identical texts spread faster than unique posts in our dataset?”</td></tr>
+  </table></div>
+  <div class="widget"><div class="wtitle">Research-question checker</div>
+    <textarea id="rqIn" rows="2" style="font-family:inherit;font-size:1rem">What do people think about EVs?</textarea>
+    <div id="rqOut"></div>
+    <p class="small">The automatic hints are simple heuristics — the five ticks below are your own judgement.</p>
+    <div id="rqSelf"></div>
+  </div>
+  <div class="callout"><b>A good question already tells you which data and methods you need.</b></div>
+  <h3>Project ideas to start from</h3>
+  <div class="grid2">
+    <div class="card"><h4>Campus rules on Reddit</h4><p class="small">How do students’ stance and emotion differ across university subreddits? <span class="tag blue">Ch 2–3 + reply network</span></p></div>
+    <div class="card"><h4>A product recall</h4><p class="small">How did sentiment and topics change before and after a recall — and which communities drove it? <span class="tag blue">Ch 2–3 + topics + events</span></p></div>
+    <div class="card"><h4>A public-health message</h4><p class="small">How far did an official health post spread, and did replies become more negative with depth? <span class="tag blue">Ch 3 + diffusion</span></p></div>
+    <div class="card"><h4>Gaming update reactions</h4><p class="small">Do players from different communities react with different emotions to the same patch? <span class="tag blue">Ch 3 + communities</span></p></div>
+  </div>
+  <p class="small">Your own idea is welcome — if the data is public and the question is answerable.</p>
+</section>
+
+<section class="chap" id="ethicsplan" data-title="Data & ethics plan">
+  <div class="sec-head"><div><div class="secnum">Section 8</div><h2>Before you collect anything: data and ethics plan</h2></div></div>
+  <div class="widget"><div class="wtitle">Your data &amp; ethics plan</div>
+    <div class="canvas8" id="epForm"></div>
+    <div class="meter" style="margin-top:10px"><div id="epMeter"></div></div>
+    <div class="feedback show" id="epMsg"></div>
+    <div class="btnrow"><button class="btn primary" id="epDl">Download plan.txt</button></div>
+  </div>
+  <div class="callout"><b>If you cannot fill in this plan, you are not ready to collect.</b></div>
+</section>
+
+<section class="chap" id="report" data-title="Report & storyboard">
+  <div class="sec-head"><div><div class="secnum">Section 9</div><h2>Written documentation and presentation storyboard</h2></div></div>
+  <div class="flow" id="docFlow"></div>
+  <div class="feedback show info" id="docMsg"></div>
+  <p class="small"><b>Every number in the report must be reproducible from your notebook.</b></p>
+  <div class="widget"><div class="wtitle">Storyboard your final presentation (six panels)</div>
+    <div class="canvas8" id="sbForm"></div>
+    <div class="btnrow"><button class="btn" id="sbSample">Load an example</button><button class="btn primary" id="sbDl">Download storyboard.txt</button></div>
+  </div>
+  <div class="callout"><b>One message per slide</b> — if you cannot sketch it, you cannot present it.</div>
+  <div class="widget"><div class="wtitle">Strong project or common weakness?</div><div id="sortStrong"></div></div>
+</section>
+
+<section class="chap" id="canvas" data-title="Proposal canvas & pitch">
+  <div class="sec-head"><div><div class="secnum">Section 10</div><h2>Activity 6.1 — project proposal canvas</h2></div></div>
+  <p>In your project group: fill in every box (25 minutes), then pitch it in two minutes. Check the question first — a weak question makes every other box weak.</p>
+  <div class="widget"><div class="wtitle">Proposal canvas</div>
+    <div class="canvas8" id="pcForm"></div>
+    <div class="meter" style="margin-top:10px"><div id="pcMeter"></div></div>
+    <div class="btnrow"><button class="btn" id="pcSample">Load the sample canvas</button><button class="btn primary" id="pcDl">Download canvas.txt</button><button class="btn" id="pcClear">Clear</button></div>
+  </div>
+  <div class="callout green"><b>Why the sample canvas is strong</b>Narrow question, realistic data, a validated model choice, a named fallback and clear roles.</div>
+  <h3>Pitch and discussion round</h3>
+  <div class="grid3">
+    <div class="card"><h4>Pitch · 2 min</h4><p class="small">question, data, methods, first figure</p></div>
+    <div class="card"><h4>Peer feedback · 3 min</h4><p class="small">one strength · one question · one risk</p></div>
+    <div class="card"><h4>Instructor check · 2 min</h4><p class="small">scope, data access, ethics — go / adjust</p></div>
+  </div>
+  <div class="widget"><div class="wtitle">Feedback card for another group</div>
+    <div class="canvas8" id="fbForm"></div>
+    <div class="btnrow"><button class="btn primary" id="fbDl">Download feedback card</button></div>
+  </div>
+  <div class="callout"><b>Leave today with a question you can answer and data you can get.</b></div>
+</section>
+
+<section class="chap" id="lab" data-title="Lab 6.1: topics × sentiment">
+  <div class="sec-head"><div><div class="secnum">Section 11</div><h2>Lab 6.1 — topics meet sentiment</h2></div></div>
+  <p><b>Goal:</b> find, name and validate topics, then combine them with your sentiment labels. Data: <code>posts_ch3.parquet</code> or your own project data. Hand in with your project proposal.</p>
+  <div class="timeline">
+    <div class="t"><b>Walkthrough</b>NMF topics on TF-IDF; top words per topic</div>
+    <div class="t"><b>Challenge 1</b>Read 5 posts per topic; a name + one-line definition</div>
+    <div class="t"><b>Challenge 2</b>Share of negative posts per topic</div>
+    <div class="t"><b>Challenge 3</b>One finding supported by two other perspectives</div>
+    <div class="t"><b>Bring to the project</b>A test run for your project data</div>
+  </div>
+  <pre><code data-hl="py">from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.decomposition import NMF
+tfidf = TfidfVectorizer(min_df=5, max_df=0.5, stop_words=my_stopwords)
+X = tfidf.fit_transform(df["text_classical"])
+nmf = NMF(n_components=6, random_state=42)
+W = nmf.fit_transform(X)                    # posts x topics
+df["topic"] = W.argmax(axis=1)
+words = tfidf.get_feature_names_out()
+for k, comp in enumerate(nmf.components_):
+    print(k, [words[i] for i in comp.argsort()[-8:]])
+pd.crosstab(df["topic"], df["sentiment"], normalize="index")</code></pre>
+  <div class="grid3">
+    <div class="card"><h4>my_stopwords</h4><p class="small">custom list that keeps negation (Ch 2)</p></div>
+    <div class="card"><h4>n_components</h4><p class="small">try 4–10 and pick what you can name</p></div>
+    <div class="card"><h4>random_state</h4><p class="small">fix it — NMF results change between runs</p></div>
+    <div class="card"><h4>argmax</h4><p class="small">one main topic per post (a simplification)</p></div>
+    <div class="card"><h4>crosstab</h4><p class="small">share of each sentiment per topic</p></div>
+  </div>
+</section>
+
+<section class="chap" id="wrapup" data-title="Course wrap-up">
+  <div class="sec-head"><div><div class="secnum">Section 12</div><h2>Course wrap-up: six chapters, one toolkit</h2></div></div>
+  <div class="grid3">
+    <a class="card" href="Chapter1_Foundations.html" style="text-decoration:none;color:inherit"><h4>1 · Foundations</h4><p class="small">data types, labels, ethics and bias</p></a>
+    <a class="card" href="Chapter2_Preprocessing_Classical_Sentiment.html" style="text-decoration:none;color:inherit"><h4>2 · Preprocessing &amp; baselines</h4><p class="small">noise vs. signal, VADER, TF-IDF, macro-F1</p></a>
+    <a class="card" href="Chapter3_Transformers_LLMs.html" style="text-decoration:none;color:inherit"><h4>3 · Transformers &amp; LLMs</h4><p class="small">context, prompts, validation, fair comparison</p></a>
+    <a class="card" href="Chapter4_Networks_Influence_Communities.html" style="text-decoration:none;color:inherit"><h4>4 · Networks I</h4><p class="small">centrality, communities, homophily</p></a>
+    <a class="card" href="Chapter5_Information_Diffusion.html" style="text-decoration:none;color:inherit"><h4>5 · Networks II</h4><p class="small">cascades, simulations, seeds</p></a>
+    <div class="card"><h4>6 · Integration &amp; project</h4><p class="small">topics, story, responsible recommendations</p></div>
+  </div>
+  <div class="callout green"><b>From posts to evidence — carefully, reproducibly and responsibly.</b>Good luck with your projects!</div>
+</section>
+
+<section class="chap" id="links" data-title="Real-world links">
+  <div class="sec-head"><div><div class="secnum">Section 13</div><h2>Explore real tools &amp; resources</h2></div></div>
+  <div class="links">
+    <a href="https://scikit-learn.org/stable/modules/decomposition.html#nmf" target="_blank" rel="noopener"><b>scikit-learn NMF</b><span>Topic extraction from TF-IDF</span></a>
+    <a href="https://maartengr.github.io/BERTopic/" target="_blank" rel="noopener"><b>BERTopic</b><span>Embedding-based topic modelling</span></a>
+    <a href="https://radimrehurek.com/gensim/models/ldamodel.html" target="_blank" rel="noopener"><b>gensim LDA</b><span>Classic probabilistic topics</span></a>
+    <a href="https://botometer.osome.iu.edu/" target="_blank" rel="noopener"><b>Botometer</b><span>Bot-likelihood scores — and their limits</span></a>
+    <a href="https://firstdraftnews.org/long-form-article/understanding-information-disorder/" target="_blank" rel="noopener"><b>Information disorder</b><span>Mis-, dis- and malinformation</span></a>
+    <a href="https://www.storytellingwithdata.com/" target="_blank" rel="noopener"><b>Storytelling with Data</b><span>Honest charts and dashboards</span></a>
+    <a href="https://www.reddit.com/dev/api/" target="_blank" rel="noopener"><b>Reddit API</b><span>Terms and access for projects</span></a>
+    <a href="https://developers.google.com/youtube/v3" target="_blank" rel="noopener"><b>YouTube Data API</b><span>Public comments for projects</span></a>
+    <a href="https://github.com/MehrdadJalali-AI/SocialMediaAnayltics" target="_blank" rel="noopener"><b>Course repository</b><span>Notebooks &amp; datasets</span></a>
+  </div>
+</section>
+
+<section class="chap" id="quiz" data-title="Self-check quiz">
+  <div class="sec-head"><div><div class="secnum">Section 14</div><h2>Self-check quiz</h2></div></div>
+  <div id="quizBox"></div>
+</section>
+</main></div>
+
+<footer class="foot">Social Media Analytics and Sentiment Analysis · Prof. Dr. Mehrdad Jalali · SRH University of Applied Sciences Heidelberg · Course repository: <a href="https://github.com/MehrdadJalali-AI/SocialMediaAnayltics" target="_blank" rel="noopener">github.com/MehrdadJalali-AI/SocialMediaAnayltics</a></footer>
+<script>const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+// theme
+(function () {
+  const saved = store.get('sma-theme', null);
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+  const b = $('#themeBtn');
+  if (!b) return;
+  const label = () => {
+    const t = document.documentElement.getAttribute('data-theme') ||
+      (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    b.textContent = t === 'dark' ? '☀ Light' : '☾ Dark';
+  };
+  label();
+  b.onclick = () => {
+    const cur = document.documentElement.getAttribute('data-theme') ||
+      (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    const nxt = cur === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', nxt);
+    store.set('sma-theme', nxt); label();
+  };
+})();
+
+// TOC, scroll spy, progress, "mark as understood"
+(function () {
+  const toc = $('#tocList'); const secs = $$('section.chap');
+  const key = 'sma-done-' + (document.body.dataset.chapter || 'x');
+  const done = new Set(store.get(key, []));
+  secs.forEach((s, i) => {
+    const a = document.createElement('a');
+    a.href = '#' + s.id; a.innerHTML = '<span class="dot"></span>' + esc(s.dataset.title || s.id);
+    if (done.has(s.id)) a.classList.add('done');
+    toc && toc.appendChild(a);
+    const head = s.querySelector('.sec-head');
+    if (head) {
+      const b = document.createElement('button'); b.className = 'donebtn';
+      const paint = () => { b.classList.toggle('on', done.has(s.id)); b.textContent = done.has(s.id) ? '✓ Understood' : 'Mark as understood'; a.classList.toggle('done', done.has(s.id)); updCount(); };
+      b.onclick = () => { done.has(s.id) ? done.delete(s.id) : done.add(s.id); store.set(key, [...done]); paint(); };
+      head.appendChild(b); setTimeout(paint);
+    }
+  });
+  function updCount() { const c = $('#doneCount'); if (c) c.textContent = done.size + ' / ' + secs.length + ' sections understood'; }
+  const links = toc ? $$('a', toc) : [];
+  const onScroll = () => {
+    const h = document.documentElement; const p = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
+    const bar = $('#progress'); if (bar) bar.style.width = (p * 100) + '%';
+    let cur = 0; secs.forEach((s, i) => { if (s.getBoundingClientRect().top < 140) cur = i; });
+    links.forEach((l, i) => l.classList.toggle('active', i === cur));
+  };
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+})();
+
+// tabs: <div class="tabs" data-group="x"><button data-tab="a">..</button></div> + <div class="tabpanel" data-group="x" data-tab="a">
+document.addEventListener('click', e => {
+  const b = e.target.closest('.tabs button'); if (!b) return;
+  const g = b.parentElement.dataset.group;
+  $$('.tabs[data-group="' + g + '"] button').forEach(x => x.classList.toggle('on', x === b));
+  $$('.tabpanel[data-group="' + g + '"]').forEach(p => p.classList.toggle('on', p.dataset.tab === b.dataset.tab));
+});
+
+// copy buttons on code
+function addCopy(root = document) {
+  $$('pre', root).forEach(p => {
+    if (p.querySelector('.copy')) return;
+    const b = document.createElement('button'); b.className = 'copy'; b.textContent = 'Copy';
+    b.onclick = () => { const t = p.querySelector('code') ? p.querySelector('code').innerText : p.innerText.replace(/Copy$/, ''); navigator.clipboard && navigator.clipboard.writeText(t); b.textContent = 'Copied'; setTimeout(() => b.textContent = 'Copy', 1200); };
+    p.appendChild(b);
+  });
+}
+addCopy();
+
+// quiz engine: renderQuiz('#el', [{q, opts:[...], a: idx, why}])
+function renderQuiz(sel, items) {
+  const root = $(sel); if (!root) return; root.classList.add('quiz');
+  let right = 0, answered = 0;
+  const sc = document.createElement('p'); sc.className = 'score';
+  const upd = () => sc.textContent = `Score: ${right} / ${items.length}` + (answered === items.length ? (right === items.length ? ' — perfect! 🎉' : ' — review the explanations and try again.') : '');
+  items.forEach((it, qi) => {
+    const d = document.createElement('div'); d.className = 'q';
+    d.innerHTML = `<p>${qi + 1}. ${it.q}</p><div class="opts"></div><div class="why">💡 ${it.why}</div>`;
+    const o = d.querySelector('.opts');
+    it.opts.forEach((t, i) => {
+      const b = document.createElement('button'); b.innerHTML = t;
+      b.onclick = () => {
+        if (d.classList.contains('answered')) return;
+        d.classList.add('answered'); answered++;
+        if (i === it.a) { b.classList.add('right'); right++; } else { b.classList.add('wrong'); o.children[it.a].classList.add('right'); }
+        upd();
+      };
+      o.appendChild(b);
+    });
+    root.appendChild(d);
+  });
+  const r = document.createElement('button'); r.className = 'btn'; r.textContent = '↺ Reset quiz';
+  r.onclick = () => { root.innerHTML = ''; renderQuiz(sel, items); };
+  root.appendChild(sc); root.appendChild(r); upd();
+}
+
+// sorter engine (click a chip, then click a bucket — or drag): makeSorter('#el', cats:[{id,label}], items:[{t, c, why?}])
+function makeSorter(sel, cats, items) {
+  const root = $(sel); if (!root) return;
+  root.innerHTML = `<div class="pool small">Click an item, then click the box it belongs to (or drag it).</div><div class="sorter"></div><div class="btnrow"><button class="btn primary chk">Check answers</button><button class="btn rst">Reset</button></div><div class="feedback"></div>`;
+  const pool = $('.pool', root), sorter = $('.sorter', root), fb = $('.feedback', root);
+  let selected = null;
+  const shuffled = items.map((x, i) => ({ ...x, i })).sort(() => Math.random() - .5);
+  shuffled.forEach(it => {
+    const c = document.createElement('span'); c.className = 'chip'; c.textContent = it.t; c.draggable = true; c.dataset.c = it.c; c.dataset.i = it.i;
+    if (it.why) c.title = it.why;
+    c.onclick = e => { e.stopPropagation(); $$('.chip', root).forEach(x => x.classList.remove('sel')); selected = c; c.classList.add('sel'); };
+    c.ondragstart = ev => { selected = c; ev.dataTransfer.setData('text', it.i); };
+    pool.appendChild(c);
+  });
+  cats.forEach(cat => {
+    const b = document.createElement('div'); b.className = 'bucket'; b.dataset.id = cat.id; b.innerHTML = `<h5>${cat.label}</h5>`;
+    const drop = () => { if (selected) { b.appendChild(selected); selected.classList.remove('sel', 'right', 'wrong'); selected = null; } };
+    b.onclick = drop;
+    b.ondragover = e => { e.preventDefault(); b.classList.add('over'); };
+    b.ondragleave = () => b.classList.remove('over');
+    b.ondrop = e => { e.preventDefault(); b.classList.remove('over'); drop(); };
+    sorter.appendChild(b);
+  });
+  pool.onclick = () => { if (selected) { pool.appendChild(selected); selected.classList.remove('sel'); selected = null; } };
+  $('.chk', root).onclick = () => {
+    let ok = 0, placed = 0;
+    $$('.bucket .chip', root).forEach(c => { placed++; const good = c.parentElement.dataset.id === c.dataset.c; c.classList.toggle('right', good); c.classList.toggle('wrong', !good); if (good) ok++; });
+    fb.className = 'feedback show ' + (ok === items.length ? 'ok' : 'info');
+    fb.textContent = ok === items.length ? `All ${ok} correct — well done!` : `${ok} of ${items.length} correct (${items.length - placed} not placed yet). Red items are in the wrong box — hover them for a hint.`;
+  };
+  $('.rst', root).onclick = () => makeSorter(sel, cats, items);
+}
+
+// tiny syntax highlighter for python / sql / yaml snippets marked data-hl
+function hl(code, lang) {
+  let s = esc(code);
+  if (lang === 'py' || lang === 'sql') {
+    s = s.replace(/(#.*|--.*)$/gm, '<span class="c-c">$1</span>');
+    s = s.replace(/(&quot;.*?&quot;|'[^'\n]*')/g, '<span class="c-s">$1</span>');
+    const kw = lang === 'py' ? 'def|return|import|from|as|for|in|if|else|try|except|with|lambda|True|False|None|print' : 'SELECT|FROM|WHERE|GROUP BY|ORDER BY|JOIN|LEFT JOIN|ON|AS|WITH|SUM|COUNT|AND|OR|MATCH|RETURN|PREFIX';
+    s = s.replace(new RegExp('\\b(' + kw + ')\\b', 'g'), '<span class="c-k">$1</span>');
+  } else if (lang === 'yaml') {
+    s = s.replace(/(#.*)$/gm, '<span class="c-c">$1</span>').replace(/^(\s*-?\s*)([\w_]+):/gm, '$1<span class="c-k">$2</span>:');
+  }
+  return s;
+}
+$$('pre code[data-hl]').forEach(c => { c.innerHTML = hl(c.textContent, c.dataset.hl); });
+
+// ---------- extra shared helpers (Social Media Analytics guides) ----------
+const fmt = (x, d = 2) => (x === null || x === undefined || isNaN(x)) ? '—' : (+x).toFixed(d);
+const pct = (x, d = 0) => (x * 100).toFixed(d) + '%';
+const mean = a => a.reduce((s, x) => s + x, 0) / (a.length || 1);
+const sdp = a => { const m = mean(a); return Math.sqrt(a.reduce((s, x) => s + (x - m) ** 2, 0) / (a.length || 1)); };
+const tbl = (head, rows, cls) => '<tr>' + head.map(h => `<th>${h}</th>`).join('') + '</tr>' + rows.map((r, i) => '<tr>' + r.map((c, j) => `<td class="${cls ? cls(i, j, c) || '' : ''}">${c === null || c === '' ? '<span class="small">∅</span>' : c}</td>`).join('') + '</tr>').join('');
+const pill = l => `<span class="pill ${({ positive: 'pos', negative: 'neg', neutral: 'neu', mixed: 'mix' })[l] || 'neu'}">${l}</span>`;
+// horizontal bar list: bars('#el', [{l, v, max?, c?, t?}])
+function bars(sel, rows, max) {
+  const el = typeof sel === 'string' ? $(sel) : sel; if (!el) return;
+  const m = max || Math.max(...rows.map(r => r.v), 1e-9);
+  el.className = 'bars';
+  el.innerHTML = rows.map(r => `<div class="row"><span>${r.l}</span><div class="track"><div class="fill ${r.c || ''}" style="width:${Math.max(0, r.v / m * 100)}%"></div></div><span class="val">${r.t !== undefined ? r.t : r.v}</span></div>`).join('');
+}
+// flip cards: click to reveal
+document.addEventListener('click', e => { const f = e.target.closest('.flip'); if (f) f.classList.toggle('open'); });
+// seeded RNG (mulberry32)
+function rngSeed(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+// "pick the label" tables: makeLabeler('#el', rows:[{t, cols:{name:answer}}], options:{name:[...]}, notes)
+function makeLabeler(sel, rows, options, opts = {}) {
+  const root = $(sel); if (!root) return;
+  const cols = Object.keys(options);
+  root.innerHTML = `<div class="tablewrap"><table><tr><th>#</th><th>${opts.textHead || 'Post'}</th>${cols.map(c => `<th>${c}</th>`).join('')}${opts.noteHead ? `<th>${opts.noteHead}</th>` : ''}</tr>${rows.map((r, i) => `<tr><td>${i + 1}</td><td>${r.t}</td>${cols.map(c => `<td data-c="${c}" data-i="${i}"><select class="lbl"><option value="">—</option>${options[c].map(o => `<option>${o}</option>`).join('')}</select></td>`).join('')}${opts.noteHead ? `<td class="small nt" data-i="${i}"></td>` : ''}</tr>`).join('')}</table></div><div class="btnrow"><button class="btn primary chk">Compare with the sample answer</button><button class="btn rst">Reset</button></div><div class="feedback"></div>`;
+  $('.chk', root).onclick = () => {
+    let ok = 0, tot = 0;
+    $$('td[data-c]', root).forEach(td => {
+      const r = rows[+td.dataset.i], ans = r.cols[td.dataset.c], v = $('select', td).value; tot++;
+      const good = Array.isArray(ans) ? ans.includes(v) : v === ans; if (good) ok++;
+      td.className = good ? 'ok' : 'no'; td.title = 'Sample answer: ' + (Array.isArray(ans) ? ans.join(' / ') : ans);
+    });
+    $$('.nt', root).forEach(n => n.textContent = rows[+n.dataset.i].note || '');
+    const fb = $('.feedback', root); fb.className = 'feedback show ' + (ok === tot ? 'ok' : 'info');
+    fb.innerHTML = `${ok} of ${tot} cells match the sample answer. Hover a red cell to see the sample label. ${opts.after || ''}`;
+  };
+  $('.rst', root).onclick = () => makeLabeler(sel, rows, options, opts);
+}
+// simple persistent checklist: makeChecklist('#el', key, items[])
+function makeChecklist(sel, key, items) {
+  const root = $(sel); if (!root) return;
+  const st = new Set(store.get(key, []));
+  const draw = () => {
+    root.innerHTML = items.map((t, i) => `<label class="check"><input type="checkbox" data-i="${i}" ${st.has(i) ? 'checked' : ''}><span>${t}</span></label>`).join('') + `<div class="meter" style="margin-top:10px"><div style="width:${st.size / items.length * 100}%"></div></div><p class="small">${st.size} of ${items.length} done</p>`;
+    $$('input', root).forEach(c => c.onchange = () => { c.checked ? st.add(+c.dataset.i) : st.delete(+c.dataset.i); store.set(key, [...st]); draw(); });
+  };
+  draw();
+}
+// download text as a file
+function downloadText(name, text) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type: 'text/plain' })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
+</script>
+<script>const TOPICS={"4": [{"top": ["added", "gave", "disappointed", "time", "explanation", "useful", "journey", "days"], "n": 470, "sent": {"negative": 0.587, "neutral": 0.0, "positive": 0.413}, "reps": ["The EV design disappointed me again after 13 days. It added time to the journey and the app gave no useful explanation. #EV Trip diary 1636.", "The EV design disappointed me again after 8 days. It added time to the journey and the app gave no useful explanation. #EV Trip diary 1834.", "The EV design disappointed me again after 20 days. It added time to the journey and the app gave no useful explanation. #EV Trip diary 1324.", "The EV design disappointed me again after 10 days. It added time to the journey and the app gave no useful explanation. #EV Trip diary 0502.", "The EV design disappointed me again after 9 days. It added time to the journey and the app gave no useful explanation. #EV Trip diary 1342."]}, {"top": ["problem", "turned", "avoidable", "simple", "impressed", "not", "expected", "today"], "n": 436, "sent": {"negative": 0.883, "neutral": 0.009, "positive": 0.108}, "reps": ["Not impressed with the price on this EV today. I expected a simple trip, but it turned into another avoidable problem. #EV Trip diary 1233.", "Not impressed with the price on this EV today. I expected a simple trip, but it turned into another avoidable problem. #EV Trip diary 1839.", "Not impressed with the price on this EV today. I expected a simple trip, but it turned into another avoidable problem. #EV Trip diary 1299.", "Not impressed with the price on this EV today. I expected a simple trip, but it turned into another avoidable problem. #EV Trip diary 1317.", "Not impressed with the price on this EV today. I expected a simple trip, but it turned into another avoidable problem. #EV Trip diary 1365."]}, {"top": ["monday", "dealer", "says", "test", "arrives", "sharing", "planning", "information"], "n": 672, "sent": {"negative": 0.079, "neutral": 0.626, "positive": 0.295}, "reps": ["The dealer says the next EV price update arrives on Monday. Sharing the information here for anyone planning a test drive. #EV Trip diary 2361.", "The dealer says the next EV price update arrives on Monday. Sharing the information here for anyone planning a test drive. #EV Trip diary 1221.", "The dealer says the next EV price update arrives on Monday. Sharing the information here for anyone planning a test drive. #EV Trip diary 0387.", "The dealer says the next EV price update arrives on Monday. Sharing the information here for anyone planning a test drive. #EV Trip diary 1011.", "The dealer says the next EV price update arrives on Monday. Sharing the information here for anyone planning a test drive. #EV Trip diary 0375."]}, {"top": ["recorded", "compare", "logged", "week", "today", "app", "charging", "winter"], "n": 785, "sent": {"negative": 0.231, "neutral": 0.541, "positive": 0.228}, "reps": ["Logged 27 km with the EV today. The charging was recorded in the app; I will compare it with next week. #EV Trip diary 0896.", "Logged 29 km with the EV today. The charging was recorded in the app; I will compare it with next week. #EV Trip diary 1304.", "Logged 17 km with the EV today. The charging was recorded in the app; I will compare it with next week. #EV Trip diary 1292.", "Logged 19 km with the EV today. The charging was recorded in the app; I will compare it with next week. #EV Trip diary 0656.", "Logged 8 km with the EV today. The charging was recorded in the app; I will compare it with next week. #EV Trip diary 1718."]}], "5": [{"top": ["added", "disappointed", "useful", "journey", "gave", "explanation", "time", "days"], "n": 276, "sent": {"negative": 1.0, "neutral": 0.0, "positive": 0.0}, "reps": ["The EV design disappointed me again after 17 days. It added time to the journey and the app gave no useful explanation. #EV Trip diary 0538.", "The EV design disappointed me again after 16 days. It added time to the journey and the app gave no useful explanation. #EV Trip diary 0856.", "The EV design disappointed me again after 9 days. It added time to the journey and the app gave no useful explanation. #EV Trip diary 2212.", "The EV design disappointed me again after 3 days. It added time to the journey and the app gave no useful explanation. #EV Trip diary 0814.", "The EV design disappointed me again after 21 days. It added time to the journey and the app gave no useful explanation. #EV Trip diary 1354."]}, {"top": ["simple", "problem", "avoidable", "turned", "impressed", "not", "expected", "today"], "n": 418, "sent": {"negative": 0.921, "neutral": 0.01, "positive": 0.069}, "reps": ["Not impressed with the price on this EV today. I expected a simple trip, but it turned into another avoidable problem. #EV Trip diary 1233.", "Not impressed with the price on this EV today. I expected a simple trip, but it turned into another avoidable problem. #EV Trip diary 0405.", "Not impressed with the price on this EV today. I expected a simple trip, but it turned into another avoidable problem. #EV Trip diary 0933.", "Not impressed with the price on this EV today. I expected a simple trip, but it turned into another avoidable problem. #EV Trip diary 0705.", "Not impressed with the price on this EV today. I expected a simple trip, but it turned into another avoidable problem. #EV Trip diary 1707."]}, {"top": ["monday", "dealer", "test", "says", "planning", "sharing", "arrives", "information"], "n": 703, "sent": {"negative": 0.119, "neutral": 0.599, "positive": 0.282}, "reps": ["The dealer says the next EV price update arrives on Monday. Sharing the information here for anyone planning a test drive. #EV Trip diary 2361.", "The dealer says the next EV price update arrives on Monday. Sharing the information here for anyone planning a test drive. #EV Trip diary 1221.", "The dealer says the next EV price update arrives on Monday. Sharing the information here for anyone planning a test drive. #EV Trip diary 0999.", "The dealer says the next EV price update arrives on Monday. Sharing the information here for anyone planning a test drive. #EV Trip diary 1005.", "The dealer says the next EV price update arrives on Monday. Sharing the information here for anyone planning a test drive. #EV Trip diary 1011."]}, {"top": ["logged", "compare", "week", "recorded", "today", "app", "charging", "efficiency"], "n": 744, "sent": {"negative": 0.202, "neutral": 0.571, "positive": 0.227}, "reps": ["Logged 18 km with the EV today. The charging was recorded in the app; I will compare it with next week. #EV Trip diary 1322.", "Logged 20 km with the EV today. The charging was recorded in the app; I will compare it with next week. #EV Trip diary 2078.", "Logged 2 km with the EV today. The charging was recorded in the app; I will compare it with next week. #EV Trip diary 0668.", "Logged 26 km with the EV today. The charging was recorded in the app; I will compare it with next week. #EV Trip diary 1910.", "Logged 25 km with the EV today. The charging was recorded in the app; I will compare it with next week. #EV Trip diary 0314."]}, {"top": ["stressful", "smooth", "car", "practical", "petrol", "old", "better", "expected"], "n": 222, "sent": {"negative": 0.0, "neutral": 0.0, "positive": 1.0}, "reps": ["After 21 days, the EV winter efficiency has been better than expected. Smooth, practical, and less stressful than my old petrol car. #EV Trip diary 2340.", "After 28 days, the EV winter efficiency has been better than expected. Smooth, practical, and less stressful than my old petrol car. #EV Trip diary 1680.", "After 1 days, the EV winter efficiency has been better than expected. Smooth, practical, and less stressful than my old petrol car. #EV Trip diary 1566.", "After 13 days, the EV winter efficiency has been better than expected. Smooth, practical, and less stressful than my old petrol car. #EV Trip diary 1578.", "After 19 days, the EV winter efficiency has been better than expected. Smooth, practical, and less stressful than my old petrol car. #EV Trip diary 0714."]}], "6": [{"top": ["added", "disappointed", "useful", "journey", "gave", "explanation", "time", "days"], "n": 276, "sent": {"negative": 1.0, "neutral": 0.0, "positive": 0.0}, "reps": ["The EV design disappointed me again after 17 days. It added time to the journey and the app gave no useful explanation. #EV Trip diary 0538.", "The EV design disappointed me again after 16 days. It added time to the journey and the app gave no useful explanation. #EV Trip diary 0856.", "The EV design disappointed me again after 9 days. It added time to the journey and the app gave no useful explanation. #EV Trip diary 2212.", "The EV design disappointed me again after 3 days. It added time to the journey and the app gave no useful explanation. #EV Trip diary 0814.", "The EV design disappointed me again after 21 days. It added time to the journey and the app gave no useful explanation. #EV Trip diary 1354."]}, {"top": ["avoidable", "problem", "turned", "simple", "impressed", "not", "expected", "today"], "n": 367, "sent": {"negative": 0.973, "neutral": 0.011, "positive": 0.016}, "reps": ["Not impressed with the price on this EV today. I expected a simple trip, but it turned into another avoidable problem. #EV Trip diary 1911.", "Not impressed with the price on this EV today. I expected a simple trip, but it turned into another avoidable problem. #EV Trip diary 1941.", "Not impressed with the price on this EV today. I expected a simple trip, but it turned into another avoidable problem. #EV Trip diary 1269.", "Not impressed with the price on this EV today. I expected a simple trip, but it turned into another avoidable problem. #EV Trip diary 1743.", "Not impressed with the price on this EV today. I expected a simple trip, but it turned into another avoidable problem. #EV Trip diary 1263."]}, {"top": ["monday", "dealer", "sharing", "test", "says", "planning", "arrives", "information"], "n": 447, "sent": {"negative": 0.022, "neutral": 0.942, "positive": 0.036}, "reps": ["The dealer says the next EV price update arrives on Monday. Sharing the information here for anyone planning a test drive. #EV Trip diary 2361.", "The dealer says the next EV price update arrives on Monday. Sharing the information here for anyone planning a test drive. #EV Trip diary 0459.", "The dealer says the next EV price update arrives on Monday. Sharing the information here for anyone planning a test drive. #EV Trip diary 1221.", "The dealer says the next EV price update arrives on Monday. Sharing the information here for anyone planning a test drive. #EV Trip diary 0549.", "The dealer says the next EV price update arrives on Monday. Sharing the information here for anyone planning a test drive. #EV Trip diary 0531."]}, {"top": ["compare", "week", "logged", "recorded", "app", "today", "charging", "efficiency"], "n": 744, "sent": {"negative": 0.202, "neutral": 0.571, "positive": 0.227}, "reps": ["Logged 18 km with the EV today. The charging was recorded in the app; I will compare it with next week. #EV Trip diary 1322.", "Logged 20 km with the EV today. The charging was recorded in the app; I will compare it with next week. #EV Trip diary 2078.", "Logged 2 km with the EV today. The charging was recorded in the app; I will compare it with next week. #EV Trip diary 0668.", "Logged 26 km with the EV today. The charging was recorded in the app; I will compare it with next week. #EV Trip diary 1910.", "Logged 25 km with the EV today. The charging was recorded in the app; I will compare it with next week. #EV Trip diary 0314."]}, {"top": ["stressful", "smooth", "car", "practical", "petrol", "old", "better", "expected"], "n": 222, "sent": {"negative": 0.0, "neutral": 0.0, "positive": 1.0}, "reps": ["After 21 days, the EV winter efficiency has been better than expected. Smooth, practical, and less stressful than my old petrol car. #EV Trip diary 2340.", "After 28 days, the EV winter efficiency has been better than expected. Smooth, practical, and less stressful than my old petrol car. #EV Trip diary 1680.", "After 1 days, the EV winter efficiency has been better than expected. Smooth, practical, and less stressful than my old petrol car. #EV Trip diary 1566.", "After 13 days, the EV winter efficiency has been better than expected. Smooth, practical, and less stressful than my old petrol car. #EV Trip diary 1578.", "After 19 days, the EV winter efficiency has been better than expected. Smooth, practical, and less stressful than my old petrol car. #EV Trip diary 0714."]}, {"top": ["pleased", "start", "evlife", "really", "finish", "easy", "felt", "helped"], "n": 307, "sent": {"negative": 0.332, "neutral": 0.0, "positive": 0.668}, "reps": ["Really pleased with the price on this EV today. The update helped, and the trip felt easy from start to finish. #EVlife Trip diary 0015.", "Really pleased with the price on this EV today. The update helped, and the trip felt easy from start to finish. #EVlife Trip diary 0303.", "Really pleased with the price on this EV today. The update helped, and the trip felt easy from start to finish. #EVlife Trip diary 1047.", "Really pleased with the price on this EV today. The update helped, and the trip felt easy from start to finish. #EVlife Trip diary 0981.", "Really pleased with the price on this EV today. The update helped, and the trip felt easy from start to finish. #EVlife Trip diary 0951."]}], "7": [{"top": ["added", "useful", "journey", "gave", "explanation", "time", "disappointed", "days"], "n": 276, "sent": {"negative": 1.0, "neutral": 0.0, "positive": 0.0}, "reps": ["The EV design disappointed me again after 17 days. It added time to the journey and the app gave no useful explanation. #EV Trip diary 0538.", "The EV design disappointed me again after 16 days. It added time to the journey and the app gave no useful explanation. #EV Trip diary 0856.", "The EV design disappointed me again after 9 days. It added time to the journey and the app gave no useful explanation. #EV Trip diary 2212.", "The EV design disappointed me again after 3 days. It added time to the journey and the app gave no useful explanation. #EV Trip diary 0814.", "The EV design disappointed me again after 21 days. It added time to the journey and the app gave no useful explanation. #EV Trip diary 1354."]}, {"top": ["simple", "problem", "turned", "avoidable", "impressed", "not", "expected", "today"], "n": 335, "sent": {"negative": 0.97, "neutral": 0.012, "positive": 0.018}, "reps": ["Not impressed with the price on this EV today. I expected a simple trip, but it turned into another avoidable problem. #EV Trip diary 1059.", "Not impressed with the price on this EV today. I expected a simple trip, but it turned into another avoidable problem. #EV Trip diary 1275.", "Not impressed with the price on this EV today. I expected a simple trip, but it turned into another avoidable problem. #EV Trip diary 1071.", "Not impressed with the price on this EV today. I expected a simple trip, but it turned into another avoidable problem. #EV Trip diary 1767.", "Not impressed with the price on this EV today. I expected a simple trip, but it turned into another avoidable problem. #EV Trip diary 0537."]}, {"top": ["dealer", "monday", "planning", "says", "sharing", "arrives", "test", "information"], "n": 444, "sent": {"negative": 0.02, "neutral": 0.948, "positive": 0.032}, "reps": ["The dealer says the next EV price update arrives on Monday. Sharing the information here for anyone planning a test drive. #EV Trip diary 2361.", "The dealer says the next EV price update arrives on Monday. Sharing the information here for anyone planning a test drive. #EV Trip diary 1473.", "The dealer says the next EV price update arrives on Monday. Sharing the information here for anyone planning a test drive. #EV Trip diary 1221.", "The dealer says the next EV price update arrives on Monday. Sharing the information here for anyone planning a test drive. #EV Trip diary 0549.", "The dealer says the next EV price update arrives on Monday. Sharing the information here for anyone planning a test drive. #EV Trip diary 1281."]}, {"top": ["compare", "week", "logged", "recorded", "today", "app", "charging", "winter"], "n": 331, "sent": {"negative": 0.06, "neutral": 0.882, "positive": 0.057}, "reps": ["Logged 9 km with the EV today. The charging was recorded in the app; I will compare it with next week. #EV Trip diary 0008.", "Logged 20 km with the EV today. The charging was recorded in the app; I will compare it with next week. #EV Trip diary 1556.", "Logged 4 km with the EV today. The charging was recorded in the app; I will compare it with next week. #EV Trip diary 1424.", "Logged 10 km with the EV today. The charging was recorded in the app; I will compare it with next week. #EV Trip diary 1430.", "Logged 16 km with the EV today. The charging was recorded in the app; I will compare it with next week. #EV Trip diary 1436."]}, {"top": ["stressful", "practical", "old", "petrol", "smooth", "car", "better", "expected"], "n": 222, "sent": {"negative": 0.0, "neutral": 0.0, "positive": 1.0}, "reps": ["After 21 days, the EV winter efficiency has been better than expected. Smooth, practical, and less stressful than my old petrol car. #EV Trip diary 2340.", "After 28 days, the EV winter efficiency has been better than expected. Smooth, practical, and less stressful than my old petrol car. #EV Trip diary 1680.", "After 1 days, the EV winter efficiency has been better than expected. Smooth, practical, and less stressful than my old petrol car. #EV Trip diary 1566.", "After 13 days, the EV winter efficiency has been better than expected. Smooth, practical, and less stressful than my old petrol car. #EV Trip diary 1578.", "After 19 days, the EV winter efficiency has been better than expected. Smooth, practical, and less stressful than my old petrol car. #EV Trip diary 0714."]}, {"top": ["start", "pleased", "really", "finish", "evlife", "easy", "felt", "helped"], "n": 204, "sent": {"negative": 0.0, "neutral": 0.0, "positive": 1.0}, "reps": ["Really pleased with the price on this EV today. The update helped, and the trip felt easy from start to finish. #EVlife Trip diary 0015.", "Really pleased with the price on this EV today. The update helped, and the trip felt easy from start to finish. #EVlife Trip diary 0465.", "Really pleased with the price on this EV today. The update helped, and the trip felt easy from start to finish. #EVlife Trip diary 1131.", "Really pleased with the price on this EV today. The update helped, and the trip felt easy from start to finish. #EVlife Trip diary 0021.", "Really pleased with the price on this EV today. The update helped, and the trip felt easy from start to finish. #EVlife Trip diary 1065."]}, {"top": ["auto", "fahrt", "beim", "wieder", "heute", "tagen", "nach", "dem"], "n": 551, "sent": {"negative": 0.481, "neutral": 0.241, "positive": 0.278}, "reps": ["Nach 5 Tagen nervt mich design beim E-Auto wieder. Die Fahrt dauerte länger und die App erklärte den Fehler nicht. #EV Trip diary 0004.", "Nach 15 Tagen nervt mich design beim E-Auto wieder. Die Fahrt dauerte länger und die App erklärte den Fehler nicht. #EV Trip diary 1696.", "Nach 24 Tagen nervt mich design beim E-Auto wieder. Die Fahrt dauerte länger und die App erklärte den Fehler nicht. #EV Trip diary 0574.", "Nach 6 Tagen nervt mich design beim E-Auto wieder. Die Fahrt dauerte länger und die App erklärte den Fehler nicht. #EV Trip diary 0556.", "Nach 16 Tagen nervt mich design beim E-Auto wieder. Die Fahrt dauerte länger und die App erklärte den Fehler nicht. #EV Trip diary 1552."]}], "8": [{"top": ["added", "journey", "gave", "explanation", "time", "disappointed", "useful", "days"], "n": 276, "sent": {"negative": 1.0, "neutral": 0.0, "positive": 0.0}, "reps": ["The EV design disappointed me again after 17 days. It added time to the journey and the app gave no useful explanation. #EV Trip diary 0538.", "The EV design disappointed me again after 16 days. It added time to the journey and the app gave no useful explanation. #EV Trip diary 0856.", "The EV design disappointed me again after 9 days. It added time to the journey and the app gave no useful explanation. #EV Trip diary 2212.", "The EV design disappointed me again after 3 days. It added time to the journey and the app gave no useful explanation. #EV Trip diary 0814.", "The EV design disappointed me again after 21 days. It added time to the journey and the app gave no useful explanation. #EV Trip diary 1354."]}, {"top": ["avoidable", "problem", "simple", "turned", "impressed", "not", "expected", "today"], "n": 337, "sent": {"negative": 0.964, "neutral": 0.018, "positive": 0.018}, "reps": ["Not impressed with the price on this EV today. I expected a simple trip, but it turned into another avoidable problem. #EV Trip diary 1071.", "Not impressed with the price on this EV today. I expected a simple trip, but it turned into another avoidable problem. #EV Trip diary 0405.", "Not impressed with the price on this EV today. I expected a simple trip, but it turned into another avoidable problem. #EV Trip diary 1275.", "Not impressed with the price on this EV today. I expected a simple trip, but it turned into another avoidable problem. #EV Trip diary 1059.", "Not impressed with the price on this EV today. I expected a simple trip, but it turned into another avoidable problem. #EV Trip diary 1767."]}, {"top": ["dealer", "monday", "planning", "arrives", "test", "sharing", "says", "information"], "n": 444, "sent": {"negative": 0.02, "neutral": 0.948, "positive": 0.032}, "reps": ["The dealer says the next EV price update arrives on Monday. Sharing the information here for anyone planning a test drive. #EV Trip diary 2361.", "The dealer says the next EV price update arrives on Monday. Sharing the information here for anyone planning a test drive. #EV Trip diary 1473.", "The dealer says the next EV price update arrives on Monday. Sharing the information here for anyone planning a test drive. #EV Trip diary 1221.", "The dealer says the next EV price update arrives on Monday. Sharing the information here for anyone planning a test drive. #EV Trip diary 0549.", "The dealer says the next EV price update arrives on Monday. Sharing the information here for anyone planning a test drive. #EV Trip diary 1281."]}, {"top": ["week", "compare", "recorded", "logged", "today", "app", "charging", "efficiency"], "n": 334, "sent": {"negative": 0.06, "neutral": 0.883, "positive": 0.057}, "reps": ["Logged 9 km with the EV today. The charging was recorded in the app; I will compare it with next week. #EV Trip diary 0008.", "Logged 15 km with the EV today. The charging was recorded in the app; I will compare it with next week. #EV Trip diary 1406.", "Logged 10 km with the EV today. The charging was recorded in the app; I will compare it with next week. #EV Trip diary 1430.", "Logged 22 km with the EV today. The charging was recorded in the app; I will compare it with next week. #EV Trip diary 0746.", "Logged 16 km with the EV today. The charging was recorded in the app; I will compare it with next week. #EV Trip diary 1436."]}, {"top": ["practical", "car", "stressful", "old", "petrol", "smooth", "better", "expected"], "n": 222, "sent": {"negative": 0.0, "neutral": 0.0, "positive": 1.0}, "reps": ["After 21 days, the EV winter efficiency has been better than expected. Smooth, practical, and less stressful than my old petrol car. #EV Trip diary 2340.", "After 28 days, the EV winter efficiency has been better than expected. Smooth, practical, and less stressful than my old petrol car. #EV Trip diary 1680.", "After 1 days, the EV winter efficiency has been better than expected. Smooth, practical, and less stressful than my old petrol car. #EV Trip diary 1566.", "After 13 days, the EV winter efficiency has been better than expected. Smooth, practical, and less stressful than my old petrol car. #EV Trip diary 1578.", "After 19 days, the EV winter efficiency has been better than expected. Smooth, practical, and less stressful than my old petrol car. #EV Trip diary 0714."]}, {"top": ["finish", "start", "really", "pleased", "evlife", "easy", "felt", "helped"], "n": 204, "sent": {"negative": 0.0, "neutral": 0.0, "positive": 1.0}, "reps": ["Really pleased with the price on this EV today. The update helped, and the trip felt easy from start to finish. #EVlife Trip diary 0015.", "Really pleased with the price on this EV today. The update helped, and the trip felt easy from start to finish. #EVlife Trip diary 0465.", "Really pleased with the price on this EV today. The update helped, and the trip felt easy from start to finish. #EVlife Trip diary 1131.", "Really pleased with the price on this EV today. The update helped, and the trip felt easy from start to finish. #EVlife Trip diary 0021.", "Really pleased with the price on this EV today. The update helped, and the trip felt easy from start to finish. #EVlife Trip diary 1065."]}, {"top": ["fahrt", "beim", "wieder", "auto", "nach", "tagen", "dauerte", "fehler"], "n": 414, "sent": {"negative": 0.635, "neutral": 0.0, "positive": 0.365}, "reps": ["Nach 5 Tagen nervt mich design beim E-Auto wieder. Die Fahrt dauerte länger und die App erklärte den Fehler nicht. #EV Trip diary 0004.", "Nach 9 Tagen nervt mich design beim E-Auto wieder. Die Fahrt dauerte länger und die App erklärte den Fehler nicht. #EV Trip diary 2038.", "Nach 26 Tagen nervt mich design beim E-Auto wieder. Die Fahrt dauerte länger und die App erklärte den Fehler nicht. #EV Trip diary 2026.", "Nach 22 Tagen nervt mich design beim E-Auto wieder. Die Fahrt dauerte länger und die App erklärte den Fehler nicht. #EV Trip diary 1384.", "Nach 14 Tagen nervt mich design beim E-Auto wieder. Die Fahrt dauerte länger und die App erklärte den Fehler nicht. #EV Trip diary 2014."]}, {"top": ["dem", "nächste", "woche", "werte", "verglichen", "stehen", "gefahren", "werden"], "n": 132, "sent": {"negative": 0.015, "neutral": 0.97, "positive": 0.015}, "reps": ["Heute 14 km mit dem E-Auto gefahren. Die Werte zu design stehen in der App und werden nächste Woche verglichen. #EV Trip diary 1144.", "Heute 6 km mit dem E-Auto gefahren. Die Werte zu design stehen in der App und werden nächste Woche verglichen. #EV Trip diary 1774.", "Heute 29 km mit dem E-Auto gefahren. Die Werte zu design stehen in der App und werden nächste Woche verglichen. #EV Trip diary 1594.", "Heute 3 km mit dem E-Auto gefahren. Die Werte zu design stehen in der App und werden nächste Woche verglichen. #EV Trip diary 1510.", "Heute 22 km mit dem E-Auto gefahren. Die Werte zu design stehen in der App und werden nächste Woche verglichen. #EV Trip diary 0688."]}]};
+</script>
+<script>
+// ---------- generic persistent form ----------
+function makeForm(sel, key, fields, onChange) {
+  const st = store.get(key, {});
+  $(sel).innerHTML = fields.map(([k, l, ph]) => `<label><b>${l}</b><span class="small">${ph || ''}</span><textarea data-k="${k}">${esc(st[k] || '')}</textarea></label>`).join('');
+  const upd = () => onChange && onChange(st);
+  $$(sel + ' textarea').forEach(t => t.oninput = () => { st[t.dataset.k] = t.value; store.set(key, st); upd(); });
+  upd();
+  return { st, set(vals) { Object.assign(st, vals); store.set(key, st); $$(sel + ' textarea').forEach(t => t.value = st[t.dataset.k] || ''); upd(); }, text(title) { return title + '\n' + '='.repeat(title.length) + '\n\n' + fields.map(([k, l]) => `${l}:\n${st[k] || '(empty)'}\n`).join('\n'); } };
+}
+
+// ---------- Section 1: dashboard ----------
+const FIX = [['axis', 'Start the axis at 0', 'Truncated axis: 25% → 35% looked like a tripling.'], ['base', 'Show absolute values', '“+40%” is relative — it hides that the share went from 25% to 35%.'], ['n', 'Show n and the time window', 'n = 64 posts is far too few to say “customers love”.'], ['model', 'Name the model and its quality', 'Which model? Which macro-F1? Unknown quality = unknown error.'], ['plat', 'State the data source', 'One platform ≠ all customers.'], ['head', 'Rewrite the headline', 'Causal headline: the update may not be the reason.'], ['unc', 'Show uncertainty', 'With 64 posts the 95% interval is roughly ±11 points.']];
+const fixOn = new Set();
+$('#dbFix').innerHTML = FIX.map(([k, l]) => `<label class="check"><input type="checkbox" data-k="${k}"><span>${l}</span></label>`).join('');
+$$('#dbFix input').forEach(c => c.onchange = () => { c.checked ? fixOn.add(c.dataset.k) : fixOn.delete(c.dataset.k); drawDB(); });
+function drawDB() {
+  const f = k => fixOn.has(k);
+  $('#dbBig').innerHTML = f('base') ? '25% → 35% <span class="small">(+10 points)</span>' : '+40%';
+  $('#dbHead').textContent = f('head') ? 'Share of positive posts rose after the update (association, not cause).' : '“Customers love the new update!”';
+  const lo = f('axis') ? 0 : 24, hi = 40, Y = v => 160 - (v - lo) / (hi - lo) * 140;
+  let s = `<line x1="40" y1="160" x2="290" y2="160" stroke="var(--line)"/><line x1="40" y1="20" x2="40" y2="160" stroke="var(--line)"/>`;
+  [['last week', 25], ['this week', 35]].forEach(([l, v], i) => { const x = 80 + i * 110; s += `<rect x="${x}" y="${Y(v)}" width="70" height="${160 - Y(v)}" fill="${i ? 'var(--accent)' : 'var(--muted)'}"></rect><text x="${x + 35}" y="174" text-anchor="middle" font-size="11" fill="var(--ink)">${l}</text>` + (f('base') ? `<text x="${x + 35}" y="${Y(v) - 6}" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">${v}%</text>` : '') + (f('unc') ? `<line x1="${x + 35}" y1="${Y(Math.min(hi, v + 11))}" x2="${x + 35}" y2="${Y(Math.max(lo, v - 11))}" stroke="var(--ink)" stroke-width="2"/>` : ''); });
+  [lo, Math.round((lo + hi) / 2), hi].forEach(v => s += `<text x="34" y="${Y(v) + 4}" text-anchor="end" font-size="10" fill="var(--muted)">${v}%</text>`);
+  $('#dbSvg').innerHTML = s;
+  $('#dbFoot').innerHTML = [f('n') ? 'n = 64 posts · 10–16 March' : '', f('plat') ? 'source: one platform (X) only' : '', f('model') ? 'model: VADER, macro-F1 0.58 on our test set' : 'model: not stated'].filter(Boolean).join(' · ');
+  $('#dbMsg').className = 'feedback show ' + (fixOn.size === FIX.length ? 'ok' : 'info');
+  $('#dbMsg').innerHTML = fixOn.size === FIX.length ? '✓ Now the dashboard shows n, the time window, model quality, uncertainty and the source — and with ±11 points on 64 posts, the change may not even be real. <b>If a dashboard can mislead, someone will make a wrong decision.</b>' : FIX.filter(([k]) => fixOn.has(k)).map(x => '✓ ' + x[2]).join('<br>') || 'Find the problems — then tick a fix to see what it changes.';
+}
+drawDB();
+
+// ---------- Section 2: layers ----------
+const LAY = [['Text', 'Ch 2', 'what is said', 'Topic model finds “privacy concerns”.'], ['Sentiment', 'Ch 2–3', 'how it is evaluated', '71% of these posts are negative.'], ['Emotion', 'Ch 3', 'which feeling appears', 'Mostly fear.'], ['Stance', 'Ch 3', 'which position is taken', 'Against sharing driving data with the manufacturer.'], ['Network', 'Ch 4', 'who connects to whom', 'One community writes 80% of them.'], ['Diffusion', 'Ch 5', 'how it spreads', 'It spread to other communities via two bridge users.'], ['Topics', 'Ch 6', 'which themes dominate', '“Privacy concerns” is the 3rd-largest topic (12% of posts).'], ['Ethics', 'all', 'what limits the claim', 'One platform, 2 weeks, model F1 0.84 — no claims about all drivers.']];
+const layOn = new Set([0]);
+$('#layBtns').innerHTML = LAY.map((l, i) => `<button class="btn ${i ? '' : 'sel'}" data-i="${i}">${l[0]} <span class="small">${l[1]}</span></button>`).join('');
+$$('#layBtns .btn').forEach(b => b.onclick = () => { const i = +b.dataset.i; layOn.has(i) ? layOn.delete(i) : layOn.add(i); b.classList.toggle('sel', layOn.has(i)); drawLay(); });
+function drawLay() {
+  $('#layOut').innerHTML = [...layOn].sort().map(i => `<div class="check"><span class="tag blue">${LAY[i][0]}</span><span><span class="small">${LAY[i][2]}:</span> ${LAY[i][3]}</span></div>`).join('');
+  $('#layMeter').style.width = (layOn.size / LAY.length * 100) + '%';
+  $('#layMsg').innerHTML = layOn.size < 3 ? 'One or two kinds of evidence: a weak, easily challenged finding.' : layOn.has(7) ? `${layOn.size} kinds of evidence, including the limits — a stronger <i>and</i> more honest conclusion.` : `${layOn.size} kinds of evidence — now add <b>Ethics</b>: what limits the claim?`;
+}
+drawLay();
+
+// ---------- Section 3: topics ----------
+const tNames = store.get('sma-ch6-topicnames', {});
+function drawTopics() {
+  const k = +$('#kR').value; $('#kV').textContent = k; const T = TOPICS[k];
+  $('#tpOut').innerHTML = T.map((t, i) => `<details class="reveal" ${i === 0 ? 'open' : ''}><summary>Topic ${i + 1} · ${t.n} posts · <span class="small">${t.top.slice(0, 6).map(esc).join(' · ')}</span></summary>
+    <div class="grid2"><div><b class="small">Representative posts</b>${t.reps.map(r => `<div class="out" style="font-family:inherit">${esc(r)}…</div>`).join('')}</div>
+    <div><b class="small">Sentiment in this topic</b><div class="tbars" id="tb${i}"></div><label class="small">Your name for this topic<input type="text" data-k="${k}-${i}" style="width:100%" value="${esc(tNames[k + '-' + i] || '')}" placeholder="e.g. Waiting at chargers"></label></div></div></details>`).join('');
+  T.forEach((t, i) => bars('#tb' + i, [{ l: 'negative', v: t.sent.negative, t: pct(t.sent.negative), c: 'r' }, { l: 'neutral', v: t.sent.neutral, t: pct(t.sent.neutral), c: 'm' }, { l: 'positive', v: t.sent.positive, t: pct(t.sent.positive), c: 'g' }], 1));
+  $$('#tpOut input').forEach(inp => inp.oninput = () => { tNames[inp.dataset.k] = inp.value; store.set('sma-ch6-topicnames', tNames); });
+  const worst = T.reduce((a, t, i) => t.sent.negative > T[a].sent.negative ? i : a, 0), tiny = T.filter(t => t.n < 150).length;
+  $('#tpMsg').innerHTML = `With k = ${k}, topic ${worst + 1} is the most negative (${pct(T[worst].sent.negative)}) — it “drives dissatisfaction”. ${tiny ? tiny + ' topic(s) have fewer than 150 posts — check whether they are noise. ' : ''}<b>Note:</b> ev_posts.csv is synthetic and template-generated, so several topics capture <i>writing templates</i> (e.g. “trip diary” reports) rather than subjects — exactly why you must read the posts before naming topics. German posts form their own topic once k ≥ 7: language is a “topic” too.`;
+}
+$('#kR').oninput = drawTopics; drawTopics();
+
+// ---------- Section 4 ----------
+makeSorter('#sortSig', [{ id: 'sig', label: '📊 Signal — report it' }, { id: 'ver', label: '⚖️ Verdict — needs evidence you rarely have' }], [
+  { t: '37 identical posts from 12 accounts within 10 minutes', c: 'sig' }, { t: 'Account posts every 4 minutes, 24 hours a day', c: 'sig' }, { t: 'The claim was rated false by two fact-checkers', c: 'sig' },
+  { t: 'Cascade depth 9 in 2 hours — unusually deep', c: 'sig' }, { t: '“These are foreign bots”', c: 'ver' }, { t: '“This is a state-sponsored campaign”', c: 'ver' },
+  { t: '“Our model says this post is misinformation”', c: 'ver', why: 'A misinformation label needs a fact-check, not a model’s opinion.' }, { t: '“Fan accounts coordinating = inauthentic”', c: 'ver', why: 'Coordination ≠ inauthenticity.' }
+]);
+
+// ---------- Section 5: story ----------
+const ST = [['Question', 'What do we want to know — and why?'], ['Data', 'Which posts, where, when, how many?'], ['Method', 'Which models and networks — and why these?'], ['Evidence', 'Figures and tables that answer the question.'], ['Limits', 'Bias, uncertainty, what we cannot say.'], ['Recommendation', 'What follows — for whom?']];
+$('#storyFlow').innerHTML = ST.map((s, i) => (i ? '<span class="arrow">→</span>' : '') + `<div class="step ${i ? '' : 'on'}" data-i="${i}">${s[0]}</div>`).join('');
+$$('#storyFlow .step').forEach(s => s.onclick = () => { $$('#storyFlow .step').forEach(x => x.classList.toggle('on', x === s)); $('#storyMsg').textContent = ST[+s.dataset.i][1]; });
+$('#storyMsg').textContent = ST[0][1];
+const CL = [['scope', 'Scope (data)', 'In 2,400 posts from 1–14 March,'], ['group', 'Specific group', '61% of the critics’ community'], ['ev', 'Evidence (what)', 'is negative about the battery recall'], ['unc', 'Model quality', '(model macro-F1 0.84).'], ['lim', 'Limitation', 'One platform only; not all drivers.'], ['rec', 'Scoped recommendation', 'Communicating the fix to this group should come first.']];
+const clOn = new Set();
+$('#clParts').innerHTML = CL.map(([k, l]) => `<label class="small"><input type="checkbox" data-k="${k}"> ${l}</label>`).join(' ');
+$$('#clParts input').forEach(c => c.onchange = () => { c.checked ? clOn.add(c.dataset.k) : clOn.delete(c.dataset.k); drawCL(); });
+function drawCL() {
+  $('#clOut').textContent = clOn.size ? CL.filter(([k]) => clOn.has(k)).map(x => x[2]).join(' ') : 'The public hates the new EV policy. The government must stop it.';
+  $('#clMsg').className = 'feedback show ' + (clOn.size === CL.length ? 'ok' : clOn.size ? 'info' : 'no');
+  $('#clMsg').innerHTML = clOn.size === CL.length ? '✓ Evidence + scope + uncertainty + limitation = a responsible recommendation.' : clOn.size ? `${CL.length - clOn.size} part(s) missing: ${CL.filter(([k]) => !clOn.has(k)).map(x => x[1]).join(', ')}.` : '✗ Too broad, no evidence, no scope — tick the parts above to rebuild it.';
+}
+drawCL();
+
+// ---------- Section 6: requirements ----------
+const REQ = [['Data profile and ethics / GDPR check', 'Ch 1', 'required', 'profile card, data minimisation, pseudonymisation'], ['Documented preprocessing + classical baseline', 'Ch 2', 'required', 'VADER and TF-IDF macro-F1, error table'], ['Transformer or LLM model', 'Ch 3', 'optional', 'same split, gain vs. cost, disclosure'], ['Network analysis or diffusion analysis', 'Ch 4–5', 'at least one', 'named communities / cascade metrics'], ['Topics, multimodal or events', 'Ch 6', 'optional', 'named and validated topics'], ['Story, limitations, recommendation', 'Ch 6', 'required', 'storyboard, uncertainty, scope']];
+const reqSt = store.get('sma-ch6-req', {});
+function drawReq() {
+  $('#reqTbl').innerHTML = '<tr><th>Component</th><th>From</th><th>Status</th><th>Evidence you show</th><th>Our progress</th></tr>' + REQ.map((r, i) => `<tr><td>${r[0]}</td><td>${r[1]}</td><td><span class="tag ${r[2] === 'required' ? 'red' : r[2] === 'optional' ? '' : 'amber'}">${r[2]}</span></td><td class="small">${r[3]}</td><td><select class="lbl" data-i="${i}">${['not started', 'in progress', 'done', 'not used'].map(o => `<option ${reqSt[i] === o ? 'selected' : ''}>${o}</option>`).join('')}</select></td></tr>`).join('');
+  $$('#reqTbl select').forEach(s => s.onchange = () => { reqSt[s.dataset.i] = s.value; store.set('sma-ch6-req', reqSt); });
+}
+drawReq();
+
+// ---------- Section 7: RQ checker ----------
+function drawRQ() {
+  const q = $('#rqIn').value.trim(), L = q.toLowerCase(), hints = [];
+  const ok = (c, good, bad) => hints.push(`<div>${c ? '✅' : '⚠️'} ${c ? good : bad}</div>`);
+  ok(q.split(/\s+/).length >= 10, 'specific enough in length', 'very short — probably too broad');
+  ok(/\b(\d{4}|week|weeks|month|months|day|days|before|after|during|march|april|2025|2026)\b/.test(L), 'has a time window', 'no time window (when?)');
+  ok(/\b(share|sentiment|stance|emotion|spread|reach|faster|more|less|differ|change|proportion|centrality|communit|cascade|topic)/.test(L), 'names something measurable', 'not clearly measurable — what will you count or compare?');
+  ok(!/\b(people|everyone|the public|society|users in general)\b/.test(L) || /\bin our dataset|subreddit|community|communities|posts\b/.test(L), 'scoped to your data', 'speaks about “people” or “the public” — scope it to your data');
+  ok(!/\b(bots?|fake news|cause[sd]?|because)\b/.test(L), 'no claim you cannot verify', 'mentions bots, fake news or causes — can your data really answer this?');
+  $('#rqOut').innerHTML = hints.join('');
+}
+$('#rqIn').oninput = drawRQ; drawRQ();
+makeChecklist('#rqSelf', 'sma-ch6-rq', ['Specific', 'Answerable with our data', 'Measurable', 'Relevant to someone (who decides what?)', 'Ethical']);
+
+// ---------- Section 8: ethics plan ----------
+const EP = [['src', 'Source and terms', 'platform, API or dataset; licence and terms of service checked'], ['scope', 'Scope', 'time window, languages, keywords — and why'], ['size', 'Size', 'enough posts for your methods (and a test set)'], ['pd', 'Personal data', 'only needed fields; pseudonymised IDs; no screenshots'], ['lab', 'Labels', 'who labels, how many, guidelines, agreement check'], ['sto', 'Storage', 'university storage only; delete raw data after the project']];
+const epF = makeForm('#epForm', 'sma-ch6-ethics', EP, st => {
+  const n = EP.filter(([k]) => (st[k] || '').trim().length > 8).length; $('#epMeter').style.width = (n / EP.length * 100) + '%';
+  $('#epMsg').className = 'feedback show ' + (n === EP.length ? 'ok' : 'info'); $('#epMsg').innerHTML = n === EP.length ? '✓ All six boxes filled — you are ready to collect (after the instructor check).' : `${n} of ${EP.length} boxes filled.`;
+});
+$('#epDl').onclick = () => downloadText('data_ethics_plan.txt', epF.text('Data and ethics plan'));
+
+// ---------- Section 9: report & storyboard ----------
+const DOC = [['1 · Question', 'why it matters, for whom'], ['2 · Data & ethics', 'source, scope, profile, GDPR decisions'], ['3 · Preprocessing', 'what you kept, removed, replaced — and why'], ['4 · Methods', 'baseline, models, networks, parameters'], ['5 · Results', 'figures and tables that answer the question'], ['6 · Limitations', 'bias, uncertainty, what you cannot claim'], ['7 · Recommendation', 'what follows, with scope'], ['A · Appendix', 'prompts, AI disclosure, notebook link']];
+$('#docFlow').innerHTML = DOC.map((d, i) => `<div class="step ${i ? '' : 'on'}" data-i="${i}">${d[0]}</div>`).join('');
+$$('#docFlow .step').forEach(s => s.onclick = () => { $$('#docFlow .step').forEach(x => x.classList.toggle('on', x === s)); $('#docMsg').textContent = DOC[+s.dataset.i][1]; });
+$('#docMsg').textContent = DOC[0][1];
+const SB = [['hook', '1 · Hook', 'one striking post or number'], ['q', '2 · Question', 'what you asked and why'], ['d', '3 · Data', 'where, when, how many — and the ethics'], ['m', '4 · Method', 'one diagram of your pipeline'], ['e', '5 · Evidence', 'your two strongest figures'], ['so', '6 · So what?', 'limits and a recommendation']];
+const sbF = makeForm('#sbForm', 'sma-ch6-story', SB);
+$('#sbSample').onclick = () => sbF.set({ hook: '“Waiting 40 min at the charger. Love it.” — sarcasm our first model got wrong.', q: 'How did sentiment about charging change after the March recall, and which community drove it?', d: '2,400 public EV posts, 1–14 March 2026, EN + DE, pseudonymised; Reddit terms checked.', m: 'raw → two text views → VADER & TF-IDF baseline → RoBERTa → mention network + Louvain.', e: 'Fig 1: share negative per day with the 4 March spike marked. Fig 2: % negative per community.', so: 'Critics’ community 61% negative (F1 0.84); one platform only. Recommend targeted communication of the fix.' });
+$('#sbDl').onclick = () => downloadText('storyboard.txt', sbF.text('Presentation storyboard'));
+makeSorter('#sortStrong', [{ id: 's', label: '💪 Strong project' }, { id: 'w', label: '⚠️ Common weakness' }], [
+  { t: 'One clear, answerable question', c: 's' }, { t: 'A baseline before complex models', c: 's' }, { t: 'Decisions explained, not only reported', c: 's' }, { t: 'Error analysis with real examples', c: 's' }, { t: 'Reproducible notebook, fixed seeds', c: 's' },
+  { t: 'Many methods, none done properly', c: 'w' }, { t: 'Accuracy only — no macro-F1', c: 'w' }, { t: 'Beautiful network pictures, no metrics', c: 'w' }, { t: '“People think …” from one platform', c: 'w' }, { t: 'Usernames or screenshots in slides', c: 'w' }, { t: 'AI use not disclosed', c: 'w' }
+]);
+
+// ---------- Section 10: canvas ----------
+const PC = [['rq', 'Research question', 'specific · answerable · measurable'], ['why', 'Why it matters', 'for whom? what decision?'], ['data', 'Data', 'source · time window · languages · size'], ['meth', 'Methods', 'which chapters, which models / networks'], ['fig', 'First figure', 'sketch the first chart you expect'], ['eth', 'Ethics and GDPR', 'personal data? pseudonymisation? terms?'], ['risk', 'Biggest risk', 'what could make the project fail?'], ['who', 'Who does what', 'roles in the group']];
+const pcF = makeForm('#pcForm', 'sma-ch6-canvas', PC, st => { const n = PC.filter(([k]) => (st[k] || '').trim().length > 5).length; $('#pcMeter').style.width = (n / PC.length * 100) + '%'; });
+$('#pcSample').onclick = () => pcF.set({ rq: 'How did stance on the campus phone ban differ between student and staff subreddits in the first month?', why: 'The student council wants to know which concerns to address first.', data: 'Reddit, 3 subreddits, 1 month, English + German, ~1,500 comments', meth: 'VADER + TF-IDF baseline; zero-shot stance (validated on 150 gold labels); reply network + communities', fig: 'Bar chart: share of favour / against per subreddit, with n', eth: 'Pseudonymised IDs, paraphrased quotes, no profiles; Reddit terms checked', risk: 'Too few staff comments → fall back to students only', who: 'A: data · B: models · C: network · D: report and slides' });
+$('#pcDl').onclick = () => downloadText('proposal_canvas.txt', pcF.text('Project proposal canvas'));
+$('#pcClear').onclick = () => pcF.set(Object.fromEntries(PC.map(([k]) => [k, ''])));
+const fbF = makeForm('#fbForm', 'sma-ch6-feedback', [['grp', 'For group', 'group number / topic'], ['s', 'Strength', 'What is most promising?'], ['q', 'Question', 'What is unclear?'], ['r', 'Risk', 'What could fail — data, method or ethics?']]);
+$('#fbDl').onclick = () => downloadText('feedback_card.txt', fbF.text('Peer feedback card'));
+
+// ---------- quiz ----------
+renderQuiz('#quizBox', [
+  { q: 'A dashboard shows “+40% positive sentiment” on 64 posts with a truncated axis. Biggest issue?', opts: ['The colour', 'Small n, relative change, truncated axis and no model quality can all mislead a decision', 'It should be a pie chart', 'Nothing'], a: 1, why: 'Show n, time window, model quality, uncertainty and events.' },
+  { q: 'A topic model returns “Topic 3”. When does it become “battery recall”?', opts: ['Automatically', 'After you read representative posts and validate the topic', 'When k = 10', 'Never'], a: 1, why: 'The model finds patterns — people give them names.' },
+  { q: 'How do you choose the number of NMF topics?', opts: ['Always 10', 'Try several k and pick the one you can name and validate', 'The largest k', 'k = number of posts'], a: 1, why: 'Too few merge themes; too many fragment them.' },
+  { q: 'Which is evidence rather than a verdict?', opts: ['“These are foreign bots”', '“37 identical posts from 12 accounts within 10 minutes”', '“This is propaganda”', '“Our model says it is fake”'], a: 1, why: 'Report signals, not verdicts.' },
+  { q: 'Which research question is strongest?', opts: ['What do people think about EVs?', 'How did sentiment about EV battery safety change in the two weeks after the March recall?', 'Do bots spread fake news?', 'Who is most influential?'], a: 1, why: 'Specific, measurable, answerable with your data.' },
+  { q: 'Which project component is optional?', opts: ['Data profile and GDPR check', 'Classical baseline', 'Transformer or LLM model', 'Limitations and recommendation'], a: 2, why: 'Transformers are optional; baseline, ethics and story are required; network or diffusion: at least one.' },
+  { q: 'What should every number in your report be?', opts: ['Rounded to integers', 'Reproducible from your notebook', 'From the slides', 'Above 0.8'], a: 1, why: 'Fixed seeds, code that runs top to bottom.' },
+  { q: 'Which is a common weakness?', opts: ['A baseline before complex models', 'Beautiful network pictures without metrics', 'Error analysis with examples', 'Honest limitations'], a: 1, why: 'A picture is a hypothesis; metrics are the evidence.' },
+  { q: '“The public hates the new EV policy.” What is missing?', opts: ['Nothing', 'Scope, evidence, model quality and limitations', 'More adjectives', 'A pie chart'], a: 1, why: 'Evidence + scope + uncertainty + limitation = a responsible recommendation.' },
+  { q: 'Coordinated posting by a fan club is…', opts: ['always inauthentic', 'coordination — not necessarily inauthentic', 'proof of bots', 'illegal'], a: 1, why: 'Describe the pattern; be careful with the label.' }
+]);
+
+addCopy();
+</script>
+</body></html>

@@ -1,0 +1,549 @@
+cascade_id,topic,post_id,user_id,parent_id,timestamp,type,sentiment
+c01,recall news,p00001,u186,,2026-03-04T08:10:00Z,post,positive
+c01,recall news,p00002,u099,p00001,2026-03-04T09:07:39Z,quote,negative
+c01,recall news,p00003,u165,p00001,2026-03-04T08:15:02Z,repost,positive
+c01,recall news,p00004,u170,p00001,2026-03-04T08:52:14Z,repost,neutral
+c01,recall news,p00005,u197,p00001,2026-03-04T08:25:48Z,reply,neutral
+c01,recall news,p00006,u170,p00001,2026-03-04T08:19:54Z,repost,neutral
+c01,recall news,p00007,u182,p00001,2026-03-04T08:48:32Z,repost,negative
+c01,recall news,p00008,u194,p00001,2026-03-04T08:27:05Z,repost,neutral
+c01,recall news,p00009,u248,p00001,2026-03-04T08:11:20Z,repost,negative
+c01,recall news,p00010,u186,p00001,2026-03-04T08:15:38Z,quote,neutral
+c01,recall news,p00011,u199,p00001,2026-03-04T08:57:59Z,quote,neutral
+c01,recall news,p00012,u164,p00001,2026-03-04T08:15:49Z,repost,neutral
+c01,recall news,p00013,u161,p00001,2026-03-04T08:46:44Z,repost,neutral
+c01,recall news,p00014,u040,p00001,2026-03-04T08:15:00Z,quote,positive
+c01,recall news,p00015,u218,p00001,2026-03-04T08:26:13Z,quote,neutral
+c01,recall news,p00016,u135,p00001,2026-03-04T08:28:09Z,repost,neutral
+c01,recall news,p00017,u194,p00010,2026-03-04T08:17:58Z,repost,positive
+c01,recall news,p00018,u193,p00001,2026-03-04T08:14:00Z,reply,neutral
+c01,recall news,p00019,u161,p00011,2026-03-04T09:01:53Z,reply,positive
+c01,recall news,p00020,u176,p00010,2026-03-04T08:16:01Z,repost,positive
+c01,recall news,p00021,u132,p00001,2026-03-04T08:19:54Z,repost,negative
+c01,recall news,p00022,u200,p00001,2026-03-04T08:29:44Z,repost,neutral
+c01,recall news,p00023,u187,p00001,2026-03-04T08:29:40Z,repost,positive
+c01,recall news,p00024,u185,p00001,2026-03-04T08:12:52Z,repost,neutral
+c01,recall news,p00025,u181,p00001,2026-03-04T08:16:06Z,repost,negative
+c01,recall news,p00026,u163,p00001,2026-03-04T08:24:20Z,quote,neutral
+c01,recall news,p00027,u177,p00001,2026-03-04T08:19:54Z,reply,positive
+c01,recall news,p00028,u041,p00003,2026-03-04T08:41:33Z,repost,negative
+c01,recall news,p00029,u176,p00001,2026-03-04T08:45:36Z,repost,positive
+c01,recall news,p00030,u200,p00001,2026-03-04T08:13:46Z,repost,neutral
+c01,recall news,p00031,u112,p00001,2026-03-04T08:15:23Z,repost,positive
+c01,recall news,p00032,u178,p00001,2026-03-04T08:10:58Z,repost,positive
+c01,recall news,p00033,u167,p00001,2026-03-04T08:34:43Z,quote,neutral
+c01,recall news,p00034,u181,p00001,2026-03-04T08:20:01Z,repost,neutral
+c01,recall news,p00035,u198,p00001,2026-03-04T08:17:34Z,repost,positive
+c01,recall news,p00036,u170,p00001,2026-03-04T08:18:50Z,repost,positive
+c01,recall news,p00037,u208,p00001,2026-03-04T08:15:21Z,repost,negative
+c01,recall news,p00038,u211,p00029,2026-03-04T09:09:49Z,quote,neutral
+c01,recall news,p00039,u190,p00001,2026-03-04T08:33:19Z,repost,neutral
+c01,recall news,p00040,u191,p00001,2026-03-04T08:24:32Z,repost,positive
+c01,recall news,p00041,u182,p00001,2026-03-04T08:38:24Z,repost,positive
+c01,recall news,p00042,u194,p00001,2026-03-04T09:03:38Z,repost,neutral
+c01,recall news,p00043,u192,p00001,2026-03-04T08:35:39Z,repost,positive
+c01,recall news,p00044,u161,p00001,2026-03-04T08:20:48Z,repost,neutral
+c01,recall news,p00045,u199,p00001,2026-03-04T09:42:01Z,repost,positive
+c01,recall news,p00046,u186,p00001,2026-03-04T08:32:44Z,quote,neutral
+c01,recall news,p00047,u163,p00001,2026-03-04T09:32:20Z,reply,negative
+c01,recall news,p00048,u178,p00025,2026-03-04T08:51:24Z,repost,neutral
+c01,recall news,p00049,u188,p00001,2026-03-04T08:10:20Z,quote,neutral
+c01,recall news,p00050,u195,p00029,2026-03-04T09:25:40Z,repost,neutral
+c01,recall news,p00051,u173,p00022,2026-03-04T09:05:24Z,repost,positive
+c01,recall news,p00052,u162,p00001,2026-03-04T09:30:07Z,reply,neutral
+c01,recall news,p00053,u173,p00001,2026-03-04T08:32:15Z,repost,neutral
+c01,recall news,p00054,u174,p00001,2026-03-04T08:33:56Z,repost,neutral
+c01,recall news,p00055,u186,p00001,2026-03-04T08:47:56Z,reply,negative
+c01,recall news,p00056,u092,p00001,2026-03-04T08:45:10Z,quote,negative
+c01,recall news,p00057,u190,p00001,2026-03-04T09:08:03Z,quote,negative
+c01,recall news,p00058,u225,p00001,2026-03-04T08:13:12Z,reply,neutral
+c01,recall news,p00059,u199,p00001,2026-03-04T08:27:15Z,repost,positive
+c01,recall news,p00060,u006,p00001,2026-03-04T08:26:16Z,repost,neutral
+c01,recall news,p00061,u198,p00001,2026-03-04T08:24:07Z,repost,positive
+c01,recall news,p00062,u171,p00001,2026-03-04T08:29:25Z,quote,neutral
+c01,recall news,p00063,u182,p00001,2026-03-04T08:10:03Z,reply,neutral
+c01,recall news,p00064,u255,p00001,2026-03-04T08:42:44Z,repost,neutral
+c01,recall news,p00065,u197,p00001,2026-03-04T08:41:29Z,repost,neutral
+c01,recall news,p00066,u162,p00001,2026-03-04T08:20:14Z,repost,neutral
+c01,recall news,p00067,u177,p00001,2026-03-04T09:22:33Z,repost,positive
+c01,recall news,p00068,u188,p00001,2026-03-04T08:47:55Z,repost,positive
+c01,recall news,p00069,u145,p00001,2026-03-04T08:20:50Z,repost,negative
+c01,recall news,p00070,u189,p00018,2026-03-04T08:29:59Z,repost,positive
+c01,recall news,p00071,u182,p00001,2026-03-04T08:38:17Z,repost,neutral
+c01,recall news,p00072,u200,p00001,2026-03-04T08:10:23Z,quote,positive
+c01,recall news,p00073,u184,p00001,2026-03-04T08:38:09Z,repost,negative
+c01,recall news,p00074,u181,p00001,2026-03-04T08:14:45Z,repost,neutral
+c01,recall news,p00075,u196,p00001,2026-03-04T08:10:43Z,quote,neutral
+c01,recall news,p00076,u189,p00001,2026-03-04T08:20:23Z,repost,negative
+c01,recall news,p00077,u181,p00001,2026-03-04T08:12:36Z,repost,positive
+c01,recall news,p00078,u187,p00001,2026-03-04T08:11:01Z,repost,negative
+c01,recall news,p00079,u173,p00075,2026-03-04T08:19:58Z,repost,negative
+c01,recall news,p00080,u184,p00001,2026-03-04T08:27:15Z,repost,negative
+c01,recall news,p00081,u192,p00001,2026-03-04T08:23:35Z,repost,positive
+c01,recall news,p00082,u179,p00001,2026-03-04T08:12:48Z,reply,positive
+c01,recall news,p00083,u003,p00058,2026-03-04T09:07:23Z,repost,negative
+c01,recall news,p00084,u168,p00001,2026-03-04T10:01:44Z,repost,positive
+c01,recall news,p00085,u185,p00030,2026-03-04T08:18:23Z,repost,neutral
+c01,recall news,p00086,u234,p00001,2026-03-04T08:14:26Z,repost,negative
+c01,recall news,p00087,u242,p00062,2026-03-04T08:30:37Z,quote,neutral
+c01,recall news,p00088,u182,p00001,2026-03-04T08:34:26Z,repost,positive
+c01,recall news,p00089,u178,p00001,2026-03-04T09:10:12Z,repost,negative
+c01,recall news,p00090,u196,p00032,2026-03-04T08:25:55Z,repost,positive
+c01,recall news,p00091,u170,p00001,2026-03-04T09:00:05Z,repost,negative
+c01,recall news,p00092,u167,p00001,2026-03-04T08:16:32Z,reply,neutral
+c01,recall news,p00093,u189,p00001,2026-03-04T08:50:25Z,repost,neutral
+c01,recall news,p00094,u192,p00033,2026-03-04T08:46:12Z,reply,positive
+c01,recall news,p00095,u169,p00001,2026-03-04T08:43:20Z,reply,negative
+c01,recall news,p00096,u171,p00001,2026-03-04T08:44:54Z,repost,positive
+c01,recall news,p00097,u185,p00001,2026-03-04T08:14:04Z,repost,neutral
+c01,recall news,p00098,u197,p00001,2026-03-04T08:27:47Z,reply,negative
+c01,recall news,p00099,u193,p00001,2026-03-04T08:11:19Z,repost,positive
+c01,recall news,p00100,u179,p00001,2026-03-04T08:19:53Z,reply,positive
+c01,recall news,p00101,u165,p00001,2026-03-04T08:41:55Z,reply,negative
+c01,recall news,p00102,u177,p00001,2026-03-04T09:27:33Z,reply,neutral
+c01,recall news,p00103,u179,p00003,2026-03-04T08:22:19Z,repost,neutral
+c01,recall news,p00104,u199,p00001,2026-03-04T08:31:39Z,quote,neutral
+c01,recall news,p00105,u242,p00001,2026-03-04T08:12:16Z,quote,negative
+c01,recall news,p00106,u184,p00001,2026-03-04T09:18:09Z,repost,neutral
+c01,recall news,p00107,u169,p00001,2026-03-04T08:21:32Z,repost,positive
+c01,recall news,p00108,u186,p00022,2026-03-04T08:37:35Z,repost,neutral
+c01,recall news,p00109,u050,p00014,2026-03-04T08:19:10Z,repost,negative
+c01,recall news,p00110,u161,p00001,2026-03-04T08:34:05Z,repost,neutral
+c01,recall news,p00111,u174,p00001,2026-03-04T08:10:38Z,repost,neutral
+c01,recall news,p00112,u182,p00001,2026-03-04T08:43:08Z,repost,neutral
+c01,recall news,p00113,u184,p00001,2026-03-04T08:19:34Z,repost,neutral
+c01,recall news,p00114,u183,p00001,2026-03-04T09:09:15Z,repost,neutral
+c01,recall news,p00115,u110,p00055,2026-03-04T08:50:15Z,repost,negative
+c01,recall news,p00116,u048,p00001,2026-03-04T09:05:31Z,reply,neutral
+c01,recall news,p00117,u078,p00058,2026-03-04T08:34:56Z,repost,positive
+c01,recall news,p00118,u187,p00001,2026-03-04T08:14:44Z,repost,neutral
+c01,recall news,p00119,u177,p00018,2026-03-04T08:29:06Z,reply,negative
+c01,recall news,p00120,u092,p00001,2026-03-04T08:17:08Z,quote,neutral
+c01,recall news,p00121,u109,p00001,2026-03-04T08:13:29Z,repost,negative
+c01,recall news,p00122,u182,p00001,2026-03-04T08:31:38Z,repost,positive
+c01,recall news,p00123,u170,p00001,2026-03-04T09:02:46Z,repost,neutral
+c01,recall news,p00124,u186,p00091,2026-03-04T09:06:55Z,repost,positive
+c01,recall news,p00125,u173,p00001,2026-03-04T08:40:23Z,repost,positive
+c01,recall news,p00126,u161,p00001,2026-03-04T08:49:58Z,repost,positive
+c01,recall news,p00127,u199,p00001,2026-03-04T10:22:44Z,repost,negative
+c01,recall news,p00128,u167,p00001,2026-03-04T08:59:45Z,repost,negative
+c01,recall news,p00129,u184,p00001,2026-03-04T08:20:36Z,repost,negative
+c01,recall news,p00130,u167,p00001,2026-03-04T08:21:50Z,quote,positive
+c01,recall news,p00131,u165,p00001,2026-03-04T08:51:54Z,quote,positive
+c01,recall news,p00132,u141,p00001,2026-03-04T08:36:33Z,reply,negative
+c01,recall news,p00133,u150,p00022,2026-03-04T08:55:20Z,repost,positive
+c01,recall news,p00134,u186,p00001,2026-03-04T08:50:03Z,reply,positive
+c01,recall news,p00135,u164,p00001,2026-03-04T09:11:06Z,quote,negative
+c01,recall news,p00136,u222,p00031,2026-03-04T08:34:00Z,reply,positive
+c01,recall news,p00137,u189,p00001,2026-03-04T08:43:54Z,repost,positive
+c01,recall news,p00138,u174,p00001,2026-03-04T08:17:14Z,repost,positive
+c01,recall news,p00139,u180,p00001,2026-03-04T08:35:45Z,repost,positive
+c01,recall news,p00140,u182,p00040,2026-03-04T09:10:43Z,repost,neutral
+c01,recall news,p00141,u182,p00001,2026-03-04T08:27:07Z,repost,neutral
+c01,recall news,p00142,u126,p00001,2026-03-04T08:21:30Z,repost,positive
+c01,recall news,p00143,u161,p00001,2026-03-04T08:56:25Z,repost,positive
+c01,recall news,p00144,u168,p00001,2026-03-04T08:50:32Z,repost,negative
+c01,recall news,p00145,u176,p00001,2026-03-04T08:16:48Z,quote,positive
+c01,recall news,p00146,u176,p00001,2026-03-04T08:23:52Z,repost,positive
+c01,recall news,p00147,u131,p00078,2026-03-04T08:21:42Z,quote,negative
+c01,recall news,p00148,u163,p00001,2026-03-04T08:19:04Z,reply,positive
+c01,recall news,p00149,u192,p00001,2026-03-04T08:10:38Z,repost,neutral
+c01,recall news,p00150,u260,p00067,2026-03-04T09:24:17Z,repost,negative
+c01,recall news,p00151,u190,p00101,2026-03-04T09:17:40Z,quote,positive
+c01,recall news,p00152,u164,p00001,2026-03-04T08:23:37Z,repost,neutral
+c01,recall news,p00153,u181,p00001,2026-03-04T09:02:13Z,repost,neutral
+c01,recall news,p00154,u176,p00001,2026-03-04T08:36:44Z,reply,neutral
+c01,recall news,p00155,u194,p00001,2026-03-04T08:36:34Z,repost,neutral
+c01,recall news,p00156,u180,p00001,2026-03-04T08:22:26Z,repost,positive
+c01,recall news,p00157,u197,p00112,2026-03-04T08:43:27Z,reply,neutral
+c01,recall news,p00158,u175,p00001,2026-03-04T08:26:47Z,repost,neutral
+c01,recall news,p00159,u165,p00001,2026-03-04T09:18:53Z,repost,neutral
+c01,recall news,p00160,u170,p00001,2026-03-04T08:17:58Z,repost,positive
+c01,recall news,p00161,u169,p00001,2026-03-04T08:12:06Z,repost,neutral
+c01,recall news,p00162,u102,p00001,2026-03-04T08:20:16Z,repost,positive
+c01,recall news,p00163,u169,p00001,2026-03-04T10:04:21Z,repost,neutral
+c01,recall news,p00164,u171,p00001,2026-03-04T08:46:37Z,quote,neutral
+c01,recall news,p00165,u179,p00001,2026-03-04T08:15:21Z,reply,negative
+c01,recall news,p00166,u182,p00001,2026-03-04T08:32:39Z,quote,positive
+c01,recall news,p00167,u186,p00001,2026-03-04T08:15:49Z,repost,positive
+c01,recall news,p00168,u233,p00037,2026-03-04T08:44:41Z,repost,positive
+c01,recall news,p00169,u020,p00055,2026-03-04T08:50:28Z,reply,positive
+c01,recall news,p00170,u172,p00001,2026-03-04T09:35:35Z,reply,neutral
+c01,recall news,p00171,u166,p00001,2026-03-04T08:36:19Z,repost,neutral
+c01,recall news,p00172,u236,p00001,2026-03-04T08:13:09Z,quote,positive
+c01,recall news,p00173,u198,p00001,2026-03-04T08:23:42Z,repost,neutral
+c01,recall news,p00174,u200,p00001,2026-03-04T08:16:55Z,repost,positive
+c01,recall news,p00175,u149,p00001,2026-03-04T08:35:10Z,reply,negative
+c01,recall news,p00176,u167,p00001,2026-03-04T08:16:27Z,repost,neutral
+c01,recall news,p00177,u185,p00131,2026-03-04T08:57:12Z,repost,positive
+c01,recall news,p00178,u214,p00164,2026-03-04T10:45:11Z,repost,neutral
+c01,recall news,p00179,u172,p00119,2026-03-04T08:44:52Z,repost,neutral
+c01,recall news,p00180,u027,p00001,2026-03-04T08:30:27Z,reply,neutral
+c01,recall news,p00181,u256,p00001,2026-03-04T08:45:49Z,repost,negative
+c01,recall news,p00182,u176,p00001,2026-03-04T08:16:06Z,reply,positive
+c01,recall news,p00183,u173,p00001,2026-03-04T08:40:55Z,repost,neutral
+c01,recall news,p00184,u195,p00001,2026-03-04T08:16:20Z,repost,neutral
+c01,recall news,p00185,u193,p00001,2026-03-04T08:14:29Z,repost,positive
+c01,recall news,p00186,u179,p00001,2026-03-04T08:19:49Z,reply,negative
+c01,recall news,p00187,u165,p00001,2026-03-04T08:28:09Z,repost,negative
+c01,recall news,p00188,u013,p00179,2026-03-04T08:54:45Z,repost,negative
+c01,recall news,p00189,u163,p00001,2026-03-04T08:10:50Z,repost,positive
+c01,recall news,p00190,u184,p00001,2026-03-04T09:08:33Z,repost,positive
+c01,recall news,p00191,u164,p00001,2026-03-04T08:50:14Z,repost,neutral
+c01,recall news,p00192,u162,p00001,2026-03-04T08:34:14Z,repost,positive
+c01,recall news,p00193,u174,p00001,2026-03-04T08:36:03Z,repost,negative
+c01,recall news,p00194,u101,p00001,2026-03-04T08:14:48Z,quote,neutral
+c01,recall news,p00195,u180,p00001,2026-03-04T09:08:37Z,repost,negative
+c01,recall news,p00196,u056,p00001,2026-03-04T08:17:24Z,repost,positive
+c01,recall news,p00197,u167,p00001,2026-03-04T08:19:20Z,repost,neutral
+c01,recall news,p00198,u055,p00196,2026-03-04T08:35:31Z,repost,negative
+c01,recall news,p00199,u179,p00001,2026-03-04T08:13:42Z,reply,positive
+c01,recall news,p00200,u046,p00051,2026-03-04T09:39:23Z,repost,positive
+c01,recall news,p00201,u171,p00001,2026-03-04T10:08:58Z,repost,neutral
+c01,recall news,p00202,u100,p00054,2026-03-04T10:42:50Z,repost,neutral
+c01,recall news,p00203,u260,p00001,2026-03-04T08:11:03Z,repost,neutral
+c01,recall news,p00204,u174,p00001,2026-03-04T09:02:59Z,quote,negative
+c01,recall news,p00205,u187,p00001,2026-03-04T08:57:27Z,reply,neutral
+c01,recall news,p00206,u176,p00001,2026-03-04T08:20:12Z,repost,positive
+c01,recall news,p00207,u065,p00001,2026-03-04T08:14:53Z,repost,neutral
+c01,recall news,p00208,u162,p00001,2026-03-04T08:57:15Z,repost,positive
+c01,recall news,p00209,u182,p00001,2026-03-04T08:42:39Z,quote,positive
+c01,recall news,p00210,u183,p00001,2026-03-04T08:14:13Z,repost,neutral
+c01,recall news,p00211,u097,p00001,2026-03-04T08:25:07Z,repost,negative
+c01,recall news,p00212,u191,p00001,2026-03-04T08:36:18Z,quote,neutral
+c02,charging tip,p00213,u005,,2026-03-06T17:30:00Z,post,neutral
+c02,charging tip,p00214,u031,p00213,2026-03-06T17:53:36Z,repost,negative
+c02,charging tip,p00215,u084,p00213,2026-03-06T17:41:53Z,repost,positive
+c02,charging tip,p00216,u054,p00213,2026-03-06T18:32:13Z,repost,negative
+c02,charging tip,p00217,u059,p00215,2026-03-06T22:44:35Z,quote,positive
+c02,charging tip,p00218,u069,p00216,2026-03-06T19:19:14Z,repost,negative
+c02,charging tip,p00219,u022,p00218,2026-03-06T19:38:05Z,repost,neutral
+c02,charging tip,p00220,u037,p00219,2026-03-06T20:03:09Z,repost,negative
+c02,charging tip,p00221,u015,p00219,2026-03-06T21:36:49Z,repost,neutral
+c02,charging tip,p00222,u017,p00219,2026-03-06T19:41:48Z,quote,neutral
+c02,charging tip,p00223,u022,p00221,2026-03-06T21:45:01Z,repost,neutral
+c02,charging tip,p00224,u052,p00223,2026-03-06T22:52:30Z,quote,negative
+c02,charging tip,p00225,u049,p00224,2026-03-06T23:35:11Z,repost,neutral
+c02,charging tip,p00226,u036,p00225,2026-03-07T00:03:03Z,repost,positive
+c02,charging tip,p00227,u174,p00223,2026-03-06T21:50:11Z,reply,neutral
+c02,charging tip,p00228,u197,p00227,2026-03-06T22:29:48Z,repost,neutral
+c02,charging tip,p00229,u198,p00228,2026-03-06T22:33:35Z,repost,neutral
+c02,charging tip,p00230,u064,p00226,2026-03-07T00:13:46Z,reply,positive
+c02,charging tip,p00231,u054,p00230,2026-03-07T00:46:21Z,repost,neutral
+c02,charging tip,p00232,u199,p00229,2026-03-06T23:40:05Z,repost,neutral
+c02,charging tip,p00233,u190,p00232,2026-03-07T00:11:19Z,repost,positive
+c02,charging tip,p00234,u222,p00233,2026-03-07T00:57:40Z,reply,negative
+c02,charging tip,p00235,u086,p00232,2026-03-07T00:10:05Z,repost,neutral
+c02,charging tip,p00236,u015,p00235,2026-03-07T00:24:08Z,quote,neutral
+c02,charging tip,p00237,u043,p00236,2026-03-07T00:52:53Z,repost,neutral
+c02,charging tip,p00238,u029,p00234,2026-03-07T01:50:58Z,repost,neutral
+c02,charging tip,p00239,u034,p00238,2026-03-07T02:46:11Z,repost,positive
+c02,charging tip,p00240,u095,p00237,2026-03-07T00:58:37Z,quote,negative
+c02,charging tip,p00241,u125,p00240,2026-03-07T01:07:57Z,repost,neutral
+c02,charging tip,p00242,u118,p00241,2026-03-07T03:51:38Z,repost,negative
+c02,charging tip,p00243,u062,p00239,2026-03-07T04:02:28Z,repost,neutral
+c02,charging tip,p00244,u003,p00243,2026-03-07T05:07:50Z,quote,neutral
+c02,charging tip,p00245,u148,p00244,2026-03-07T06:27:13Z,repost,negative
+c02,charging tip,p00246,u251,p00244,2026-03-07T05:31:47Z,repost,negative
+c02,charging tip,p00247,u221,p00246,2026-03-07T05:57:44Z,reply,positive
+c02,charging tip,p00248,u244,p00246,2026-03-07T06:13:04Z,quote,negative
+c02,charging tip,p00249,u247,p00248,2026-03-07T06:28:42Z,repost,positive
+c02,charging tip,p00250,u256,p00249,2026-03-07T07:02:28Z,repost,negative
+c03,subsidy (DE),p00251,u225,,2026-03-09T06:00:00Z,post,negative
+c03,subsidy (DE),p00252,u254,p00251,2026-03-09T06:59:36Z,reply,negative
+c03,subsidy (DE),p00253,u223,p00251,2026-03-09T06:50:41Z,repost,positive
+c03,subsidy (DE),p00254,u142,p00251,2026-03-09T06:02:12Z,repost,negative
+c03,subsidy (DE),p00255,u217,p00252,2026-03-09T07:42:11Z,repost,positive
+c03,subsidy (DE),p00256,u214,p00252,2026-03-09T08:20:36Z,repost,neutral
+c03,subsidy (DE),p00257,u240,p00255,2026-03-09T09:45:20Z,quote,neutral
+c03,subsidy (DE),p00258,u230,p00251,2026-03-09T06:07:57Z,reply,positive
+c03,subsidy (DE),p00259,u082,p00251,2026-03-09T06:27:57Z,repost,positive
+c03,subsidy (DE),p00260,u207,p00256,2026-03-09T08:43:54Z,repost,negative
+c03,subsidy (DE),p00261,u201,p00255,2026-03-09T07:53:07Z,repost,neutral
+c03,subsidy (DE),p00262,u231,p00256,2026-03-09T08:44:37Z,repost,neutral
+c03,subsidy (DE),p00263,u248,p00251,2026-03-09T06:20:28Z,repost,neutral
+c03,subsidy (DE),p00264,u250,p00263,2026-03-09T06:47:00Z,repost,positive
+c03,subsidy (DE),p00265,u241,p00260,2026-03-09T10:32:39Z,repost,negative
+c03,subsidy (DE),p00266,u218,p00260,2026-03-09T09:36:09Z,repost,neutral
+c03,subsidy (DE),p00267,u252,p00265,2026-03-09T10:35:04Z,repost,neutral
+c03,subsidy (DE),p00268,u138,p00251,2026-03-09T06:34:01Z,repost,positive
+c03,subsidy (DE),p00269,u240,p00251,2026-03-09T07:21:48Z,repost,negative
+c03,subsidy (DE),p00270,u151,p00251,2026-03-09T06:00:04Z,quote,neutral
+c03,subsidy (DE),p00271,u155,p00251,2026-03-09T06:30:06Z,repost,negative
+c03,subsidy (DE),p00272,u248,p00264,2026-03-09T07:00:44Z,repost,neutral
+c03,subsidy (DE),p00273,u045,p00255,2026-03-09T08:02:24Z,repost,neutral
+c03,subsidy (DE),p00274,u256,p00251,2026-03-09T06:00:05Z,reply,neutral
+c03,subsidy (DE),p00275,u111,p00271,2026-03-09T07:22:31Z,repost,negative
+c03,subsidy (DE),p00276,u259,p00253,2026-03-09T07:23:19Z,quote,negative
+c03,subsidy (DE),p00277,u210,p00251,2026-03-09T07:19:47Z,repost,negative
+c03,subsidy (DE),p00278,u240,p00265,2026-03-09T11:30:41Z,quote,neutral
+c03,subsidy (DE),p00279,u172,p00266,2026-03-09T09:53:03Z,repost,negative
+c03,subsidy (DE),p00280,u224,p00251,2026-03-09T06:24:11Z,repost,neutral
+c03,subsidy (DE),p00281,u214,p00251,2026-03-09T06:05:02Z,repost,negative
+c03,subsidy (DE),p00282,u249,p00251,2026-03-09T06:12:08Z,quote,positive
+c03,subsidy (DE),p00283,u227,p00265,2026-03-09T10:50:09Z,repost,negative
+c03,subsidy (DE),p00284,u235,p00251,2026-03-09T06:02:55Z,repost,negative
+c03,subsidy (DE),p00285,u134,p00279,2026-03-09T09:57:51Z,repost,negative
+c03,subsidy (DE),p00286,u221,p00283,2026-03-09T12:31:07Z,reply,neutral
+c03,subsidy (DE),p00287,u234,p00258,2026-03-09T07:16:11Z,reply,neutral
+c03,subsidy (DE),p00288,u158,p00251,2026-03-09T06:21:32Z,repost,negative
+c03,subsidy (DE),p00289,u252,p00251,2026-03-09T06:05:56Z,repost,negative
+c03,subsidy (DE),p00290,u221,p00281,2026-03-09T06:18:42Z,repost,negative
+c03,subsidy (DE),p00291,u073,p00251,2026-03-09T06:51:29Z,repost,neutral
+c03,subsidy (DE),p00292,u247,p00251,2026-03-09T06:59:41Z,repost,negative
+c03,subsidy (DE),p00293,u231,p00251,2026-03-09T06:19:18Z,reply,negative
+c03,subsidy (DE),p00294,u202,p00251,2026-03-09T06:25:12Z,repost,negative
+c03,subsidy (DE),p00295,u028,p00251,2026-03-09T06:12:39Z,repost,positive
+c03,subsidy (DE),p00296,u010,p00251,2026-03-09T06:11:33Z,repost,neutral
+c03,subsidy (DE),p00297,u132,p00288,2026-03-09T06:24:09Z,repost,negative
+c03,subsidy (DE),p00298,u167,p00251,2026-03-09T07:16:33Z,reply,positive
+c03,subsidy (DE),p00299,u215,p00251,2026-03-09T06:05:09Z,repost,negative
+c03,subsidy (DE),p00300,u257,p00251,2026-03-09T06:00:51Z,repost,negative
+c03,subsidy (DE),p00301,u220,p00251,2026-03-09T06:08:14Z,repost,neutral
+c03,subsidy (DE),p00302,u155,p00268,2026-03-09T06:55:16Z,repost,negative
+c03,subsidy (DE),p00303,u216,p00289,2026-03-09T06:21:16Z,repost,positive
+c03,subsidy (DE),p00304,u222,p00293,2026-03-09T06:45:53Z,reply,negative
+c04,range test video,p00305,u061,,2026-03-02T12:00:00Z,post,neutral
+c04,range test video,p00306,u045,p00305,2026-03-02T12:12:05Z,repost,negative
+c04,range test video,p00307,u004,p00306,2026-03-02T12:27:54Z,repost,positive
+c04,range test video,p00308,u032,p00305,2026-03-02T13:02:39Z,reply,neutral
+c04,range test video,p00309,u175,p00305,2026-03-02T12:06:54Z,reply,positive
+c04,range test video,p00310,u181,p00305,2026-03-02T12:26:36Z,repost,neutral
+c04,range test video,p00311,u037,p00305,2026-03-02T12:07:32Z,quote,positive
+c04,range test video,p00312,u204,p00305,2026-03-02T12:40:24Z,repost,positive
+c04,range test video,p00313,u061,p00305,2026-03-02T13:42:40Z,reply,neutral
+c04,range test video,p00314,u004,p00305,2026-03-02T12:30:39Z,quote,neutral
+c04,range test video,p00315,u039,p00305,2026-03-02T12:08:20Z,quote,positive
+c04,range test video,p00316,u025,p00305,2026-03-02T12:05:17Z,repost,negative
+c04,range test video,p00317,u051,p00305,2026-03-02T12:00:48Z,repost,positive
+c04,range test video,p00318,u004,p00305,2026-03-02T12:00:41Z,repost,positive
+c04,range test video,p00319,u035,p00305,2026-03-02T12:02:56Z,repost,negative
+c04,range test video,p00320,u001,p00305,2026-03-02T12:18:51Z,reply,neutral
+c04,range test video,p00321,u076,p00305,2026-03-02T13:51:49Z,repost,negative
+c04,range test video,p00322,u045,p00305,2026-03-02T12:06:04Z,repost,negative
+c04,range test video,p00323,u010,p00305,2026-03-02T12:54:59Z,repost,neutral
+c04,range test video,p00324,u021,p00305,2026-03-02T13:34:13Z,repost,negative
+c04,range test video,p00325,u068,p00305,2026-03-02T12:55:52Z,repost,neutral
+c04,range test video,p00326,u031,p00305,2026-03-02T12:41:40Z,reply,neutral
+c04,range test video,p00327,u078,p00305,2026-03-02T12:03:34Z,repost,neutral
+c04,range test video,p00328,u148,p00305,2026-03-02T13:17:22Z,reply,neutral
+c04,range test video,p00329,u041,p00305,2026-03-02T12:46:52Z,quote,positive
+c04,range test video,p00330,u038,p00305,2026-03-02T12:07:07Z,repost,positive
+c04,range test video,p00331,u015,p00305,2026-03-02T12:02:04Z,repost,positive
+c04,range test video,p00332,u036,p00305,2026-03-02T12:05:58Z,reply,positive
+c04,range test video,p00333,u067,p00305,2026-03-02T12:25:10Z,repost,positive
+c04,range test video,p00334,u057,p00317,2026-03-02T12:11:57Z,repost,neutral
+c04,range test video,p00335,u045,p00307,2026-03-02T13:11:34Z,repost,neutral
+c04,range test video,p00336,u068,p00305,2026-03-02T12:20:52Z,repost,neutral
+c04,range test video,p00337,u022,p00305,2026-03-02T12:01:34Z,repost,neutral
+c04,range test video,p00338,u171,p00309,2026-03-02T12:09:42Z,repost,positive
+c04,range test video,p00339,u039,p00305,2026-03-02T12:52:05Z,quote,negative
+c04,range test video,p00340,u046,p00316,2026-03-02T13:14:47Z,quote,positive
+c04,range test video,p00341,u030,p00305,2026-03-02T12:26:08Z,repost,neutral
+c04,range test video,p00342,u027,p00305,2026-03-02T12:05:45Z,repost,neutral
+c04,range test video,p00343,u037,p00305,2026-03-02T12:05:12Z,repost,negative
+c04,range test video,p00344,u071,p00305,2026-03-02T12:40:43Z,repost,negative
+c04,range test video,p00345,u260,p00305,2026-03-02T12:34:38Z,repost,positive
+c04,range test video,p00346,u092,p00338,2026-03-02T12:21:30Z,repost,negative
+c04,range test video,p00347,u082,p00305,2026-03-02T12:57:01Z,repost,neutral
+c04,range test video,p00348,u069,p00305,2026-03-02T12:10:58Z,repost,negative
+c04,range test video,p00349,u013,p00333,2026-03-02T13:12:30Z,repost,neutral
+c04,range test video,p00350,u188,p00305,2026-03-02T12:04:05Z,repost,neutral
+c04,range test video,p00351,u052,p00305,2026-03-02T12:43:41Z,repost,positive
+c04,range test video,p00352,u052,p00305,2026-03-02T12:08:06Z,repost,neutral
+c04,range test video,p00353,u002,p00305,2026-03-02T12:11:37Z,repost,positive
+c04,range test video,p00354,u017,p00305,2026-03-02T12:19:57Z,quote,positive
+c04,range test video,p00355,u058,p00305,2026-03-02T13:29:18Z,repost,neutral
+c04,range test video,p00356,u018,p00335,2026-03-02T13:26:44Z,quote,neutral
+c04,range test video,p00357,u014,p00305,2026-03-02T12:16:48Z,reply,neutral
+c04,range test video,p00358,u087,p00305,2026-03-02T12:26:08Z,repost,neutral
+c04,range test video,p00359,u088,p00305,2026-03-02T13:19:18Z,repost,positive
+c04,range test video,p00360,u077,p00305,2026-03-02T12:08:14Z,repost,neutral
+c04,range test video,p00361,u045,p00305,2026-03-02T12:05:06Z,repost,positive
+c04,range test video,p00362,u004,p00341,2026-03-02T12:27:19Z,repost,positive
+c04,range test video,p00363,u202,p00305,2026-03-02T12:06:09Z,reply,negative
+c04,range test video,p00364,u014,p00305,2026-03-02T12:28:48Z,reply,positive
+c04,range test video,p00365,u065,p00305,2026-03-02T12:11:35Z,repost,neutral
+c04,range test video,p00366,u024,p00305,2026-03-02T12:33:55Z,repost,neutral
+c04,range test video,p00367,u156,p00305,2026-03-02T12:08:59Z,repost,neutral
+c04,range test video,p00368,u018,p00305,2026-03-02T12:02:11Z,repost,neutral
+c04,range test video,p00369,u036,p00305,2026-03-02T12:01:52Z,repost,positive
+c04,range test video,p00370,u038,p00305,2026-03-02T12:15:39Z,repost,neutral
+c04,range test video,p00371,u235,p00305,2026-03-02T12:01:50Z,repost,negative
+c04,range test video,p00372,u226,p00305,2026-03-02T12:13:56Z,repost,positive
+c04,range test video,p00373,u040,p00305,2026-03-02T12:45:18Z,repost,neutral
+c04,range test video,p00374,u088,p00305,2026-03-02T12:16:09Z,repost,positive
+c04,range test video,p00375,u069,p00305,2026-03-02T12:13:54Z,repost,neutral
+c04,range test video,p00376,u025,p00305,2026-03-02T12:11:44Z,repost,negative
+c04,range test video,p00377,u001,p00305,2026-03-02T12:06:40Z,repost,neutral
+c04,range test video,p00378,u035,p00365,2026-03-02T13:04:54Z,repost,positive
+c04,range test video,p00379,u048,p00305,2026-03-02T12:07:12Z,repost,positive
+c04,range test video,p00380,u078,p00377,2026-03-02T12:24:15Z,repost,negative
+c04,range test video,p00381,u013,p00306,2026-03-02T12:16:45Z,repost,neutral
+c04,range test video,p00382,u031,p00305,2026-03-02T12:13:30Z,repost,positive
+c04,range test video,p00383,u035,p00305,2026-03-02T12:02:00Z,repost,neutral
+c04,range test video,p00384,u041,p00305,2026-03-02T12:50:38Z,repost,neutral
+c04,range test video,p00385,u043,p00359,2026-03-02T13:29:07Z,repost,negative
+c04,range test video,p00386,u058,p00305,2026-03-02T12:30:48Z,repost,neutral
+c04,range test video,p00387,u056,p00305,2026-03-02T13:01:23Z,repost,neutral
+c04,range test video,p00388,u085,p00305,2026-03-02T12:09:48Z,repost,negative
+c04,range test video,p00389,u043,p00347,2026-03-02T14:21:51Z,reply,positive
+c04,range test video,p00390,u078,p00305,2026-03-02T12:04:20Z,repost,neutral
+c04,range test video,p00391,u018,p00305,2026-03-02T13:06:09Z,quote,negative
+c04,range test video,p00392,u083,p00305,2026-03-02T12:45:03Z,repost,negative
+c04,range test video,p00393,u130,p00305,2026-03-02T12:15:09Z,repost,positive
+c04,range test video,p00394,u156,p00305,2026-03-02T12:02:18Z,quote,positive
+c04,range test video,p00395,u238,p00305,2026-03-02T12:10:19Z,quote,neutral
+c04,range test video,p00396,u017,p00305,2026-03-02T13:05:20Z,quote,neutral
+c04,range test video,p00397,u010,p00305,2026-03-02T12:42:09Z,repost,neutral
+c04,range test video,p00398,u203,p00395,2026-03-02T12:10:35Z,repost,negative
+c04,range test video,p00399,u045,p00305,2026-03-02T12:00:54Z,repost,negative
+c05,fire rumour,p00400,u118,,2026-03-04T21:00:00Z,post,negative
+c05,fire rumour,p00401,u130,p00400,2026-03-04T21:47:47Z,repost,neutral
+c05,fire rumour,p00402,u194,p00401,2026-03-04T22:44:10Z,repost,neutral
+c05,fire rumour,p00403,u117,p00402,2026-03-04T23:22:39Z,repost,neutral
+c05,fire rumour,p00404,u107,p00403,2026-03-05T02:40:48Z,repost,negative
+c05,fire rumour,p00405,u143,p00404,2026-03-05T02:50:06Z,repost,negative
+c05,fire rumour,p00406,u153,p00405,2026-03-05T04:05:57Z,quote,negative
+c05,fire rumour,p00407,u256,p00406,2026-03-05T04:38:19Z,repost,negative
+c05,fire rumour,p00408,u223,p00407,2026-03-05T06:05:30Z,repost,negative
+c05,fire rumour,p00409,u205,p00405,2026-03-05T02:51:35Z,repost,positive
+c05,fire rumour,p00410,u247,p00409,2026-03-05T03:05:45Z,quote,negative
+c05,fire rumour,p00411,u255,p00410,2026-03-05T04:51:43Z,quote,negative
+c05,fire rumour,p00412,u258,p00410,2026-03-05T03:08:52Z,repost,negative
+c05,fire rumour,p00413,u258,p00412,2026-03-05T05:04:50Z,repost,negative
+c05,fire rumour,p00414,u223,p00413,2026-03-05T07:04:25Z,reply,negative
+c05,fire rumour,p00415,u215,p00411,2026-03-05T05:18:53Z,quote,negative
+c05,fire rumour,p00416,u250,p00413,2026-03-05T07:32:22Z,repost,negative
+c05,fire rumour,p00417,u224,p00414,2026-03-05T08:00:33Z,repost,negative
+c05,fire rumour,p00418,u214,p00417,2026-03-05T08:22:03Z,repost,neutral
+c05,fire rumour,p00419,u245,p00418,2026-03-05T09:45:03Z,reply,negative
+c05,fire rumour,p00420,u244,p00419,2026-03-05T10:48:49Z,repost,negative
+c05,fire rumour,p00421,u202,p00420,2026-03-05T11:03:45Z,reply,negative
+c05,fire rumour,p00422,u203,p00421,2026-03-05T12:12:03Z,repost,negative
+c05,fire rumour,p00423,u260,p00419,2026-03-05T10:20:02Z,repost,negative
+c05,fire rumour,p00424,u237,p00423,2026-03-05T11:35:54Z,repost,negative
+c05,fire rumour,p00425,u253,p00424,2026-03-05T13:49:13Z,repost,negative
+c05,fire rumour,p00426,u243,p00425,2026-03-05T14:02:18Z,repost,neutral
+c05,fire rumour,p00427,u244,p00426,2026-03-05T15:15:52Z,repost,negative
+c05,fire rumour,p00428,u243,p00427,2026-03-05T15:34:00Z,repost,negative
+c05,fire rumour,p00429,u226,p00428,2026-03-05T16:59:12Z,reply,negative
+c05,fire rumour,p00430,u146,p00426,2026-03-05T15:01:58Z,reply,negative
+c05,fire rumour,p00431,u114,p00430,2026-03-05T15:24:08Z,quote,negative
+c05,fire rumour,p00432,u045,p00431,2026-03-05T15:46:14Z,repost,negative
+c05,fire rumour,p00433,u034,p00432,2026-03-05T19:01:56Z,reply,negative
+c05,fire rumour,p00434,u009,p00433,2026-03-05T19:14:27Z,repost,negative
+c05,fire rumour,p00435,u042,p00434,2026-03-05T19:21:31Z,reply,negative
+c05,fire rumour,p00436,u047,p00435,2026-03-05T21:01:22Z,repost,negative
+c05,fire rumour,p00437,u003,p00436,2026-03-05T23:02:39Z,repost,negative
+c05,fire rumour,p00438,u073,p00436,2026-03-05T22:24:29Z,reply,negative
+c05,fire rumour,p00439,u050,p00438,2026-03-05T22:25:02Z,repost,negative
+c05,fire rumour,p00440,u019,p00437,2026-03-06T01:28:11Z,repost,negative
+c05,fire rumour,p00441,u255,p00440,2026-03-06T01:33:28Z,repost,negative
+c05,fire rumour,p00442,u063,p00440,2026-03-06T02:37:48Z,repost,negative
+c05,fire rumour,p00443,u071,p00440,2026-03-06T01:46:29Z,quote,negative
+c05,fire rumour,p00444,u067,p00443,2026-03-06T02:50:42Z,repost,negative
+c05,fire rumour,p00445,u003,p00442,2026-03-06T03:01:49Z,repost,negative
+c05,fire rumour,p00446,u243,p00445,2026-03-06T03:50:12Z,repost,negative
+c05,fire rumour,p00447,u206,p00446,2026-03-06T05:41:52Z,reply,negative
+c05,fire rumour,p00448,u234,p00446,2026-03-06T04:29:20Z,repost,negative
+c05,fire rumour,p00449,u260,p00448,2026-03-06T06:23:10Z,reply,negative
+c05,fire rumour,p00450,u229,p00449,2026-03-06T06:43:53Z,repost,negative
+c05,fire rumour,p00451,u242,p00450,2026-03-06T07:50:11Z,repost,negative
+c05,fire rumour,p00452,u222,p00451,2026-03-06T08:09:47Z,repost,negative
+c05,fire rumour,p00453,u211,p00451,2026-03-06T09:22:10Z,quote,negative
+c05,fire rumour,p00454,u003,p00452,2026-03-06T09:55:01Z,repost,negative
+c05,fire rumour,p00455,u039,p00454,2026-03-06T10:24:26Z,reply,negative
+c05,fire rumour,p00456,u069,p00454,2026-03-06T10:08:00Z,reply,negative
+c05,fire rumour,p00457,u060,p00454,2026-03-06T10:37:00Z,reply,negative
+c05,fire rumour,p00458,u089,p00457,2026-03-06T11:13:40Z,quote,negative
+c05,fire rumour,p00459,u037,p00458,2026-03-06T12:27:15Z,reply,neutral
+c05,fire rumour,p00460,u005,p00456,2026-03-06T11:30:55Z,repost,negative
+c06,price cut,p00461,u162,,2026-03-11T10:15:00Z,post,positive
+c06,price cut,p00462,u184,p00461,2026-03-11T11:29:31Z,reply,positive
+c06,price cut,p00463,u039,p00462,2026-03-11T11:36:50Z,repost,positive
+c06,price cut,p00464,u165,p00461,2026-03-11T10:15:36Z,repost,positive
+c06,price cut,p00465,u167,p00461,2026-03-11T10:55:40Z,quote,negative
+c06,price cut,p00466,u049,p00463,2026-03-11T11:56:24Z,repost,negative
+c06,price cut,p00467,u178,p00461,2026-03-11T10:18:20Z,repost,positive
+c06,price cut,p00468,u170,p00461,2026-03-11T10:26:48Z,repost,positive
+c06,price cut,p00469,u177,p00464,2026-03-11T10:15:51Z,reply,neutral
+c06,price cut,p00470,u014,p00466,2026-03-11T12:02:41Z,repost,neutral
+c06,price cut,p00471,u169,p00461,2026-03-11T10:24:43Z,quote,neutral
+c06,price cut,p00472,u089,p00461,2026-03-11T10:17:22Z,repost,neutral
+c06,price cut,p00473,u260,p00471,2026-03-11T10:29:19Z,reply,negative
+c06,price cut,p00474,u036,p00461,2026-03-11T10:39:17Z,repost,positive
+c06,price cut,p00475,u044,p00463,2026-03-11T11:39:02Z,repost,negative
+c06,price cut,p00476,u182,p00469,2026-03-11T10:21:22Z,repost,negative
+c06,price cut,p00477,u176,p00476,2026-03-11T11:25:51Z,repost,neutral
+c06,price cut,p00478,u138,p00463,2026-03-11T11:58:56Z,repost,negative
+c06,price cut,p00479,u188,p00465,2026-03-11T11:07:52Z,repost,neutral
+c06,price cut,p00480,u166,p00461,2026-03-11T10:18:41Z,repost,positive
+c06,price cut,p00481,u162,p00461,2026-03-11T10:32:58Z,quote,positive
+c06,price cut,p00482,u190,p00464,2026-03-11T11:01:35Z,reply,positive
+c06,price cut,p00483,u192,p00461,2026-03-11T11:12:41Z,repost,positive
+c06,price cut,p00484,u206,p00483,2026-03-11T11:24:33Z,reply,negative
+c06,price cut,p00485,u173,p00461,2026-03-11T10:38:51Z,repost,neutral
+c06,price cut,p00486,u192,p00461,2026-03-11T10:39:52Z,repost,positive
+c06,price cut,p00487,u077,p00461,2026-03-11T10:17:31Z,repost,negative
+c06,price cut,p00488,u180,p00481,2026-03-11T10:42:59Z,repost,positive
+c06,price cut,p00489,u162,p00461,2026-03-11T12:12:47Z,repost,positive
+c06,price cut,p00490,u194,p00461,2026-03-11T11:46:24Z,repost,neutral
+c06,price cut,p00491,u039,p00463,2026-03-11T11:56:42Z,repost,negative
+c06,price cut,p00492,u175,p00461,2026-03-11T10:39:56Z,repost,positive
+c06,price cut,p00493,u195,p00485,2026-03-11T10:49:33Z,repost,neutral
+c06,price cut,p00494,u210,p00485,2026-03-11T10:45:10Z,quote,neutral
+c06,price cut,p00495,u145,p00490,2026-03-11T12:28:39Z,repost,neutral
+c06,price cut,p00496,u182,p00461,2026-03-11T10:23:55Z,repost,negative
+c06,price cut,p00497,u177,p00465,2026-03-11T10:58:47Z,repost,positive
+c06,price cut,p00498,u218,p00494,2026-03-11T10:45:21Z,quote,negative
+c06,price cut,p00499,u195,p00488,2026-03-11T10:45:25Z,repost,positive
+c06,price cut,p00500,u168,p00462,2026-03-11T11:31:06Z,repost,neutral
+c06,price cut,p00501,u035,p00474,2026-03-11T11:28:36Z,repost,negative
+c06,price cut,p00502,u174,p00461,2026-03-11T10:16:38Z,repost,negative
+c06,price cut,p00503,u046,p00463,2026-03-11T11:45:11Z,reply,negative
+c07,winter range complaint,p00504,u112,,2026-03-12T19:40:00Z,post,neutral
+c07,winter range complaint,p00505,u150,p00504,2026-03-12T19:44:56Z,repost,positive
+c07,winter range complaint,p00506,u102,p00504,2026-03-12T19:46:57Z,repost,negative
+c07,winter range complaint,p00507,u111,p00506,2026-03-12T21:43:22Z,repost,positive
+c07,winter range complaint,p00508,u142,p00504,2026-03-12T20:52:11Z,repost,neutral
+c07,winter range complaint,p00509,u094,p00505,2026-03-12T21:03:02Z,repost,neutral
+c07,winter range complaint,p00510,u138,p00509,2026-03-12T21:03:53Z,repost,positive
+c07,winter range complaint,p00511,u104,p00509,2026-03-12T21:03:27Z,repost,negative
+c07,winter range complaint,p00512,u007,p00511,2026-03-12T23:57:06Z,quote,neutral
+c07,winter range complaint,p00513,u128,p00511,2026-03-12T21:17:31Z,repost,negative
+c07,winter range complaint,p00514,u110,p00513,2026-03-12T21:51:41Z,repost,negative
+c07,winter range complaint,p00515,u130,p00514,2026-03-12T22:05:12Z,repost,negative
+c07,winter range complaint,p00516,u185,p00515,2026-03-12T22:06:33Z,repost,neutral
+c07,winter range complaint,p00517,u163,p00516,2026-03-13T01:20:40Z,reply,negative
+c07,winter range complaint,p00518,u197,p00517,2026-03-13T01:39:13Z,repost,negative
+c07,winter range complaint,p00519,u168,p00518,2026-03-13T03:27:20Z,repost,negative
+c07,winter range complaint,p00520,u161,p00519,2026-03-13T03:41:39Z,repost,neutral
+c07,winter range complaint,p00521,u191,p00517,2026-03-13T01:27:34Z,repost,negative
+c07,winter range complaint,p00522,u167,p00521,2026-03-13T01:44:22Z,repost,negative
+c07,winter range complaint,p00523,u165,p00522,2026-03-13T03:35:14Z,repost,positive
+c07,winter range complaint,p00524,u040,p00523,2026-03-13T03:40:53Z,repost,negative
+c07,winter range complaint,p00525,u028,p00524,2026-03-13T03:53:48Z,quote,negative
+c07,winter range complaint,p00526,u084,p00525,2026-03-13T06:14:24Z,repost,negative
+c07,winter range complaint,p00527,u074,p00526,2026-03-13T07:48:57Z,repost,negative
+c07,winter range complaint,p00528,u078,p00526,2026-03-13T07:24:06Z,reply,negative
+c07,winter range complaint,p00529,u087,p00528,2026-03-13T07:28:03Z,repost,negative
+c07,winter range complaint,p00530,u169,p00529,2026-03-13T08:08:17Z,quote,negative
+c08,dealer event,p00531,u185,,2026-03-13T09:00:00Z,post,negative
+c08,dealer event,p00532,u235,p00531,2026-03-13T09:12:32Z,repost,negative
+c08,dealer event,p00533,u190,p00531,2026-03-13T09:09:19Z,repost,positive
+c08,dealer event,p00534,u193,p00531,2026-03-13T09:00:07Z,repost,neutral
+c08,dealer event,p00535,u249,p00532,2026-03-13T10:07:22Z,quote,neutral
+c08,dealer event,p00536,u169,p00531,2026-03-13T09:05:40Z,repost,negative
+c08,dealer event,p00537,u166,p00531,2026-03-13T09:48:03Z,reply,negative
+c08,dealer event,p00538,u162,p00531,2026-03-13T09:00:12Z,repost,positive
+c08,dealer event,p00539,u161,p00531,2026-03-13T09:03:05Z,repost,positive
+c08,dealer event,p00540,u187,p00531,2026-03-13T09:06:12Z,repost,neutral
+c08,dealer event,p00541,u164,p00531,2026-03-13T09:33:32Z,repost,positive
+c08,dealer event,p00542,u177,p00531,2026-03-13T09:00:47Z,repost,negative
+c08,dealer event,p00543,u200,p00534,2026-03-13T09:20:03Z,reply,negative
+c08,dealer event,p00544,u158,p00531,2026-03-13T09:10:37Z,reply,neutral
+c08,dealer event,p00545,u180,p00531,2026-03-13T09:24:38Z,repost,positive
+c08,dealer event,p00546,u174,p00531,2026-03-13T09:12:38Z,quote,negative
+c08,dealer event,p00547,u167,p00531,2026-03-13T09:11:32Z,reply,positive
+c08,dealer event,p00548,u175,p00531,2026-03-13T09:06:00Z,reply,neutral

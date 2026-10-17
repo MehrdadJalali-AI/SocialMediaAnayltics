@@ -1,39 +1,51 @@
 # Social Media Analytics and Sentiment Analysis
 
-An MSc-level, notebook-first course combining text, sentiment, networks, diffusion, and responsible research practice. The four CSV files are **synthetic teaching data** generated with seed 42 and contain no real private users.
+Course materials for **Social Media Analytics and Sentiment Analysis** — Prof. Dr. Mehrdad Jalali, SRH University of Applied Sciences Heidelberg.
+
+A six-chapter path from social media posts to trustworthy insight: text and sentiment, transformers and LLMs, social networks, information diffusion, and a responsible end-to-end group project.
 
 ## Interactive study guides
 
-Open these in your browser. Each page explains the chapter's concepts with examples, interactive exercises, links to real tools and a self-check quiz.
+Open these in your browser. Each page explains the chapter's concepts with examples, interactive exercises (live VADER, TF-IDF calculator, network and diffusion simulators, proposal canvas …), links to real tools and a self-check quiz.
 
 | Chapter | Topic | Open |
 |---|---|---|
 | 1 | Foundations & Introduction | [Open page](https://mehrdadjalali-ai.github.io/SocialMediaAnayltics/interactive/Chapter1_Foundations.html) |
 | 2 | Preprocessing & Classical Sentiment | [Open page](https://mehrdadjalali-ai.github.io/SocialMediaAnayltics/interactive/Chapter2_Preprocessing_Classical_Sentiment.html) |
+| 3 | Transformers & LLMs: Sentiment, Emotion & Stance | [Open page](https://mehrdadjalali-ai.github.io/SocialMediaAnayltics/interactive/Chapter3_Transformers_LLMs.html) |
+| 4 | Social Network Analytics I — Influence, Communities & Homophily | [Open page](https://mehrdadjalali-ai.github.io/SocialMediaAnayltics/interactive/Chapter4_Networks_Influence_Communities.html) |
+| 5 | Social Network Analytics II — Information Diffusion | [Open page](https://mehrdadjalali-ai.github.io/SocialMediaAnayltics/interactive/Chapter5_Information_Diffusion.html) |
+| 6 | Advanced Topics & Project Kick-off | [Open page](https://mehrdadjalali-ai.github.io/SocialMediaAnayltics/interactive/Chapter6_Advanced_Topics_Project.html) |
 
-All pages: <https://mehrdadjalali-ai.github.io/SocialMediaAnayltics/interactive/>
+All six: <https://mehrdadjalali-ai.github.io/SocialMediaAnayltics/interactive/>
 
-Offline: download the `.html` files from the [`interactive/`](interactive/) folder and open them in any browser.
+Offline: download the `.html` files from the [`interactive/`](interactive/) folder and open them in any browser — every page is self-contained.
 
-## Seven chapters
+## Labs (Jupyter notebooks)
 
-| # | Notebook | Focus |
+| Lab | Notebook | What you do |
 |---|---|---|
-| 1 | `01_Foundations_and_Introduction.ipynb` | Concepts, ethics, orientation |
-| 2 | `02_Text_Preprocessing_in_Social_Media.ipynb` | Transparent text cleaning |
-| 3 | `03_Lexicon_and_Classical_ML_Sentiment_Analysis.ipynb` | VADER, TF–IDF, classifiers |
-| 4 | `04_Transformer_Based_Sentiment_Emotion_and_Stance.ipynb` | Transformer inference and stance |
-| 5 | `05_Social_Network_Analytics_Influence_Communities_and_Homophily.ipynb` | Networks and communities |
-| 6 | `06_Information_Diffusion.ipynb` | Cascades and simulations |
-| 7 | `07_Advanced_Topics_and_Applications.ipynb` | Integrated mini-project |
+| 1.1 | [`Lab1.1_Profile.ipynb`](notebooks/Lab1.1_Profile.ipynb) | Profile `ev_posts.csv` before any modelling: missing values, duplicates, time range, labels, engagement |
+| 2.1 | [`Lab2.1_Baseline.ipynb`](notebooks/Lab2.1_Baseline.ipynb) | Auditable preprocessing, VADER vs. TF-IDF + Logistic Regression, leakage-safe split, error analysis |
+| 3.1 | [`Lab3.1_Transformers.ipynb`](notebooks/Lab3.1_Transformers.ipynb) | Pretrained sentiment/emotion models, zero-shot stance, fine-tuning (Colab GPU), failure audit |
+| 4.1 | [`Lab4.1_Networks.ipynb`](notebooks/Lab4.1_Networks.ipynb) | Centralities, Louvain communities, assortativity — karate club, then the EV mention network |
+| 5.1 | [`Lab5.1_Diffusion.ipynb`](notebooks/Lab5.1_Diffusion.ipynb) | Cascade metrics from parent IDs, Independent Cascade / Linear Threshold, seed strategies |
+| 6.1 | [`Lab6.1_Topics.ipynb`](notebooks/Lab6.1_Topics.ipynb) | NMF topics, naming and validation, topics × sentiment — a test run for your project |
 
-Each chapter moves from plain-language concepts through small executable steps, interpretation, exactly three challenges, a summary, and a group-project connection.
+Each lab has a walkthrough, **three challenges** and a reflection. Labs build on each other: Lab 2.1 writes `outputs/posts_ch2.parquet`, which Lab 3.1 reads; Lab 3.1 writes `outputs/posts_ch3.parquet` for Lab 6.1. Labs 1, 2, 4, 5 and 6 are stored with their outputs; Lab 3.1 downloads models from Hugging Face on first run and is stored without outputs.
 
-## Structure
+## Data
 
-- `notebooks/`: the seven executed course notebooks
-- `data/`: synthetic posts, users, edges, and diffusion events
-- `requirements.txt`: compatible Python dependencies
+All files are **synthetic teaching data** (seed 42) — no real users.
+
+| File | Content |
+|---|---|
+| `data/ev_posts.csv` | 2,400 posts about electric vehicles (1–14 March 2026): text, language, sentiment label, likes, replies, `reply_to`, `user_location` |
+| `data/ev_mentions.csv` | directed, weighted mention network (260 pseudonymised users, 1,208 edges) with the sentiment of the mentions |
+| `data/ev_users.csv` | user attributes for homophily: language and group |
+| `data/ev_cascades.csv` | 8 repost/reply cascades with `parent_id`, UTC timestamps, type and sentiment |
+
+`ev_posts.csv` is template-generated, so classifiers can score unrealistically high on it — Lab 2.1 discusses why that is a warning sign.
 
 ## Installation
 
@@ -45,22 +57,15 @@ pip install -r requirements.txt
 jupyter lab
 ```
 
-Windows PowerShell activation: `.venv\Scripts\Activate.ps1`. Windows Command Prompt: `.venv\Scripts\activate.bat`. Open notebooks in numerical order. Chapter 4 may download a small public Hugging Face model on first execution; no API key is needed, and an offline teaching fallback is included.
+Windows PowerShell activation: `.venv\Scripts\Activate.ps1`. Open the labs in numerical order from the `notebooks/` folder.
 
-Execute all notebooks from the repository root:
+## Group project
 
-```bash
-for notebook in notebooks/*.ipynb; do python -m nbconvert --to notebook --execute --inplace "$notebook" --ExecutePreprocessor.timeout=600; done
-```
-
-## Challenges and group project
-
-Complete the three challenges after each walkthrough without looking for a ready-made solution. Record assumptions, outputs, interpretation, and limitations. The sequence builds toward a group project that combines a measurable question, transparent methods, evaluation, visualization, and ethical risk assessment.
+The examination project (50% of the grade) answers one real question about public social media data — end to end, responsibly, as a group of 3–5. It must contain a data profile and GDPR check, documented preprocessing and a classical baseline, and at least one network or diffusion analysis; a transformer/LLM model and topics are optional. Use the proposal canvas and storyboard tools in the [Chapter 6 guide](https://mehrdadjalali-ai.github.io/SocialMediaAnayltics/interactive/Chapter6_Advanced_Topics_Project.html). Deadlines and assessment criteria are on Moodle; submit only via Moodle.
 
 ## Troubleshooting
 
-- **Data not found:** launch Jupyter from the repository root or `notebooks/`.
-- **Kernel missing:** run `python -m ipykernel install --user --name social-media-analytics`.
-- **Model download fails:** check internet access; Chapter 4 prints a fallback notice and still demonstrates output structure.
-- **Slow execution:** use CPU and the included small samples; do not enlarge transformer batches initially.
-- **Different results:** confirm seed 42 and package versions from `requirements.txt`.
+- **Data not found:** start Jupyter from the repository root or from `notebooks/`.
+- **`posts_ch2.parquet` missing:** run Lab 2.1 before Lab 3.1.
+- **Model download fails:** check internet access; use Colab if the lab machine blocks Hugging Face.
+- **Different results:** confirm seed 42 and the package versions in `requirements.txt`.

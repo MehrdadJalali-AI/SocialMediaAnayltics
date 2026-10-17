@@ -1,0 +1,978 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ch3 · Transformers & LLMs</title>
+<style>:root{
+  --bg:#f7f5f2; --surface:#ffffff; --surface2:#f1eee9; --ink:#1f1d1a; --muted:#5f5a53; --line:#e3ded6;
+  --accent:#c2255c; --accent-soft:#fce4ec; --blue:#1f5fa8; --blue-soft:#e6eef8; --green:#21794f; --green-soft:#e2f2ea;
+  --amber:#9a5a0f; --amber-soft:#fbf0de; --purple:#5a43a6; --purple-soft:#ece8f8; --red:#b42318; --red-soft:#fde8e6;
+  --code-bg:#1e1f24; --code-ink:#e8e6e3; --shadow:0 1px 2px rgba(0,0,0,.05),0 4px 16px rgba(0,0,0,.05);
+  --radius:14px; --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#141312; --surface:#1d1c1a; --surface2:#262421; --ink:#eeebe6; --muted:#a8a29a; --line:#35322e;
+  --accent:#f06595; --accent-soft:#3a1a26; --blue:#7fb0ec; --blue-soft:#1a2738; --green:#6fcf9f; --green-soft:#173027;
+  --amber:#e8b062; --amber-soft:#33281a; --purple:#b3a3f0; --purple-soft:#26213a; --red:#f2877d; --red-soft:#3a1d1a;
+  --code-bg:#0f0f11; --shadow:0 1px 2px rgba(0,0,0,.4);
+}}
+:root[data-theme="dark"]{
+  --bg:#141312; --surface:#1d1c1a; --surface2:#262421; --ink:#eeebe6; --muted:#a8a29a; --line:#35322e;
+  --accent:#f06595; --accent-soft:#3a1a26; --blue:#7fb0ec; --blue-soft:#1a2738; --green:#6fcf9f; --green-soft:#173027;
+  --amber:#e8b062; --amber-soft:#33281a; --purple:#b3a3f0; --purple-soft:#26213a; --red:#f2877d; --red-soft:#3a1d1a;
+  --code-bg:#0f0f11; --shadow:0 1px 2px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+code{font-family:var(--mono);font-size:.88em;background:var(--surface2);padding:.1em .35em;border-radius:5px}
+h1,h2,h3,h4{line-height:1.25;margin:0 0 .5em}
+h2{font-size:1.65rem;letter-spacing:-.01em}
+h3{font-size:1.15rem}
+p{margin:0 0 1em}
+.topbar{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topbar-inner{max-width:1240px;margin:0 auto;display:flex;align-items:center;gap:16px;padding:10px 20px}
+.brand{font-weight:700;color:var(--accent);text-decoration:none;white-space:nowrap}
+.chapnav{display:flex;gap:6px;overflow-x:auto;flex:1}
+.chapnav a{padding:6px 12px;border-radius:999px;text-decoration:none;color:var(--muted);font-size:.9rem;white-space:nowrap;border:1px solid transparent}
+.chapnav a.on{background:var(--accent-soft);color:var(--accent);border-color:color-mix(in srgb,var(--accent) 30%,transparent);font-weight:600}
+.iconbtn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 12px;cursor:pointer;font-size:.85rem}
+.progress{height:3px;background:var(--accent);width:0;transition:width .1s}
+.hero{max-width:1240px;margin:0 auto;padding:48px 20px 24px}
+.hero .kicker{color:var(--accent);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.8rem}
+.hero h1{font-size:clamp(1.9rem,4vw,2.8rem);letter-spacing:-.02em;margin:.2em 0 .35em}
+.hero p.lead{font-size:1.12rem;color:var(--muted);max-width:760px}
+.objectives{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:20px}
+.objectives div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:.93rem}
+.objectives b{display:block;color:var(--accent);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase}
+.layout{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:230px minmax(0,1fr);gap:32px;padding:0 20px 80px}
+.toc{position:sticky;top:76px;align-self:start;max-height:calc(100vh - 96px);overflow:auto;font-size:.9rem}
+.toc h4{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.toc a{display:flex;gap:8px;align-items:center;padding:5px 8px;border-radius:8px;color:var(--muted);text-decoration:none;border-left:2px solid transparent}
+.toc a.active{color:var(--ink);background:var(--surface);border-left-color:var(--accent)}
+.toc a .dot{width:8px;height:8px;border-radius:50%;border:1.5px solid var(--line);flex:none}
+.toc a.done .dot{background:var(--green);border-color:var(--green)}
+section.chap{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:28px;margin-bottom:24px;box-shadow:var(--shadow)}
+section.chap > .sec-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:8px}
+.secnum{color:var(--accent);font-weight:700;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase}
+.donebtn{border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:999px;padding:4px 10px;font-size:.8rem;cursor:pointer;white-space:nowrap}
+.donebtn.on{background:var(--green-soft);color:var(--green);border-color:var(--green)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.card{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:16px}
+.card h4{margin-bottom:.3em}
+.card p:last-child{margin-bottom:0}
+.callout{border-left:4px solid var(--accent);background:var(--accent-soft);padding:12px 16px;border-radius:0 10px 10px 0;margin:16px 0}
+.callout.green{border-color:var(--green);background:var(--green-soft)}
+.callout.blue{border-color:var(--blue);background:var(--blue-soft)}
+.callout.amber{border-color:var(--amber);background:var(--amber-soft)}
+.callout b:first-child{display:block;margin-bottom:2px}
+.analogy{display:flex;gap:12px;background:var(--purple-soft);border-radius:12px;padding:14px 16px;margin:16px 0}
+.analogy .ico{font-size:1.5rem;line-height:1}
+.tag{display:inline-block;padding:2px 9px;border-radius:999px;font-size:.78rem;font-weight:600;background:var(--surface2);border:1px solid var(--line);color:var(--muted)}
+.tag.blue{background:var(--blue-soft);color:var(--blue);border-color:transparent}
+.tag.green{background:var(--green-soft);color:var(--green);border-color:transparent}
+.tag.amber{background:var(--amber-soft);color:var(--amber);border-color:transparent}
+.tag.red{background:var(--red-soft);color:var(--red);border-color:transparent}
+.tag.purple{background:var(--purple-soft);color:var(--purple);border-color:transparent}
+.widget{border:1px dashed color-mix(in srgb,var(--accent) 45%,var(--line));border-radius:12px;padding:18px;margin:18px 0;background:var(--bg)}
+.widget > .wtitle{display:flex;align-items:center;gap:8px;font-weight:700;margin-bottom:10px}
+.widget > .wtitle::before{content:"▶ TRY IT";font-size:.7rem;letter-spacing:.08em;background:var(--accent);color:#fff;padding:2px 8px;border-radius:999px}
+.btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:7px 14px;border-radius:9px;cursor:pointer;font:inherit;font-size:.92rem}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.sel{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);font-weight:600}
+.btnrow{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+input[type=text],input[type=number],select,textarea{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:7px 10px}
+textarea{font-family:var(--mono);font-size:.85rem;width:100%}
+label{font-size:.9rem}
+input[type=range]{accent-color:var(--accent);width:100%}
+.tablewrap{overflow-x:auto;margin:10px 0}
+table{border-collapse:collapse;width:100%;font-size:.88rem}
+th,td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--surface2);font-weight:600;white-space:nowrap}
+td.bad,span.bad{background:var(--red-soft);color:var(--red)}
+td.good{background:var(--green-soft);color:var(--green)}
+td.warn{background:var(--amber-soft);color:var(--amber)}
+tr.hl td{background:var(--accent-soft)}
+td[contenteditable]{outline:none;cursor:text}
+td[contenteditable]:focus{box-shadow:inset 0 0 0 2px var(--accent)}
+pre{background:var(--code-bg);color:var(--code-ink);border-radius:10px;padding:14px 16px;overflow:auto;font:13px/1.55 var(--mono);position:relative;margin:10px 0}
+pre code{background:none;padding:0;color:inherit;font-size:inherit}
+pre .copy{position:absolute;top:8px;right:8px;font-size:.72rem;background:#ffffff1a;color:#ddd;border:1px solid #ffffff30;border-radius:6px;padding:2px 8px;cursor:pointer}
+.c-k{color:#f4a261}.c-s{color:#9ad59a}.c-c{color:#8b8f98;font-style:italic}.c-n{color:#82b8ff}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:14px;overflow-x:auto}
+.tabs button{border:0;background:none;color:var(--muted);padding:9px 14px;cursor:pointer;font:inherit;font-size:.93rem;border-bottom:2px solid transparent;white-space:nowrap}
+.tabs button.on{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+.tabpanel{display:none}.tabpanel.on{display:block}
+details.reveal{background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:8px 0}
+details.reveal summary{cursor:pointer;font-weight:600}
+.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.links a{display:block;text-decoration:none;color:var(--ink);background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;transition:border-color .15s,transform .15s}
+.links a:hover{border-color:var(--accent);transform:translateY(-1px)}
+.links a b{display:block;color:var(--accent);font-size:.95rem}
+.links a span{font-size:.84rem;color:var(--muted)}
+.quiz .q{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:10px 0}
+.quiz .q p{font-weight:600;margin-bottom:8px}
+.quiz .opts{display:grid;gap:6px}
+.quiz .opts button{text-align:left;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:9px;padding:8px 12px;cursor:pointer;font:inherit;font-size:.93rem}
+.quiz .opts button.right{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.quiz .opts button.wrong{background:var(--red-soft);border-color:var(--red);color:var(--red)}
+.quiz .why{display:none;margin-top:8px;font-size:.9rem;color:var(--muted)}
+.quiz .q.answered .why{display:block}
+.score{font-weight:700;color:var(--accent)}
+.flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;margin:12px 0}
+.flow .step{flex:1 1 130px;background:var(--surface2);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer;transition:all .15s;position:relative}
+.flow .step small{display:block;color:var(--muted);font-size:.8rem}
+.flow .step.on{border-color:var(--accent);background:var(--accent-soft)}
+.flow .arrow{align-self:center;color:var(--muted)}
+.feedback{margin-top:10px;padding:10px 12px;border-radius:9px;font-size:.92rem;display:none}
+.feedback.show{display:block}
+.feedback.ok{background:var(--green-soft);color:var(--green)}
+.feedback.no{background:var(--red-soft);color:var(--red)}
+.feedback.info{background:var(--blue-soft);color:var(--blue)}
+.meter{height:10px;background:var(--surface2);border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+.meter > div{height:100%;background:var(--green);transition:width .3s}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:10px 0}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.kpi .v{font-size:1.5rem;font-weight:700}
+.kpi .l{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.sorter{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.bucket{min-height:110px;border:2px dashed var(--line);border-radius:10px;padding:8px}
+.bucket h5{margin:0 0 6px;font-size:.85rem}
+.bucket.over{border-color:var(--accent);background:var(--accent-soft)}
+.chip{display:inline-block;margin:3px;padding:5px 10px;border-radius:8px;background:var(--surface);border:1px solid var(--line);font-size:.85rem;cursor:grab;user-select:none}
+.chip.sel{outline:2px solid var(--accent)}
+.chip.right{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.chip.wrong{background:var(--red-soft);border-color:var(--red);color:var(--red)}
+.pool{min-height:50px;padding:8px;border-radius:10px;background:var(--surface2);margin-bottom:10px}
+.small{font-size:.86rem;color:var(--muted)}
+.foot{max-width:1240px;margin:0 auto;padding:20px;color:var(--muted);font-size:.85rem;text-align:center}
+svg text{font-family:inherit}
+@media (max-width:900px){
+  .layout{grid-template-columns:minmax(0,1fr)}
+  .toc{display:none}
+  section.chap{padding:18px}
+  .hero{padding:28px 16px 16px}
+  .layout{padding:0 16px 60px}
+  .topbar-inner{padding:8px 16px}
+}
+@media print{.topbar,.toc,.widget,.donebtn{display:none}.layout{display:block}}
+@media (max-width:700px){#doneCount{display:none}.brand{display:none}}
+
+
+/* ---------- additions for the Social Media Analytics guides ---------- */
+.post{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;max-width:560px;box-shadow:var(--shadow)}
+.post .ph{display:flex;gap:10px;align-items:center}
+.post .av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--purple));flex:none}
+.post .nm{font-weight:700}.post .meta{font-size:.82rem;color:var(--muted)}
+.post .tx{margin:10px 0;font-size:1.02rem}
+.post .eng{display:flex;gap:18px;font-size:.88rem;color:var(--muted)}
+.hot{cursor:pointer;border-radius:6px;padding:1px 3px;transition:background .15s,box-shadow .15s}
+.hot:hover{background:var(--accent-soft)}
+.hot.on{background:var(--accent-soft);box-shadow:0 0 0 2px var(--accent)}
+.zone{cursor:pointer;border-radius:10px;transition:box-shadow .15s}
+.zone.on{box-shadow:0 0 0 2px var(--accent)}
+.flipgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.flip{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;min-height:92px;transition:border-color .15s}
+.flip:hover{border-color:var(--accent)}
+.flip .b{display:none;color:var(--muted);font-size:.9rem;margin-top:6px}
+.flip.open .b{display:block}
+.flip .h{font-weight:700}
+.flip .h::after{content:" ＋";color:var(--accent);font-weight:400}
+.flip.open .h::after{content:" −"}
+.gsvg{width:100%;height:auto;display:block;background:var(--surface);border:1px solid var(--line);border-radius:12px;touch-action:manipulation}
+.gsvg line{stroke:var(--line);stroke-width:1.4}
+.gsvg line.hl{stroke:var(--accent);stroke-width:2.6}
+.gsvg line.cross{stroke:var(--red);stroke-width:2.2}
+.gsvg line.fail{stroke:var(--red);stroke-dasharray:4 3}
+.gsvg circle{stroke:var(--surface);stroke-width:1.5;cursor:pointer;transition:r .2s}
+.gsvg circle.sel{stroke:var(--ink);stroke-width:3}
+.gsvg text{font-size:10px;fill:var(--ink);pointer-events:none;text-anchor:middle;dominant-baseline:central}
+.gsvg text.on{fill:#fff;font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:.85rem;color:var(--muted);margin:6px 0}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.bars{display:grid;gap:6px;margin:8px 0}
+.bars .row{display:grid;grid-template-columns:minmax(90px,170px) 1fr 64px;gap:8px;align-items:center;font-size:.88rem}
+.bars .track{background:var(--surface2);border-radius:6px;height:18px;overflow:hidden;border:1px solid var(--line)}
+.bars .fill{height:100%;background:var(--accent);transition:width .35s}
+.bars .fill.g{background:var(--green)}.bars .fill.b{background:var(--blue)}.bars .fill.a{background:var(--amber)}.bars .fill.p{background:var(--purple)}.bars .fill.r{background:var(--red)}.bars .fill.m{background:var(--muted)}
+.bars .val{font-variant-numeric:tabular-nums;text-align:right}
+.mono{font-family:var(--mono);font-size:.86rem}
+.out{background:var(--surface2);border:1px solid var(--line);border-radius:9px;padding:9px 12px;font-family:var(--mono);font-size:.85rem;white-space:pre-wrap;word-break:break-word;margin:6px 0}
+.pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:.8rem;font-weight:600}
+.pill.pos{background:var(--green-soft);color:var(--green)}.pill.neg{background:var(--red-soft);color:var(--red)}.pill.neu{background:var(--surface2);color:var(--muted);border:1px solid var(--line)}.pill.mix{background:var(--amber-soft);color:var(--amber)}
+.tok{display:inline-block;margin:2px;padding:2px 7px;border-radius:7px;background:var(--surface2);border:1px solid var(--line);font-family:var(--mono);font-size:.82rem}
+.tok.pos{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.tok.neg{background:var(--red-soft);border-color:var(--red);color:var(--red)}
+.tok.gone{text-decoration:line-through;opacity:.55;background:var(--red-soft)}
+.tok.keep{background:var(--blue-soft);border-color:var(--blue);color:var(--blue)}
+.gauge{position:relative;height:16px;border-radius:99px;background:linear-gradient(90deg,var(--red),var(--surface2) 50%,var(--green));border:1px solid var(--line);margin:22px 0 8px}
+.gauge .needle{position:absolute;top:-6px;width:4px;height:28px;background:var(--ink);border-radius:2px;transition:left .3s;transform:translateX(-2px)}
+.gauge .lab{position:absolute;top:-22px;transform:translateX(-50%);font-weight:700;font-size:.85rem;white-space:nowrap;transition:left .3s}
+.check{display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px dashed var(--line)}
+.check input{margin-top:5px;accent-color:var(--accent)}
+.canvas8{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.canvas8 label{display:block;background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:10px}
+.canvas8 label b{display:block;font-size:.8rem;color:var(--accent);letter-spacing:.05em;text-transform:uppercase}
+.canvas8 textarea{font-family:inherit;font-size:.9rem;min-height:70px;margin-top:6px}
+.matrix input{width:64px;text-align:center}
+.cm td{text-align:center;font-variant-numeric:tabular-nums}
+.timeline{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.timeline .t{flex:1 0 120px;background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:10px;font-size:.88rem}
+.timeline .t b{display:block;color:var(--accent);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase}
+.timeline .t.now{border-color:var(--accent);background:var(--accent-soft)}
+select.lbl{font-size:.85rem;padding:4px 6px}
+td.ok{background:var(--green-soft)}td.no{background:var(--red-soft)}
+.big{font-size:2rem;font-weight:800;letter-spacing:-.02em}
+.dash{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:14px}
+.kicker2{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+</style></head>
+<body data-chapter="3">
+<div class="topbar"><div class="topbar-inner"><a class="brand" href="index.html">Social Media Analytics</a><nav class="chapnav"><a href="Chapter1_Foundations.html" class="">Ch 1 · Foundations</a><a href="Chapter2_Preprocessing_Classical_Sentiment.html" class="">Ch 2 · Preprocessing & VADER</a><a href="Chapter3_Transformers_LLMs.html" class="on">Ch 3 · Transformers & LLMs</a><a href="Chapter4_Networks_Influence_Communities.html" class="">Ch 4 · Networks I</a><a href="Chapter5_Information_Diffusion.html" class="">Ch 5 · Diffusion</a><a href="Chapter6_Advanced_Topics_Project.html" class="">Ch 6 · Topics & Project</a></nav><span class="small" id="doneCount"></span><button class="iconbtn" id="themeBtn">☾ Dark</button></div><div class="progress" id="progress"></div></div>
+<header class="hero" id="top">
+  <div class="kicker">Chapter 3 · Interactive study guide</div>
+  <h1>Transformers &amp; LLMs for Sentiment, Emotion and Stance</h1>
+  <p class="lead">In Chapter 2 we built two transparent baselines — VADER and TF-IDF + Logistic Regression. They were fast and explainable, but they missed <b>context</b>: sarcasm, negation scope, informal expressions. Today we use models that read words in context, and large language models as classifiers. <b>A transformer must beat the baseline on the same test posts — and we must report what it costs.</b></p>
+  <div class="objectives">
+    <div><b>Part A · Models</b>Explain what transformers add — and choose inference, fine-tuning or zero-shot</div>
+    <div><b>Part A · Models</b>Run pretrained social-media models for sentiment, emotion and stance</div>
+    <div><b>Part B · LLMs</b>Write and validate an LLM classification prompt; handle multilingual posts</div>
+    <div><b>Part C · Evaluation</b>Compare fairly, audit failures and disclose AI use</div>
+  </div>
+</header>
+<div class="layout">
+<aside class="toc"><h4>In this chapter</h4><nav id="tocList"></nav></aside>
+<main>
+
+<section class="chap" id="warmup" data-title="Warm-up: what must a model understand?">
+  <div class="sec-head"><div><div class="secnum">Section 1</div><h2>Warm-up: what must a model understand?</h2></div></div>
+  <div class="post" style="max-width:none"><div class="tx" style="font-size:1.15rem">“Great, another update that breaks everything.”</div></div>
+  <p style="margin-top:12px">The Chapter 2 classifier says <span class="pill pos">positive</span> — “great” is a strong positive feature. Which words would you <b>connect</b>? Click a word to see which other words a self-attention head might look at (illustrative weights).</p>
+  <div class="widget"><div class="wtitle">Self-attention, illustrated</div>
+    <div id="attWords" style="font-size:1.1rem"></div>
+    <div id="attBars"></div>
+    <p class="small">Illustrative weights for teaching — real models have many heads and layers. The point: every token can attend to every other token, so “Great” can be read <i>together with</i> “another … breaks everything”.</p>
+  </div>
+  <div class="timeline"><div class="t"><b>From Ch 2</b>posts_ch2.parquet with text_transformer · baselines VADER 0.58, LR 0.74 · error table</div><div class="t now"><b>Ch 3 — you build</b>Transformer predictions for sentiment, emotion, stance · a validated LLM prompt · an honest comparison</div><div class="t"><b>Ch 4–5 use</b>Sentiment and stance per user — to compare communities and cascades</div></div>
+</section>
+
+<section class="chap" id="recap" data-title="What transformers add">
+  <div class="sec-head"><div><div class="secnum">Section 2 · Part A</div><h2>NLP recap: what transformers add</h2></div></div>
+  <div class="tablewrap"><table>
+    <tr><th>Idea</th><th>In one line</th><th>Why it matters on social media</th></tr>
+    <tr><td>Static embeddings</td><td>one vector per word (Word2Vec, GloVe)</td><td>“sick” has the same vector in “I feel sick” and “this camera is sick”</td></tr>
+    <tr><td>Contextual embeddings</td><td>the vector depends on the sentence (BERT, RoBERTa)</td><td>slang and sarcasm can be resolved from context</td></tr>
+    <tr><td>Self-attention</td><td>every token can attend to every other token</td><td>connects “not” with “happy” in “not really happy”</td></tr>
+    <tr><td>Pretraining</td><td>learn language from huge unlabelled corpora</td><td>models pretrained on tweets know hashtags, emojis, slang</td></tr>
+    <tr><td>Subword tokenizer</td><td>splits rare words into known pieces</td><td>“sooo” or new hashtags never become “unknown”</td></tr>
+  </table></div>
+  <div class="widget"><div class="wtitle">Static vs. contextual: where does “sick” land?</div>
+    <div class="btnrow"><button class="btn sel" data-m="static">Static embedding</button><button class="btn" data-m="ctx">Contextual embedding</button></div>
+    <svg id="embSvg" viewBox="0 0 520 260" class="gsvg"></svg>
+    <p class="small" id="embMsg"></p>
+  </div>
+</section>
+
+<section class="chap" id="errors" data-title="Back to Chapter 2 errors">
+  <div class="sec-head"><div><div class="secnum">Section 3</div><h2>Back to our Chapter 2 errors</h2></div></div>
+  <p>Which baseline errors can a transformer fix — and which can it not? Predict first, then compare.</p>
+  <div id="fixLab"></div>
+  <div class="callout"><b>Better models fix model errors — not label or data problems.</b></div>
+</section>
+
+<section class="chap" id="ways" data-title="Three ways to use a model">
+  <div class="sec-head"><div><div class="secnum">Section 4</div><h2>Three ways to use a transformer</h2></div></div>
+  <div class="tablewrap"><table>
+    <tr><th></th><th>Pretrained inference</th><th>Fine-tuning</th><th>Zero-shot / prompting</th></tr>
+    <tr><td>What</td><td>use a model already fine-tuned for your task</td><td>adapt a pretrained model to your labels</td><td>describe the labels in words; no training</td></tr>
+    <tr><td>Labels needed</td><td>none (only for testing)</td><td>hundreds to thousands</td><td>none (only for validation)</td></tr>
+    <tr><td>Compute</td><td>CPU is enough</td><td>GPU recommended</td><td>large model or API</td></tr>
+    <tr><td>Control</td><td>low: its labels, its domain</td><td>high: your labels, your domain</td><td>medium: depends on the prompt</td></tr>
+    <tr><td>Example</td><td>a Twitter sentiment model</td><td>RoBERTa on the EV posts</td><td>an NLI model or an LLM for stance</td></tr>
+  </table></div>
+  <div class="widget"><div class="wtitle">Which way fits your project?</div><div id="wayHelper"></div></div>
+  <div class="callout"><b>Start with inference, fine-tune when you have labels, prompt when you have none.</b></div>
+</section>
+
+<section class="chap" id="models" data-title="Pretrained social-media models">
+  <div class="sec-head"><div><div class="secnum">Section 5</div><h2>Pretrained models for social media</h2></div></div>
+  <div class="tablewrap"><table>
+    <tr><th>Model (Hugging Face)</th><th>Task</th><th>Labels</th><th>Language</th><th>Trained on</th></tr>
+    <tr><td><a href="https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment-latest" target="_blank" rel="noopener">cardiffnlp/twitter-roberta-base-sentiment-latest</a></td><td>sentiment</td><td>negative · neutral · positive</td><td>English</td><td>~124M tweets + TweetEval</td></tr>
+    <tr><td><a href="https://huggingface.co/cardiffnlp/twitter-xlm-roberta-base-sentiment" target="_blank" rel="noopener">cardiffnlp/twitter-xlm-roberta-base-sentiment</a></td><td>sentiment</td><td>negative · neutral · positive</td><td>multilingual</td><td>tweets in many languages</td></tr>
+    <tr><td><a href="https://huggingface.co/j-hartmann/emotion-english-distilroberta-base" target="_blank" rel="noopener">j-hartmann/emotion-english-distilroberta-base</a></td><td>emotion</td><td>anger · disgust · fear · joy · neutral · sadness · surprise</td><td>English</td><td>6 emotion datasets</td></tr>
+    <tr><td><a href="https://huggingface.co/facebook/bart-large-mnli" target="_blank" rel="noopener">facebook/bart-large-mnli</a></td><td>zero-shot (NLI)</td><td>any labels you define</td><td>English</td><td>natural language inference</td></tr>
+  </table></div>
+  <div class="widget"><div class="wtitle">Model-card checklist — before you run anything</div><div id="cardCheck"></div></div>
+  <div class="callout"><b>A model is only as relevant as the data it was trained on.</b>Read the model card: training data, label order, known biases, and the exact preprocessing it expects.</div>
+</section>
+
+<section class="chap" id="prep" data-title="Light preprocessing">
+  <div class="sec-head"><div><div class="secnum">Section 6</div><h2>What the model sees: light preprocessing only</h2></div></div>
+  <div class="widget"><div class="wtitle">Model-card preprocessing (Cardiff NLP style)</div>
+    <input type="text" id="cpIn" style="width:100%" value="Charging takes forever again 🙄 @CarBrand https://t.co/x7">
+    <div class="grid2">
+      <div><div class="kicker2">Model-card preprocessing</div><div class="out" id="cpOut"></div><div class="kicker2">Subword tokens (illustration)</div><div id="cpTok"></div></div>
+      <div><div class="kicker2">Over-cleaned (Chapter-2 classical view) — avoid</div><div class="out" id="cpBad"></div><p class="small" id="cpMsg"></p></div>
+    </div>
+    <pre><code data-hl="py">def preprocess(text):            # from the Cardiff NLP model card
+    out = []
+    for t in text.split(" "):
+        t = "@user" if t.startswith("@") and len(t) > 1 else t
+        t = "http" if t.startswith("http") else t
+        out.append(t)
+    return " ".join(out)</code></pre>
+  </div>
+  <div class="grid3"><div class="card"><h4>Keep</h4><p class="small">emojis, punctuation, capitals, word order</p></div><div class="card"><h4>Replace</h4><p class="small">usernames and links, as the model card says</p></div><div class="card"><h4>Avoid</h4><p class="small">stemming, stop-word removal, lowercasing</p></div></div>
+  <div class="callout"><b>Do not over-clean — context is the model’s input.</b>That is why Chapter 2 created a separate <code>text_transformer</code> column.</div>
+</section>
+
+<section class="chap" id="inference" data-title="Inference: one post, three models">
+  <div class="sec-head"><div><div class="secnum">Section 7</div><h2>Pretrained inference in practice</h2></div></div>
+  <div class="grid2">
+    <pre><code data-hl="py">from transformers import pipeline
+sent = pipeline("sentiment-analysis",
+    model="cardiffnlp/twitter-roberta-base-sentiment-latest")
+posts = df_test["text_transformer"].tolist()
+preds = sent(posts, batch_size=32, truncation=True)
+df_test["rob_label"] = [p["label"] for p in preds]
+df_test["rob_score"] = [p["score"] for p in preds]</code></pre>
+    <div class="tablewrap"><table>
+      <tr><th>Post</th><th>Label</th><th>Score</th></tr>
+      <tr><td>Waiting 40 min at the charger. Love it.</td><td><span class="pill neg">negative</span></td><td>0.71</td></tr>
+      <tr><td>Not the worst update, honestly.</td><td><span class="pill pos">positive</span></td><td>0.64</td></tr>
+      <tr><td>Charging takes forever.</td><td><span class="pill neg">negative</span></td><td>0.88</td></tr>
+      <tr><td>Range is fine I guess</td><td><span class="pill neu">neutral</span></td><td>0.52</td></tr>
+      <tr><td>New firmware 2.4 out today #EV</td><td><span class="pill neu">neutral</span></td><td>0.90</td></tr>
+    </table><p class="small">Illustrative outputs — run the notebook for real scores. <code>score</code> is a probability, not a guarantee of correctness.</p></div>
+  </div>
+  <h3>One post, three models</h3>
+  <div class="post" style="max-width:none"><div class="tx">“I am worried about electric cars, but I fully support the new subsidy policy.”</div></div>
+  <div class="grid3" style="margin-top:12px">
+    <div class="card"><h4>Sentiment</h4><p class="small">twitter-roberta-base-sentiment-latest</p><div id="m3a"></div></div>
+    <div class="card"><h4>Emotion</h4><p class="small">emotion-english-distilroberta-base</p><div id="m3b"></div></div>
+    <div class="card"><h4>Stance · zero-shot</h4><p class="small">bart-large-mnli · target: subsidy policy</p><div id="m3c"></div></div>
+  </div>
+  <p class="small">Illustrative probabilities. The sentiment model has no “mixed” class — it spreads its probability instead.</p>
+</section>
+
+<section class="chap" id="zeroshot" data-title="Zero-shot stance with NLI">
+  <div class="sec-head"><div><div class="secnum">Section 8</div><h2>Zero-shot stance with NLI</h2></div></div>
+  <p>Turn each label into a <b>hypothesis</b>. The model checks how strongly the post (the <b>premise</b>) entails each one; the highest wins.</p>
+  <div class="widget"><div class="wtitle">Hypothesis builder</div>
+    <label class="small">Target <input type="text" id="zsTarget" value="the subsidy policy" style="width:100%"></label>
+    <label class="small">Hypothesis template (use {} for the label) <input type="text" id="zsTpl" value="The author is {} the subsidy policy." style="width:100%"></label>
+    <label class="small">Candidate labels (comma-separated) <input type="text" id="zsLabels" value="in favour of, against, no position on" style="width:100%"></label>
+    <div id="zsOut"></div>
+    <pre><code id="zsCode"></code></pre>
+    <div class="feedback show info" id="zsMsg"></div>
+  </div>
+  <div class="callout amber"><b>Watch out</b>The wording of the hypothesis changes the result · always validate on labelled posts · slow: one model call per label. Still, zero-shot is a strong start when you have no stance labels.</div>
+</section>
+
+<section class="chap" id="finetune" data-title="Fine-tuning">
+  <div class="sec-head"><div><div class="secnum">Section 9</div><h2>Fine-tuning: the structure</h2></div></div>
+  <div class="flow"><div class="step on">Pretrained model<small>RoBERTa trained on tweets</small></div><span class="arrow">→</span><div class="step">+ classification head<small>3 outputs: neg · neu · pos</small></div><span class="arrow">→</span><div class="step">Tokenize<small>max_length=128</small></div><span class="arrow">→</span><div class="step">Train 2–4 epochs<small>lr ≈ 2e-5</small></div><span class="arrow">→</span><div class="step">Evaluate<small>macro-F1 on the Ch 2 test split</small></div></div>
+  <pre><code data-hl="py">tok = AutoTokenizer.from_pretrained(name)
+model = AutoModelForSequenceClassification.from_pretrained(name, num_labels=3)
+args = TrainingArguments("out", learning_rate=2e-5, num_train_epochs=3,
+    per_device_train_batch_size=16, eval_strategy="epoch", seed=42)
+trainer = Trainer(model=model, args=args, train_dataset=train_ds,
+    eval_dataset=val_ds, compute_metrics=macro_f1)
+trainer.train()</code></pre>
+  <div class="widget"><div class="wtitle">When should you stop training?</div>
+    <p class="small">Illustrative learning curves for a small dataset. Move the slider to choose the number of epochs — choose on the <b>validation</b> set, never on the test set.</p>
+    <input type="range" id="epR" min="1" max="10" value="3"><svg id="epSvg" viewBox="0 0 520 220" class="gsvg"></svg>
+    <div class="feedback show" id="epMsg"></div>
+  </div>
+  <div class="callout"><b>Fine-tuning is Chapter 2’s pipeline with a pretrained model inside.</b>Same deduplicated split · validation set for epochs · watch validation loss · fix and report the seed · use Colab or lab GPUs.</div>
+</section>
+
+<section class="chap" id="llm" data-title="LLMs as classifiers">
+  <div class="sec-head"><div><div class="secnum">Section 10 · Part B</div><h2>LLMs as classifiers and annotators</h2></div></div>
+  <div class="grid2">
+    <div><h3>Where LLMs help</h3><div class="flipgrid">
+      <div class="flip"><div class="h">No labels yet</div><div class="b">classify stance or emotion with a clear prompt</div></div>
+      <div class="flip"><div class="h">Labelling support</div><div class="b">draft labels that humans then check</div></div>
+      <div class="flip"><div class="h">Explanations</div><div class="b">a short reason speeds up error analysis</div></div>
+      <div class="flip"><div class="h">Rare categories</div><div class="b">describe a new label in words instead of collecting data</div></div>
+    </div></div>
+    <div><h3>What to watch</h3><div class="flipgrid">
+      <div class="flip"><div class="h">Inconsistency</div><div class="b">the same post can get different labels on reruns</div></div>
+      <div class="flip"><div class="h">Model drift</div><div class="b">API models change; results may not be reproducible</div></div>
+      <div class="flip"><div class="h">Privacy</div><div class="b">sending posts to an external API is a GDPR question</div></div>
+      <div class="flip"><div class="h">Cost &amp; speed</div><div class="b">thousands of posts × tokens × price</div></div>
+      <div class="flip"><div class="h">Confident errors</div><div class="b">fluent explanations can still be wrong</div></div>
+    </div></div>
+  </div>
+  <div class="callout"><b>An LLM label is a prediction — validate it like any other model.</b></div>
+</section>
+
+<section class="chap" id="prompt" data-title="Prompt design">
+  <div class="sec-head"><div><div class="secnum">Section 11</div><h2>Prompt design for classification</h2></div></div>
+  <p>A classification prompt has five parts — the same work as writing guidelines for human annotators.</p>
+  <div class="widget"><div class="wtitle">Prompt builder</div>
+    <div class="canvas8" id="pbForm"></div>
+    <div class="kicker2" style="margin-top:10px">Your prompt</div>
+    <pre><code id="pbOut"></code></pre>
+    <div id="pbScore"></div>
+    <div class="btnrow"><button class="btn" id="pbSample">Load the slide example</button><button class="btn" id="pbDl">Download prompt.txt</button></div>
+  </div>
+</section>
+
+<section class="chap" id="validate" data-title="Validating LLM outputs">
+  <div class="sec-head"><div><div class="secnum">Section 12</div><h2>Validating LLM outputs</h2></div></div>
+  <div class="flow"><div class="step on">1 · Gold sample<small>100 posts, two people</small></div><span class="arrow">→</span><div class="step">2 · Agreement<small>macro-F1 &amp; Cohen’s κ</small></div><span class="arrow">→</span><div class="step">3 · Consistency<small>rerun 20 posts</small></div><span class="arrow">→</span><div class="step">4 · Error review<small>fix the prompt once</small></div></div>
+  <div class="widget"><div class="wtitle">Agreement calculator (accuracy, macro-F1, Cohen’s κ)</div>
+    <p class="small">One label per line. Pre-filled with Activity 3.1’s sample (our labels vs. the LLM). Edit freely.</p>
+    <div class="grid2"><label class="small">Gold / your labels<textarea id="kA" rows="7">favour
+against
+none
+against
+favour
+against</textarea></label><label class="small">LLM labels<textarea id="kB" rows="7">favour
+favour
+none
+none
+favour
+against</textarea></label></div>
+    <div class="kpis" id="kOut"></div>
+    <div class="tablewrap"><table id="kCM"></table></div>
+    <div class="feedback show info" id="kMsg"></div>
+  </div>
+  <div class="tablewrap"><table>
+    <tr><th>Check on 100 gold posts</th><th>Prompt v1</th><th>Prompt v2 (rules + example)</th></tr>
+    <tr><td>Macro-F1 vs. gold</td><td>0.64</td><td class="good">0.78</td></tr>
+    <tr><td>Cohen’s κ vs. gold</td><td>0.49</td><td class="good">0.68</td></tr>
+    <tr><td>Labels changed on rerun (20 posts)</td><td>4</td><td class="good">1</td></tr>
+    <tr><td>Human–human κ (the ceiling)</td><td>0.74</td><td>0.74</td></tr>
+  </table></div>
+  <div class="callout green"><b>Rule of thumb</b>If the LLM agrees with your gold labels about as well as two humans agree with each other, it is a usable annotator — for this task and this data. Fix the prompt on a dev sample; report on a separate test sample.</div>
+</section>
+
+<section class="chap" id="multi" data-title="Multilingual posts">
+  <div class="sec-head"><div><div class="secnum">Section 13</div><h2>Multilingual posts: three strategies</h2></div></div>
+  <p>“Das Update ist echt mies, but the camera is 🔥” — 24% of the EV posts are German and 8% mix languages.</p>
+  <div class="tabs" data-group="ml"><button class="on" data-tab="tr">Translate → English model</button><button data-tab="mm">Multilingual model</button><button data-tab="pl">Per-language models</button></div>
+  <div class="tabpanel on" data-group="ml" data-tab="tr"><p><b>How:</b> machine translation, then an English model. <b>Strength:</b> the best English models. <b>Risk:</b> tone, slang and sarcasm get lost in translation.</p></div>
+  <div class="tabpanel" data-group="ml" data-tab="mm"><p><b>How:</b> one model for all languages (e.g. XLM-T). <b>Strength:</b> keeps the original text; handles code-switching. <b>Risk:</b> weaker for small languages — check per-language F1.</p></div>
+  <div class="tabpanel" data-group="ml" data-tab="pl"><p><b>How:</b> detect the language, route to a German or English model. <b>Strength:</b> strong when each language has enough data. <b>Risk:</b> short posts are hard to language-detect.</p></div>
+  <div class="widget"><div class="wtitle">Why report per language?</div>
+    <label class="small">Share of German posts: <b id="mlV"></b><input type="range" id="mlR" min="0" max="60" value="24"></label>
+    <div id="mlBars"></div><p class="small" id="mlMsg"></p>
+  </div>
+</section>
+
+<section class="chap" id="choose" data-title="Choosing a model">
+  <div class="sec-head"><div><div class="secnum">Section 14 · Part C</div><h2>Choosing a model: more than accuracy</h2></div></div>
+  <div class="tablewrap"><table>
+    <tr><th>Criterion</th><th>LR (Ch 2)</th><th>Pretrained RoBERTa</th><th>Fine-tuned RoBERTa</th><th>LLM via API</th></tr>
+    <tr><td>Macro-F1 (EV test set)</td><td>0.74</td><td>0.79</td><td>0.84</td><td>0.78</td></tr>
+    <tr><td>Labels needed</td><td>1,900</td><td>0 (+ test set)</td><td>1,900</td><td>0 (+ test set)</td></tr>
+    <tr><td>Time for 2,400 posts</td><td>&lt; 1 s</td><td>~2 min (CPU)</td><td>~2 min + training</td><td>~20 min</td></tr>
+    <tr><td>Interpretability</td><td>high: feature weights</td><td>low</td><td>low</td><td>medium: reasons, unverified</td></tr>
+    <tr><td>Reproducibility</td><td>full</td><td>full</td><td>full with seed</td><td>model may change</td></tr>
+    <tr><td>Data protection</td><td>local</td><td>local</td><td>local</td><td>external server: GDPR check</td></tr>
+  </table></div>
+  <p class="small">Illustrative values for the EV dataset — your lab produces the real ones.</p>
+  <div class="widget"><div class="wtitle">Weighted decision matrix</div>
+    <p class="small">How important is each criterion for <i>your</i> question? The ranking updates.</p>
+    <div class="grid3" id="dmSliders"></div>
+    <div id="dmBars"></div>
+    <div class="feedback show info" id="dmMsg"></div>
+  </div>
+  <h3>Did we beat the baseline?</h3>
+  <div id="beatBars"></div>
+  <div class="tablewrap"><table><tr><th>Class</th><th>LR</th><th>Fine-tuned</th><th>Gain</th></tr><tr><td>negative</td><td>0.78</td><td>0.86</td><td class="good">+0.08</td></tr><tr><td>neutral</td><td>0.70</td><td>0.79</td><td class="good">+0.09</td></tr><tr><td>positive</td><td>0.74</td><td>0.87</td><td class="good">+0.13</td></tr></table></div>
+  <div class="callout"><b>Is +0.10 worth it?</b>Report the gain, the cost and one example where each model wins — then decide for your question. A simpler model can be the better choice if it is good enough.</div>
+</section>
+
+<section class="chap" id="audit" data-title="Bias & failure audit">
+  <div class="sec-head"><div><div class="secnum">Section 15</div><h2>Bias and failure audit</h2></div></div>
+  <p>High average scores can hide <b>systematic failures</b>. Look for them on purpose: collect doubtful and confidently wrong predictions — then group them by cause.</p>
+  <div class="widget"><div class="wtitle">Group the failures by cause</div><div id="sortAudit"></div></div>
+</section>
+
+<section class="chap" id="disclose" data-title="Disclosure & integrity">
+  <div class="sec-head"><div><div class="secnum">Section 16</div><h2>Disclosure and academic integrity</h2></div></div>
+  <div class="grid2">
+    <div class="card"><h4>If you use a transformer or LLM, report</h4><div id="discCheck"></div></div>
+    <div class="card"><h4>Rules for this course</h4><p class="small">No personal data to external APIs without a GDPR check · pseudonymise posts before any API call · you are responsible for every label you report · LLM help with code or text: say so in the report · follow the SRH rules on AI use in assessments.</p><div class="callout"><b>Transparent use is allowed — hidden use is not.</b></div></div>
+  </div>
+</section>
+
+<section class="chap" id="activity" data-title="Activity 3.1: prompt it, check it">
+  <div class="sec-head"><div><div class="secnum">Section 17</div><h2>Activity 3.1 — prompt it, then check it</h2></div></div>
+  <p>In pairs (15 min): pick a target, find six public comments (no user names), <b>label them yourselves first</b>, then run your stance prompt and mark every disagreement. Is the prompt wrong — or your label?</p>
+  <details class="reveal"><summary>Sample answer: “phones banned in lecture halls”</summary>
+    <div class="tablewrap"><table>
+      <tr><th>#</th><th>Comment (paraphrased)</th><th>Ours</th><th>LLM</th><th>Agree?</th></tr>
+      <tr><td>1</td><td>Finally I can hear the lecturer</td><td>favour</td><td>favour</td><td class="good">✓</td></tr>
+      <tr><td>2</td><td>Treating adults like kids, great</td><td>against</td><td>favour</td><td class="bad">✗ sarcasm → prompt problem</td></tr>
+      <tr><td>3</td><td>When does the rule start?</td><td>none</td><td>none</td><td class="good">✓</td></tr>
+      <tr><td>4</td><td>Fine for lectures, silly for labs</td><td>against</td><td>none</td><td class="bad">✗ partly against → label problem (“mixed”?)</td></tr>
+      <tr><td>5</td><td>My grades went up, no joke</td><td>favour</td><td>favour</td><td class="good">✓</td></tr>
+      <tr><td>6</td><td>lol good luck enforcing that</td><td>against</td><td>against</td><td class="good">✓</td></tr>
+    </table></div>
+    <p class="small">These six pairs are pre-filled in the agreement calculator above.</p>
+  </details>
+</section>
+
+<section class="chap" id="lab" data-title="Lab 3.1 & project">
+  <div class="sec-head"><div><div class="secnum">Section 18</div><h2>Lab 3.1 — transformers vs. the baseline</h2></div></div>
+  <p><b>Goal:</b> run pretrained models, fine-tune a small model and audit where transformers still fail. Data: <code>posts_ch2.parquet</code> — the same train/test split. Colab GPU for Challenge 2 · finish before Chapter 4.</p>
+  <div class="timeline">
+    <div class="t"><b>Walkthrough</b>Sentiment &amp; emotion pipelines on the test split</div>
+    <div class="t"><b>Challenge 1</b>RoBERTa vs. VADER vs. LR: macro-F1 + 3 disagreements</div>
+    <div class="t"><b>Challenge 2</b>Fine-tune on the training split, report macro-F1</div>
+    <div class="t"><b>Challenge 3</b>10 doubtful or confidently wrong predictions, by cause</div>
+    <div class="t"><b>Save</b>posts_ch3.parquet with sentiment, emotion, stance</div>
+  </div>
+  <div class="tabs" data-group="code" style="margin-top:14px"><button class="on" data-tab="p">1 · Predict</button><button data-tab="c">2 · Compare &amp; audit</button><button data-tab="s">Sample results</button></div>
+  <div class="tabpanel on" data-group="code" data-tab="p"><pre><code data-hl="py">from transformers import pipeline
+sent = pipeline("sentiment-analysis",
+    model="cardiffnlp/twitter-roberta-base-sentiment-latest")
+emo = pipeline("text-classification",
+    model="j-hartmann/emotion-english-distilroberta-base")
+texts = df_te["text_transformer"].tolist()
+df_te["rob"] = [p["label"] for p in sent(texts, truncation=True)]
+df_te["emo"] = [p["label"] for p in emo(texts, truncation=True)]</code></pre></div>
+  <div class="tabpanel" data-group="code" data-tab="c"><pre><code data-hl="py">from sklearn.metrics import f1_score
+for col in ["vader", "lr", "rob"]:
+    f1 = f1_score(df_te["sentiment"], df_te[col], average="macro")
+    print(col, round(f1, 2))
+# confident errors for the audit
+wrong = df_te[df_te["rob"] != df_te["sentiment"]]
+wrong.sort_values("rob_score", ascending=False).head(10)</code></pre></div>
+  <div class="tabpanel" data-group="code" data-tab="s"><div class="tablewrap"><table>
+    <tr><th>Model</th><th>Setting</th><th>Macro-F1</th><th>Time / cost</th><th>Gets right that LR missed</th></tr>
+    <tr><td>LR (Ch 2)</td><td>TF-IDF (1, 2)</td><td>0.74</td><td>&lt; 1 s</td><td>—</td></tr>
+    <tr><td>Pretrained RoBERTa</td><td>twitter-roberta-…-latest</td><td>0.79</td><td>2 min CPU</td><td>“Charging takes forever.” → negative</td></tr>
+    <tr class="hl"><td>Fine-tuned RoBERTa</td><td>3 epochs, lr 2e-5, seed 42</td><td>0.84</td><td>6 min GPU</td><td>“Not the worst update, honestly.” → positive</td></tr>
+  </table></div><p class="small">Strong because the gain is reported with its cost, every setting is reproducible, and errors are grouped by cause — including one no model can fix (an unclear label). Numbers are illustrative.</p></div>
+  <h3>Group project: if you use a transformer, report…</h3>
+  <div id="projCheck"></div>
+</section>
+
+<section class="chap" id="summary" data-title="Summary">
+  <div class="sec-head"><div><div class="secnum">Section 19</div><h2>Theory summary</h2></div></div>
+  <div class="grid3">
+    <div class="card"><h4>1 · Context matters</h4><p>contextual embeddings fix many baseline errors — not label problems.</p></div>
+    <div class="card"><h4>2 · Three ways to use a model</h4><p>inference, fine-tuning or zero-shot — chosen by data and cost.</p></div>
+    <div class="card"><h4>3 · Light preprocessing</h4><p>keep emojis and word order; follow the model card.</p></div>
+    <div class="card"><h4>4 · LLMs need validation</h4><p>gold sample, agreement, consistency, error review.</p></div>
+    <div class="card"><h4>5 · Languages are a decision</h4><p>translate, multilingual or per-language — report per language.</p></div>
+    <div class="card"><h4>6 · Fair comparison</h4><p>same split, gains next to costs, bias audit and disclosure.</p></div>
+  </div>
+</section>
+
+<section class="chap" id="links" data-title="Real-world links">
+  <div class="sec-head"><div><div class="secnum">Section 20</div><h2>Explore real tools &amp; resources</h2></div></div>
+  <div class="links">
+    <a href="https://huggingface.co/docs/transformers/main_classes/pipelines" target="_blank" rel="noopener"><b>Transformers pipelines</b><span>sentiment-analysis, zero-shot-classification</span></a>
+    <a href="https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment-latest" target="_blank" rel="noopener"><b>Twitter-RoBERTa sentiment</b><span>Model card &amp; preprocessing</span></a>
+    <a href="https://huggingface.co/j-hartmann/emotion-english-distilroberta-base" target="_blank" rel="noopener"><b>Emotion DistilRoBERTa</b><span>Ekman emotions + neutral</span></a>
+    <a href="https://huggingface.co/facebook/bart-large-mnli" target="_blank" rel="noopener"><b>BART-large-MNLI</b><span>Zero-shot classification</span></a>
+    <a href="https://huggingface.co/docs/transformers/training" target="_blank" rel="noopener"><b>Fine-tuning tutorial</b><span>Trainer API step by step</span></a>
+    <a href="https://github.com/cardiffnlp/tweeteval" target="_blank" rel="noopener"><b>TweetEval</b><span>Benchmark incl. stance and emotion</span></a>
+    <a href="https://colab.research.google.com/" target="_blank" rel="noopener"><b>Google Colab</b><span>Free GPU for Challenge 2</span></a>
+    <a href="https://scikit-learn.org/stable/modules/generated/sklearn.metrics.cohen_kappa_score.html" target="_blank" rel="noopener"><b>cohen_kappa_score</b><span>Agreement with gold labels</span></a>
+    <a href="https://huggingface.co/docs/hub/model-cards" target="_blank" rel="noopener"><b>Model cards</b><span>What to read before using a model</span></a>
+    <a href="https://github.com/MehrdadJalali-AI/SocialMediaAnayltics" target="_blank" rel="noopener"><b>Course repository</b><span>Notebooks &amp; datasets</span></a>
+  </div>
+</section>
+
+<section class="chap" id="quiz" data-title="Self-check quiz">
+  <div class="sec-head"><div><div class="secnum">Section 21</div><h2>Self-check quiz</h2></div></div>
+  <div id="quizBox"></div>
+</section>
+</main></div>
+
+<footer class="foot">Social Media Analytics and Sentiment Analysis · Prof. Dr. Mehrdad Jalali · SRH University of Applied Sciences Heidelberg · Course repository: <a href="https://github.com/MehrdadJalali-AI/SocialMediaAnayltics" target="_blank" rel="noopener">github.com/MehrdadJalali-AI/SocialMediaAnayltics</a></footer>
+<script>const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+// theme
+(function () {
+  const saved = store.get('sma-theme', null);
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+  const b = $('#themeBtn');
+  if (!b) return;
+  const label = () => {
+    const t = document.documentElement.getAttribute('data-theme') ||
+      (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    b.textContent = t === 'dark' ? '☀ Light' : '☾ Dark';
+  };
+  label();
+  b.onclick = () => {
+    const cur = document.documentElement.getAttribute('data-theme') ||
+      (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    const nxt = cur === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', nxt);
+    store.set('sma-theme', nxt); label();
+  };
+})();
+
+// TOC, scroll spy, progress, "mark as understood"
+(function () {
+  const toc = $('#tocList'); const secs = $$('section.chap');
+  const key = 'sma-done-' + (document.body.dataset.chapter || 'x');
+  const done = new Set(store.get(key, []));
+  secs.forEach((s, i) => {
+    const a = document.createElement('a');
+    a.href = '#' + s.id; a.innerHTML = '<span class="dot"></span>' + esc(s.dataset.title || s.id);
+    if (done.has(s.id)) a.classList.add('done');
+    toc && toc.appendChild(a);
+    const head = s.querySelector('.sec-head');
+    if (head) {
+      const b = document.createElement('button'); b.className = 'donebtn';
+      const paint = () => { b.classList.toggle('on', done.has(s.id)); b.textContent = done.has(s.id) ? '✓ Understood' : 'Mark as understood'; a.classList.toggle('done', done.has(s.id)); updCount(); };
+      b.onclick = () => { done.has(s.id) ? done.delete(s.id) : done.add(s.id); store.set(key, [...done]); paint(); };
+      head.appendChild(b); setTimeout(paint);
+    }
+  });
+  function updCount() { const c = $('#doneCount'); if (c) c.textContent = done.size + ' / ' + secs.length + ' sections understood'; }
+  const links = toc ? $$('a', toc) : [];
+  const onScroll = () => {
+    const h = document.documentElement; const p = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
+    const bar = $('#progress'); if (bar) bar.style.width = (p * 100) + '%';
+    let cur = 0; secs.forEach((s, i) => { if (s.getBoundingClientRect().top < 140) cur = i; });
+    links.forEach((l, i) => l.classList.toggle('active', i === cur));
+  };
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+})();
+
+// tabs: <div class="tabs" data-group="x"><button data-tab="a">..</button></div> + <div class="tabpanel" data-group="x" data-tab="a">
+document.addEventListener('click', e => {
+  const b = e.target.closest('.tabs button'); if (!b) return;
+  const g = b.parentElement.dataset.group;
+  $$('.tabs[data-group="' + g + '"] button').forEach(x => x.classList.toggle('on', x === b));
+  $$('.tabpanel[data-group="' + g + '"]').forEach(p => p.classList.toggle('on', p.dataset.tab === b.dataset.tab));
+});
+
+// copy buttons on code
+function addCopy(root = document) {
+  $$('pre', root).forEach(p => {
+    if (p.querySelector('.copy')) return;
+    const b = document.createElement('button'); b.className = 'copy'; b.textContent = 'Copy';
+    b.onclick = () => { const t = p.querySelector('code') ? p.querySelector('code').innerText : p.innerText.replace(/Copy$/, ''); navigator.clipboard && navigator.clipboard.writeText(t); b.textContent = 'Copied'; setTimeout(() => b.textContent = 'Copy', 1200); };
+    p.appendChild(b);
+  });
+}
+addCopy();
+
+// quiz engine: renderQuiz('#el', [{q, opts:[...], a: idx, why}])
+function renderQuiz(sel, items) {
+  const root = $(sel); if (!root) return; root.classList.add('quiz');
+  let right = 0, answered = 0;
+  const sc = document.createElement('p'); sc.className = 'score';
+  const upd = () => sc.textContent = `Score: ${right} / ${items.length}` + (answered === items.length ? (right === items.length ? ' — perfect! 🎉' : ' — review the explanations and try again.') : '');
+  items.forEach((it, qi) => {
+    const d = document.createElement('div'); d.className = 'q';
+    d.innerHTML = `<p>${qi + 1}. ${it.q}</p><div class="opts"></div><div class="why">💡 ${it.why}</div>`;
+    const o = d.querySelector('.opts');
+    it.opts.forEach((t, i) => {
+      const b = document.createElement('button'); b.innerHTML = t;
+      b.onclick = () => {
+        if (d.classList.contains('answered')) return;
+        d.classList.add('answered'); answered++;
+        if (i === it.a) { b.classList.add('right'); right++; } else { b.classList.add('wrong'); o.children[it.a].classList.add('right'); }
+        upd();
+      };
+      o.appendChild(b);
+    });
+    root.appendChild(d);
+  });
+  const r = document.createElement('button'); r.className = 'btn'; r.textContent = '↺ Reset quiz';
+  r.onclick = () => { root.innerHTML = ''; renderQuiz(sel, items); };
+  root.appendChild(sc); root.appendChild(r); upd();
+}
+
+// sorter engine (click a chip, then click a bucket — or drag): makeSorter('#el', cats:[{id,label}], items:[{t, c, why?}])
+function makeSorter(sel, cats, items) {
+  const root = $(sel); if (!root) return;
+  root.innerHTML = `<div class="pool small">Click an item, then click the box it belongs to (or drag it).</div><div class="sorter"></div><div class="btnrow"><button class="btn primary chk">Check answers</button><button class="btn rst">Reset</button></div><div class="feedback"></div>`;
+  const pool = $('.pool', root), sorter = $('.sorter', root), fb = $('.feedback', root);
+  let selected = null;
+  const shuffled = items.map((x, i) => ({ ...x, i })).sort(() => Math.random() - .5);
+  shuffled.forEach(it => {
+    const c = document.createElement('span'); c.className = 'chip'; c.textContent = it.t; c.draggable = true; c.dataset.c = it.c; c.dataset.i = it.i;
+    if (it.why) c.title = it.why;
+    c.onclick = e => { e.stopPropagation(); $$('.chip', root).forEach(x => x.classList.remove('sel')); selected = c; c.classList.add('sel'); };
+    c.ondragstart = ev => { selected = c; ev.dataTransfer.setData('text', it.i); };
+    pool.appendChild(c);
+  });
+  cats.forEach(cat => {
+    const b = document.createElement('div'); b.className = 'bucket'; b.dataset.id = cat.id; b.innerHTML = `<h5>${cat.label}</h5>`;
+    const drop = () => { if (selected) { b.appendChild(selected); selected.classList.remove('sel', 'right', 'wrong'); selected = null; } };
+    b.onclick = drop;
+    b.ondragover = e => { e.preventDefault(); b.classList.add('over'); };
+    b.ondragleave = () => b.classList.remove('over');
+    b.ondrop = e => { e.preventDefault(); b.classList.remove('over'); drop(); };
+    sorter.appendChild(b);
+  });
+  pool.onclick = () => { if (selected) { pool.appendChild(selected); selected.classList.remove('sel'); selected = null; } };
+  $('.chk', root).onclick = () => {
+    let ok = 0, placed = 0;
+    $$('.bucket .chip', root).forEach(c => { placed++; const good = c.parentElement.dataset.id === c.dataset.c; c.classList.toggle('right', good); c.classList.toggle('wrong', !good); if (good) ok++; });
+    fb.className = 'feedback show ' + (ok === items.length ? 'ok' : 'info');
+    fb.textContent = ok === items.length ? `All ${ok} correct — well done!` : `${ok} of ${items.length} correct (${items.length - placed} not placed yet). Red items are in the wrong box — hover them for a hint.`;
+  };
+  $('.rst', root).onclick = () => makeSorter(sel, cats, items);
+}
+
+// tiny syntax highlighter for python / sql / yaml snippets marked data-hl
+function hl(code, lang) {
+  let s = esc(code);
+  if (lang === 'py' || lang === 'sql') {
+    s = s.replace(/(#.*|--.*)$/gm, '<span class="c-c">$1</span>');
+    s = s.replace(/(&quot;.*?&quot;|'[^'\n]*')/g, '<span class="c-s">$1</span>');
+    const kw = lang === 'py' ? 'def|return|import|from|as|for|in|if|else|try|except|with|lambda|True|False|None|print' : 'SELECT|FROM|WHERE|GROUP BY|ORDER BY|JOIN|LEFT JOIN|ON|AS|WITH|SUM|COUNT|AND|OR|MATCH|RETURN|PREFIX';
+    s = s.replace(new RegExp('\\b(' + kw + ')\\b', 'g'), '<span class="c-k">$1</span>');
+  } else if (lang === 'yaml') {
+    s = s.replace(/(#.*)$/gm, '<span class="c-c">$1</span>').replace(/^(\s*-?\s*)([\w_]+):/gm, '$1<span class="c-k">$2</span>:');
+  }
+  return s;
+}
+$$('pre code[data-hl]').forEach(c => { c.innerHTML = hl(c.textContent, c.dataset.hl); });
+
+// ---------- extra shared helpers (Social Media Analytics guides) ----------
+const fmt = (x, d = 2) => (x === null || x === undefined || isNaN(x)) ? '—' : (+x).toFixed(d);
+const pct = (x, d = 0) => (x * 100).toFixed(d) + '%';
+const mean = a => a.reduce((s, x) => s + x, 0) / (a.length || 1);
+const sdp = a => { const m = mean(a); return Math.sqrt(a.reduce((s, x) => s + (x - m) ** 2, 0) / (a.length || 1)); };
+const tbl = (head, rows, cls) => '<tr>' + head.map(h => `<th>${h}</th>`).join('') + '</tr>' + rows.map((r, i) => '<tr>' + r.map((c, j) => `<td class="${cls ? cls(i, j, c) || '' : ''}">${c === null || c === '' ? '<span class="small">∅</span>' : c}</td>`).join('') + '</tr>').join('');
+const pill = l => `<span class="pill ${({ positive: 'pos', negative: 'neg', neutral: 'neu', mixed: 'mix' })[l] || 'neu'}">${l}</span>`;
+// horizontal bar list: bars('#el', [{l, v, max?, c?, t?}])
+function bars(sel, rows, max) {
+  const el = typeof sel === 'string' ? $(sel) : sel; if (!el) return;
+  const m = max || Math.max(...rows.map(r => r.v), 1e-9);
+  el.className = 'bars';
+  el.innerHTML = rows.map(r => `<div class="row"><span>${r.l}</span><div class="track"><div class="fill ${r.c || ''}" style="width:${Math.max(0, r.v / m * 100)}%"></div></div><span class="val">${r.t !== undefined ? r.t : r.v}</span></div>`).join('');
+}
+// flip cards: click to reveal
+document.addEventListener('click', e => { const f = e.target.closest('.flip'); if (f) f.classList.toggle('open'); });
+// seeded RNG (mulberry32)
+function rngSeed(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+// "pick the label" tables: makeLabeler('#el', rows:[{t, cols:{name:answer}}], options:{name:[...]}, notes)
+function makeLabeler(sel, rows, options, opts = {}) {
+  const root = $(sel); if (!root) return;
+  const cols = Object.keys(options);
+  root.innerHTML = `<div class="tablewrap"><table><tr><th>#</th><th>${opts.textHead || 'Post'}</th>${cols.map(c => `<th>${c}</th>`).join('')}${opts.noteHead ? `<th>${opts.noteHead}</th>` : ''}</tr>${rows.map((r, i) => `<tr><td>${i + 1}</td><td>${r.t}</td>${cols.map(c => `<td data-c="${c}" data-i="${i}"><select class="lbl"><option value="">—</option>${options[c].map(o => `<option>${o}</option>`).join('')}</select></td>`).join('')}${opts.noteHead ? `<td class="small nt" data-i="${i}"></td>` : ''}</tr>`).join('')}</table></div><div class="btnrow"><button class="btn primary chk">Compare with the sample answer</button><button class="btn rst">Reset</button></div><div class="feedback"></div>`;
+  $('.chk', root).onclick = () => {
+    let ok = 0, tot = 0;
+    $$('td[data-c]', root).forEach(td => {
+      const r = rows[+td.dataset.i], ans = r.cols[td.dataset.c], v = $('select', td).value; tot++;
+      const good = Array.isArray(ans) ? ans.includes(v) : v === ans; if (good) ok++;
+      td.className = good ? 'ok' : 'no'; td.title = 'Sample answer: ' + (Array.isArray(ans) ? ans.join(' / ') : ans);
+    });
+    $$('.nt', root).forEach(n => n.textContent = rows[+n.dataset.i].note || '');
+    const fb = $('.feedback', root); fb.className = 'feedback show ' + (ok === tot ? 'ok' : 'info');
+    fb.innerHTML = `${ok} of ${tot} cells match the sample answer. Hover a red cell to see the sample label. ${opts.after || ''}`;
+  };
+  $('.rst', root).onclick = () => makeLabeler(sel, rows, options, opts);
+}
+// simple persistent checklist: makeChecklist('#el', key, items[])
+function makeChecklist(sel, key, items) {
+  const root = $(sel); if (!root) return;
+  const st = new Set(store.get(key, []));
+  const draw = () => {
+    root.innerHTML = items.map((t, i) => `<label class="check"><input type="checkbox" data-i="${i}" ${st.has(i) ? 'checked' : ''}><span>${t}</span></label>`).join('') + `<div class="meter" style="margin-top:10px"><div style="width:${st.size / items.length * 100}%"></div></div><p class="small">${st.size} of ${items.length} done</p>`;
+    $$('input', root).forEach(c => c.onchange = () => { c.checked ? st.add(+c.dataset.i) : st.delete(+c.dataset.i); store.set(key, [...st]); draw(); });
+  };
+  draw();
+}
+// download text as a file
+function downloadText(name, text) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type: 'text/plain' })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
+</script>
+<script>
+// ---------- Section 1: attention (illustrative) ----------
+const ATT_W = ['Great', ',', 'another', 'update', 'that', 'breaks', 'everything', '.'];
+const ATT = {
+  0: [0.10, 0.02, 0.22, 0.12, 0.03, 0.30, 0.18, 0.03], 2: [0.15, 0.02, 0.10, 0.38, 0.03, 0.20, 0.10, 0.02], 3: [0.08, 0.01, 0.20, 0.18, 0.06, 0.32, 0.12, 0.03],
+  5: [0.12, 0.01, 0.08, 0.30, 0.10, 0.12, 0.25, 0.02], 6: [0.10, 0.01, 0.06, 0.18, 0.05, 0.40, 0.17, 0.03], 1: [0.4, 0.2, 0.1, 0.1, 0.05, 0.05, 0.05, 0.05], 4: [0.05, 0.02, 0.1, 0.4, 0.15, 0.2, 0.06, 0.02], 7: [0.2, 0.05, 0.1, 0.15, 0.05, 0.2, 0.2, 0.05]
+};
+function drawAtt(i) {
+  $('#attWords').innerHTML = ATT_W.map((w, j) => `<span class="hot ${j === i ? 'on' : ''}" data-j="${j}" style="background:color-mix(in srgb,var(--accent) ${Math.round(ATT[i][j] * 220)}%,transparent);margin:2px;padding:3px 6px">${esc(w)}</span>`).join(' ');
+  $$('#attWords .hot').forEach(s => s.onclick = () => drawAtt(+s.dataset.j));
+  bars('#attBars', ATT_W.map((w, j) => ({ l: `“${esc(w)}”`, v: ATT[i][j], t: ATT[i][j].toFixed(2), c: j === i ? 'm' : '' })), 0.45);
+}
+drawAtt(0);
+
+// ---------- Section 2: embeddings (illustrative 2-D) ----------
+const EMB_PTS = { great: [400, 70], awesome: [440, 100], amazing: [380, 40], ill: [90, 180], fever: [60, 210], nausea: [120, 220] };
+function drawEmb(mode) {
+  let h = '<line x1="260" y1="10" x2="260" y2="250" style="stroke-dasharray:3 4"/>';
+  h += `<text x="130" y="20" style="font-size:12px;fill:var(--muted)">illness region</text><text x="400" y="20" style="font-size:12px;fill:var(--muted)">praise region</text>`;
+  Object.entries(EMB_PTS).forEach(([w, [x, y]]) => h += `<circle cx="${x}" cy="${y}" r="5" fill="var(--muted)"></circle><text x="${x}" y="${y - 12}" style="font-size:11px">${w}</text>`);
+  const pts = mode === 'static' ? [[250, 140, '“sick” (both sentences)']] : [[95, 150, '“I feel sick”'], [425, 140, '“this camera is sick”']];
+  pts.forEach(([x, y, l]) => h += `<circle cx="${x}" cy="${y}" r="9" fill="var(--accent)"></circle><text x="${x}" y="${y + 20}" style="font-size:12px;font-weight:700">${l}</text>`);
+  $('#embSvg').innerHTML = h;
+  $('#embMsg').innerHTML = mode === 'static' ? 'A static embedding gives “sick” <b>one</b> vector — a blurry average between illness and praise.' : 'A contextual model gives <b>two different</b> vectors: each lands next to its true meaning. (Illustrative 2-D sketch.)';
+}
+$$('#recap [data-m]').forEach(b => b.onclick = () => { $$('#recap [data-m]').forEach(x => x.classList.toggle('sel', x === b)); drawEmb(b.dataset.m); });
+drawEmb('static');
+
+// ---------- Section 3: expect a fix? ----------
+makeLabeler('#fixLab', [
+  { t: 'Sarcasm — “Waiting 40 min at the charger. Love it.”', cols: { 'Expect a fix?': 'often' }, note: 'context around “Love it”' },
+  { t: 'Negation scope — “Not the worst update, honestly.”', cols: { 'Expect a fix?': 'usually' }, note: 'attention links “not” and “worst”' },
+  { t: 'Domain expression — “Charging takes forever.”', cols: { 'Expect a fix?': 'usually' }, note: 'pretraining on informal text' },
+  { t: 'Spurious feature — “New firmware 2.4 out today #EV”', cols: { 'Expect a fix?': 'sometimes' }, note: 'less reliance on single tokens' },
+  { t: 'Hedged opinion — “Range is fine I guess”', cols: { 'Expect a fix?': 'no' }, note: 'the label itself is unclear' },
+  { t: 'Other language — “Das Update ist echt mies”', cols: { 'Expect a fix?': 'depends' }, note: 'only with a multilingual model' }
+], { 'Expect a fix?': ['often', 'usually', 'sometimes', 'no', 'depends'] }, { textHead: 'Chapter 2 error', noteHead: 'What a transformer adds' });
+
+// ---------- Section 4: helper ----------
+(function () {
+  const Q = [['Do you have hundreds+ of labelled posts for your task?', 'labels'], ['Does a pretrained model exist with exactly your labels (e.g. neg/neu/pos sentiment)?', 'fit'], ['Do you have GPU access (Colab, lab machines)?', 'gpu'], ['May the posts leave your machine (GDPR checked, pseudonymised)?', 'api']];
+  const st = {};
+  function draw() {
+    $('#wayHelper').innerHTML = Q.map(([q, k]) => `<div class="check" style="justify-content:space-between"><span>${q}</span><span class="btnrow" style="margin:0"><button class="btn ${st[k] === true ? 'sel' : ''}" data-k="${k}" data-v="1">yes</button><button class="btn ${st[k] === false ? 'sel' : ''}" data-k="${k}" data-v="0">no</button></span></div>`).join('') + '<div class="feedback show info" id="wayMsg"></div>';
+    $$('#wayHelper .btn').forEach(b => b.onclick = () => { st[b.dataset.k] = b.dataset.v === '1'; draw(); });
+    let m;
+    if (Object.keys(st).length < 4) m = 'Answer all four questions.';
+    else if (st.fit) m = '<b>Start with pretrained inference</b> — no training needed; you only need a labelled test set.' + (st.labels && st.gpu ? ' Later, <b>fine-tune</b> on your labels to gain control over the domain.' : '');
+    else if (st.labels && st.gpu) m = '<b>Fine-tune</b> a pretrained model on your labels (same split as your baseline, validation set for epochs).';
+    else if (st.api) m = '<b>Zero-shot / prompting</b> with an LLM — validated on a hand-labelled gold sample, and disclosed.';
+    else m = '<b>Zero-shot with a local NLI model</b> (e.g. bart-large-mnli) — no labels and no data leaving your machine. Validate on gold labels.';
+    $('#wayMsg').innerHTML = m;
+  }
+  draw();
+})();
+makeChecklist('#cardCheck', 'sma-ch3-card', ['Training data — which platform, period, language?', 'Label set and label order (e.g. 0 = negative)', 'Expected preprocessing (@user, http)', 'Known biases and limitations', 'Licence — may I use it for my project?', 'Maximum input length (truncation)']);
+
+// ---------- Section 6: preprocessing ----------
+function drawCP() {
+  const t = $('#cpIn').value;
+  const out = t.split(' ').map(w => w.startsWith('@') && w.length > 1 ? '@user' : w.startsWith('http') ? 'http' : w).join(' ');
+  $('#cpOut').textContent = out;
+  const toks = out.split(/\s+/).flatMap(w => /^[A-Za-z]{8,}$/.test(w) ? [w.slice(0, Math.ceil(w.length / 2)), '##' + w.slice(Math.ceil(w.length / 2))] : [w]);
+  $('#cpTok').innerHTML = toks.map(x => `<span class="tok keep">${esc(x)}</span>`).join('');
+  const bad = t.replace(/https?:\/\/\S+/g, '').replace(/@\w+/g, '').replace(/\p{Extended_Pictographic}/gu, '').toLowerCase().replace(/[^\p{L}\s]/gu, '').split(/\s+/).filter(w => w && !['the', 'a', 'is', 'again', 'not', 'no', 'never', 'and'].includes(w)).join(' ');
+  $('#cpBad').textContent = bad;
+  $('#cpMsg').innerHTML = 'The over-cleaned view lost emojis, capitals, punctuation and possibly negation — exactly the context a transformer needs.';
+}
+$('#cpIn').oninput = drawCP; drawCP();
+
+// ---------- Section 7: three models ----------
+bars('#m3a', [{ l: 'neutral', v: 0.46, c: 'm' }, { l: 'positive', v: 0.38, c: 'g' }, { l: 'negative', v: 0.16, c: 'r' }], 1);
+bars('#m3b', [{ l: 'fear', v: 0.81, c: 'p' }, { l: 'neutral', v: 0.08, c: 'm' }, { l: 'sadness', v: 0.05, c: 'b' }], 1);
+bars('#m3c', [{ l: 'favour', v: 0.77, c: 'g' }, { l: 'against', v: 0.15, c: 'r' }, { l: 'none', v: 0.08, c: 'm' }], 1);
+$$('#inference .bars .row').forEach(r => r.style.gridTemplateColumns = '64px 1fr 40px');
+
+// ---------- Section 8: zero-shot ----------
+function drawZS() {
+  const tpl = $('#zsTpl').value, labels = $('#zsLabels').value.split(',').map(s => s.trim()).filter(Boolean);
+  const ok = tpl.includes('{}');
+  $('#zsOut').innerHTML = '<p class="small" style="margin-top:8px"><b>Premise:</b> “…but I fully support the new subsidy policy.”</p>' + labels.map(l => `<div class="out">Hypothesis: ${esc(ok ? tpl.replace('{}', l) : tpl)}</div>`).join('');
+  $('#zsCode').innerHTML = hl(`zs = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")\nzs(post, candidate_labels=${JSON.stringify(labels)},\n   hypothesis_template="${tpl}")`, 'py');
+  const msgs = [];
+  if (!ok) msgs.push('⚠️ The template needs <code>{}</code> where the label goes.');
+  if (!tpl.toLowerCase().includes($('#zsTarget').value.toLowerCase().replace(/^the /, ''))) msgs.push('⚠️ The target is not mentioned in the template — the model may judge the mood, not the stance.');
+  msgs.push(`${labels.length} label(s) → ${labels.length} model call(s) per post. For 2,400 posts: ${(labels.length * 2400).toLocaleString()} calls.`);
+  $('#zsMsg').innerHTML = msgs.join('<br>');
+}
+['#zsTpl', '#zsLabels', '#zsTarget'].forEach(s => $(s).oninput = drawZS); drawZS();
+
+// ---------- Section 9: learning curves (illustrative) ----------
+function curves(e) { const tr = 0.9 * Math.exp(-0.45 * e) + 0.05; const va = 0.55 * Math.exp(-0.8 * e) + 0.33 + 0.022 * Math.max(0, e - 3) ** 1.6; return [tr, va]; }
+function drawEp() {
+  const E = +$('#epR').value, W = 520, H = 220, x = e => 40 + (e - 1) / 9 * (W - 60), y = v => H - 30 - v * (H - 50);
+  let h = `<line x1="40" y1="${H - 30}" x2="${W - 20}" y2="${H - 30}"/><line x1="40" y1="10" x2="40" y2="${H - 30}"/>`;
+  [['train', 0, 'var(--blue)'], ['validation', 1, 'var(--accent)']].forEach(([n, k, c]) => { let d = ''; for (let e = 1; e <= 10; e += 0.1) d += (d ? 'L' : 'M') + x(e) + ',' + y(curves(e)[k]); h += `<path d="${d}" fill="none" stroke="${c}" stroke-width="2.5"/><text x="${W - 60}" y="${y(curves(10)[k]) - 8}" style="font-size:11px;fill:${c}">${n} loss</text>`; });
+  for (let e = 1; e <= 10; e++) h += `<text x="${x(e)}" y="${H - 14}" style="font-size:10px">${e}</text>`;
+  h += `<line x1="${x(E)}" y1="10" x2="${x(E)}" y2="${H - 30}" style="stroke:var(--ink);stroke-dasharray:4 3"/><text x="${x(E)}" y="${H - 2}" style="font-size:10px">epochs</text>`;
+  $('#epSvg').innerHTML = h;
+  const best = [...Array(10)].map((_, i) => curves(i + 1)[1]).reduce((b, v, i, a) => v < a[b] ? i : b, 0) + 1;
+  $('#epMsg').className = 'feedback show ' + (Math.abs(E - best) <= 1 ? 'ok' : 'no');
+  $('#epMsg').innerHTML = E < best - 1 ? `Epoch ${E}: still underfitting — validation loss is still falling.` : E > best + 1 ? `Epoch ${E}: overfitting — training loss keeps falling but validation loss rises. Small data overfits fast.` : `Epoch ${E}: around the validation minimum (epoch ${best}). Good choice — and you chose it on the validation set.`;
+}
+$('#epR').oninput = drawEp; drawEp();
+
+// ---------- Section 11: prompt builder ----------
+const PB = [['role', 'Role and task', 'You label social media posts about electric cars.'], ['defs', 'Label definitions', 'favour  = the author supports the subsidy policy\nagainst = the author opposes the subsidy policy\nnone    = no position on the policy, or off-topic'], ['rules', 'Rules', 'Judge the position on the policy, not the mood.\nIf unsure, answer none.'], ['ex', 'Few-shot examples', '"Scared of EVs, but the subsidy is overdue." -> favour'], ['out', 'Output format', 'Return JSON: {"label": "...", "reason": "<10 words>"}']];
+const pb = store.get('sma-ch3-prompt', {});
+$('#pbForm').innerHTML = PB.map(([k, l]) => `<label><b>${l}</b><textarea data-k="${k}" rows="3">${esc(pb[k] || '')}</textarea></label>`).join('');
+function drawPB() {
+  const txt = PB.map(([k, l]) => pb[k] ? `# ${l}\n${pb[k]}` : '').filter(Boolean).join('\n') + '\nPost: "{post}"';
+  $('#pbOut').textContent = txt;
+  const checks = [['role', 'role & task'], ['defs', 'one definition per label'], ['rules', 'an “unsure → none” rule', v => /unsure|not sure|uncertain/i.test(v)], ['ex', 'at least one example', v => /->|→|=>/.test(v)], ['out', 'parseable JSON output', v => /json|\{/i.test(v)]];
+  const ok = checks.filter(([k, , f]) => pb[k] && (!f || f(pb[k]))).length;
+  $('#pbScore').innerHTML = `<div class="meter"><div style="width:${ok / 5 * 100}%"></div></div><p class="small">${checks.map(([k, l, f]) => (pb[k] && (!f || f(pb[k])) ? '✅ ' : '⬜ ') + l).join(' · ')}</p>`;
+}
+$$('#pbForm textarea').forEach(t => t.oninput = () => { pb[t.dataset.k] = t.value; store.set('sma-ch3-prompt', pb); drawPB(); });
+$('#pbSample').onclick = () => { PB.forEach(([k, , v]) => pb[k] = v); store.set('sma-ch3-prompt', pb); $$('#pbForm textarea').forEach(t => t.value = pb[t.dataset.k]); drawPB(); };
+$('#pbDl').onclick = () => downloadText('stance_prompt.txt', $('#pbOut').textContent);
+drawPB();
+
+// ---------- Section 12: kappa ----------
+function drawK() {
+  const A = $('#kA').value.split('\n').map(s => s.trim().toLowerCase()).filter(Boolean), B = $('#kB').value.split('\n').map(s => s.trim().toLowerCase()).filter(Boolean);
+  const n = Math.min(A.length, B.length); if (!n) return;
+  const L = [...new Set([...A.slice(0, n), ...B.slice(0, n)])].sort();
+  const M = L.map(a => L.map(b => 0)); for (let i = 0; i < n; i++) M[L.indexOf(A[i])][L.indexOf(B[i])]++;
+  const po = L.reduce((s, _, k) => s + M[k][k], 0) / n;
+  const pe = L.reduce((s, _, k) => s + (M[k].reduce((a, b) => a + b, 0) / n) * (M.reduce((a, r) => a + r[k], 0) / n), 0);
+  const kappa = pe === 1 ? 1 : (po - pe) / (1 - pe);
+  const f1 = L.map((_, k) => { const tp = M[k][k], p = M.reduce((a, r) => a + r[k], 0), r = M[k].reduce((a, b) => a + b, 0); const pr = p ? tp / p : 0, rc = r ? tp / r : 0; return pr + rc ? 2 * pr * rc / (pr + rc) : 0; });
+  $('#kOut').innerHTML = `<div class="kpi"><div class="l">pairs</div><div class="v">${n}</div></div><div class="kpi"><div class="l">accuracy (agreement)</div><div class="v">${po.toFixed(2)}</div></div><div class="kpi"><div class="l">macro-F1 vs. gold</div><div class="v">${mean(f1).toFixed(2)}</div></div><div class="kpi"><div class="l">Cohen’s κ</div><div class="v">${kappa.toFixed(2)}</div></div>`;
+  $('#kCM').innerHTML = '<tr><th>gold ↓ / LLM →</th>' + L.map(l => `<th>${esc(l)}</th>`).join('') + '</tr>' + L.map((l, i) => `<tr><th>${esc(l)}</th>${M[i].map((v, j) => `<td class="${i === j ? 'good' : v ? 'bad' : ''}">${v}</td>`).join('')}</tr>`).join('');
+  $('#kMsg').innerHTML = `κ corrects for chance agreement: κ = (p<sub>o</sub> − p<sub>e</sub>) / (1 − p<sub>e</sub>) = (${po.toFixed(2)} − ${pe.toFixed(2)}) / (1 − ${pe.toFixed(2)}) = <b>${kappa.toFixed(2)}</b>. ` + (kappa >= 0.74 ? 'At or above the human–human ceiling (0.74 in the slide example).' : kappa >= 0.6 ? 'Substantial — compare with your human–human κ.' : 'Below typical human agreement: read every disagreement and fix the prompt (or your labels) once.') + (A.length !== B.length ? ' ⚠️ The two lists have different lengths — only the first ' + n + ' pairs are used.' : '');
+}
+['#kA', '#kB'].forEach(s => $(s).oninput = drawK); drawK();
+
+// ---------- Section 13: per-language ----------
+function drawML() {
+  const de = +$('#mlR').value / 100; $('#mlV').textContent = Math.round(de * 100) + '%';
+  const en = 0.86, deF = 0.52, avg = en * (1 - de) + deF * de;
+  bars('#mlBars', [{ l: 'English posts', v: en, t: en.toFixed(2), c: 'g' }, { l: 'German posts', v: deF, t: deF.toFixed(2), c: 'r' }, { l: 'Overall average', v: avg, t: avg.toFixed(2), c: 'b' }], 1);
+  $('#mlMsg').innerHTML = `An English-only model (illustrative F1 0.86 on English, 0.52 on German) still shows an overall score of <b>${avg.toFixed(2)}</b> — the average hides the failure on German. <b>Always report macro-F1 per language.</b>`;
+}
+$('#mlR').oninput = drawML; drawML();
+
+// ---------- Section 14: decision matrix ----------
+const DM_C = [['f1', 'Macro-F1'], ['lab', 'Few labels needed'], ['speed', 'Speed / cost'], ['interp', 'Interpretability'], ['repro', 'Reproducibility'], ['priv', 'Data protection']];
+const DM_M = { 'LR (Ch 2)': { f1: 0.74, lab: 0.2, speed: 1, interp: 1, repro: 1, priv: 1 }, 'Pretrained RoBERTa': { f1: 0.79, lab: 1, speed: 0.7, interp: 0.2, repro: 1, priv: 1 }, 'Fine-tuned RoBERTa': { f1: 0.84, lab: 0.2, speed: 0.5, interp: 0.2, repro: 0.9, priv: 1 }, 'LLM via API': { f1: 0.78, lab: 1, speed: 0.2, interp: 0.5, repro: 0.3, priv: 0.2 } };
+const dmW = { f1: 5, lab: 2, speed: 2, interp: 2, repro: 3, priv: 3 };
+$('#dmSliders').innerHTML = DM_C.map(([k, l]) => `<label class="small">${l}: <b id="dmv-${k}">${dmW[k]}</b><input type="range" min="0" max="5" value="${dmW[k]}" data-k="${k}"></label>`).join('');
+function drawDM() {
+  const tot = Object.values(dmW).reduce((a, b) => a + b, 0) || 1;
+  const f1n = v => (v - 0.7) / 0.15;
+  const sc = Object.entries(DM_M).map(([m, s]) => [m, DM_C.reduce((a, [k]) => a + dmW[k] * (k === 'f1' ? f1n(s.f1) : s[k]), 0) / tot]).sort((a, b) => b[1] - a[1]);
+  bars('#dmBars', sc.map(([m, v], i) => ({ l: m, v, t: v.toFixed(2), c: i === 0 ? 'g' : 'b' })), 1);
+  $('#dmMsg').innerHTML = `With your weights, <b>${sc[0][0]}</b> ranks first. Try putting all weight on Macro-F1, then on data protection — the “best” model changes with the question.`;
+}
+$$('#dmSliders input').forEach(r => r.oninput = () => { dmW[r.dataset.k] = +r.value; $('#dmv-' + r.dataset.k).textContent = r.value; drawDM(); }); drawDM();
+bars('#beatBars', [{ l: 'Majority class', v: 0.18, t: '0.18', c: 'm' }, { l: 'VADER', v: 0.58, t: '0.58', c: 'a' }, { l: 'LR (Ch 2)', v: 0.74, t: '0.74', c: 'b' }, { l: 'Zero-shot LLM', v: 0.78, t: '0.78', c: 'p' }, { l: 'Pretrained RoBERTa', v: 0.79, t: '0.79', c: 'g' }, { l: 'Fine-tuned RoBERTa', v: 0.84, t: '0.84', c: 'g' }], 1);
+
+// ---------- Section 15: audit ----------
+makeSorter('#sortAudit', [{ id: 'dial', label: 'Dialect / non-standard English' }, { id: 'id', label: 'Identity terms' }, { id: 'sar', label: 'Sarcasm & irony' }, { id: 'conf', label: 'Confident error' }, { id: 'drift', label: 'Time drift' }, { id: 'topic', label: 'Topic shortcut' }], [
+  { t: '“dis car aint it fam” scored very negative', c: 'dial' }, { t: 'A neutral post mentioning a religious group labelled negative', c: 'id' }, { t: '“Treating adults like kids, great” → favour', c: 'sar' },
+  { t: 'Probability 0.95 — and wrong', c: 'conf' }, { t: 'New slang from after the training data is misread', c: 'drift' }, { t: '“Recall fixed in 2 days, impressive” → negative', c: 'topic', why: 'The word “recall” acts as a shortcut.' }
+]);
+makeChecklist('#discCheck', 'sma-ch3-disc', ['Model name, version and access date', 'The full prompt (appendix)', 'Temperature and other settings', 'Which posts were sent, and where', 'Validation results against human labels', 'What you checked or changed by hand']);
+makeChecklist('#projCheck', 'sma-ch3-proj', ['Why this model, for which task', 'Model card: data, labels, language', 'Same split as your baseline', 'Macro-F1 and per-class results', 'Compute and cost', 'One example where it helps', 'One example where it fails', 'Limitations, bias and disclosure']);
+
+// ---------- quiz ----------
+renderQuiz('#quizBox', [
+  { q: 'What do contextual embeddings add over static ones?', opts: ['Faster training', 'A word’s vector depends on the sentence, so “sick” can mean ill or great', 'Fewer parameters', 'They remove stopwords'], a: 1, why: 'Context resolves slang and sarcasm.' },
+  { q: '“Range is fine I guess” is misclassified. Will a bigger model fix it?', opts: ['Yes, always', 'Probably not — the label itself is unclear', 'Only with more epochs', 'Only with lowercasing'], a: 1, why: 'Better models fix model errors, not label problems.' },
+  { q: 'You have no labels and need stance toward a policy. Best first step?', opts: ['Fine-tune RoBERTa', 'Zero-shot classification (NLI or a validated LLM prompt)', 'TF-IDF + LR', 'VADER'], a: 1, why: 'Prompt or zero-shot when you have no labels — then validate on a gold sample.' },
+  { q: 'Which preprocessing is appropriate for a Twitter-RoBERTa model?', opts: ['Lowercase and remove stopwords', 'Replace @handles with @user and links with http; keep emojis and punctuation', 'Stem every word', 'Remove all emojis'], a: 1, why: 'Follow the model card; context is the input.' },
+  { q: 'How do you choose the number of fine-tuning epochs?', opts: ['Best test-set score', 'On a validation set', 'Always 10', 'Until training loss is zero'], a: 1, why: 'Tuning on the test set is leakage.' },
+  { q: 'An LLM agrees with your gold labels with κ = 0.70; two humans reach κ = 0.74. Interpretation?', opts: ['Unusable', 'About as good as a second human annotator for this task and data', 'Perfect', 'κ is irrelevant'], a: 1, why: 'Human–human agreement is the ceiling.' },
+  { q: 'Why report macro-F1 per language?', opts: ['It is required by Hugging Face', 'An average can hide a model that fails on German', 'It is faster', 'Languages have no labels'], a: 1, why: 'Per-language results reveal hidden failures.' },
+  { q: 'Which is <b>not</b> required when you disclose LLM use?', opts: ['Model name, version and date', 'The full prompt', 'Validation against human labels', 'Your API password'], a: 3, why: 'Never share credentials; disclose model, prompt, settings, data flow and validation.' },
+  { q: 'Fine-tuned RoBERTa: 0.84; LR: 0.74 but instant, local and explainable. Which do you choose?', opts: ['Always the higher score', 'It depends on the question — report gain and cost, then decide', 'Always LR', 'Neither'], a: 1, why: 'A simpler model can be better if it is good enough.' },
+  { q: 'A sentiment model labels every post with “recall” negative, even neutral news. This is…', opts: ['Sarcasm', 'A topic shortcut', 'Time drift', 'Dialect bias'], a: 1, why: 'The model relies on a topic word instead of the evaluation.' }
+]);
+
+addCopy();
+</script>
+</body></html>

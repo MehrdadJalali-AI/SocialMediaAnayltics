@@ -1,0 +1,977 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ch5 · Information Diffusion</title>
+<style>:root{
+  --bg:#f7f5f2; --surface:#ffffff; --surface2:#f1eee9; --ink:#1f1d1a; --muted:#5f5a53; --line:#e3ded6;
+  --accent:#c2255c; --accent-soft:#fce4ec; --blue:#1f5fa8; --blue-soft:#e6eef8; --green:#21794f; --green-soft:#e2f2ea;
+  --amber:#9a5a0f; --amber-soft:#fbf0de; --purple:#5a43a6; --purple-soft:#ece8f8; --red:#b42318; --red-soft:#fde8e6;
+  --code-bg:#1e1f24; --code-ink:#e8e6e3; --shadow:0 1px 2px rgba(0,0,0,.05),0 4px 16px rgba(0,0,0,.05);
+  --radius:14px; --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#141312; --surface:#1d1c1a; --surface2:#262421; --ink:#eeebe6; --muted:#a8a29a; --line:#35322e;
+  --accent:#f06595; --accent-soft:#3a1a26; --blue:#7fb0ec; --blue-soft:#1a2738; --green:#6fcf9f; --green-soft:#173027;
+  --amber:#e8b062; --amber-soft:#33281a; --purple:#b3a3f0; --purple-soft:#26213a; --red:#f2877d; --red-soft:#3a1d1a;
+  --code-bg:#0f0f11; --shadow:0 1px 2px rgba(0,0,0,.4);
+}}
+:root[data-theme="dark"]{
+  --bg:#141312; --surface:#1d1c1a; --surface2:#262421; --ink:#eeebe6; --muted:#a8a29a; --line:#35322e;
+  --accent:#f06595; --accent-soft:#3a1a26; --blue:#7fb0ec; --blue-soft:#1a2738; --green:#6fcf9f; --green-soft:#173027;
+  --amber:#e8b062; --amber-soft:#33281a; --purple:#b3a3f0; --purple-soft:#26213a; --red:#f2877d; --red-soft:#3a1d1a;
+  --code-bg:#0f0f11; --shadow:0 1px 2px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+code{font-family:var(--mono);font-size:.88em;background:var(--surface2);padding:.1em .35em;border-radius:5px}
+h1,h2,h3,h4{line-height:1.25;margin:0 0 .5em}
+h2{font-size:1.65rem;letter-spacing:-.01em}
+h3{font-size:1.15rem}
+p{margin:0 0 1em}
+.topbar{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topbar-inner{max-width:1240px;margin:0 auto;display:flex;align-items:center;gap:16px;padding:10px 20px}
+.brand{font-weight:700;color:var(--accent);text-decoration:none;white-space:nowrap}
+.chapnav{display:flex;gap:6px;overflow-x:auto;flex:1}
+.chapnav a{padding:6px 12px;border-radius:999px;text-decoration:none;color:var(--muted);font-size:.9rem;white-space:nowrap;border:1px solid transparent}
+.chapnav a.on{background:var(--accent-soft);color:var(--accent);border-color:color-mix(in srgb,var(--accent) 30%,transparent);font-weight:600}
+.iconbtn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 12px;cursor:pointer;font-size:.85rem}
+.progress{height:3px;background:var(--accent);width:0;transition:width .1s}
+.hero{max-width:1240px;margin:0 auto;padding:48px 20px 24px}
+.hero .kicker{color:var(--accent);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.8rem}
+.hero h1{font-size:clamp(1.9rem,4vw,2.8rem);letter-spacing:-.02em;margin:.2em 0 .35em}
+.hero p.lead{font-size:1.12rem;color:var(--muted);max-width:760px}
+.objectives{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:20px}
+.objectives div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:.93rem}
+.objectives b{display:block;color:var(--accent);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase}
+.layout{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:230px minmax(0,1fr);gap:32px;padding:0 20px 80px}
+.toc{position:sticky;top:76px;align-self:start;max-height:calc(100vh - 96px);overflow:auto;font-size:.9rem}
+.toc h4{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.toc a{display:flex;gap:8px;align-items:center;padding:5px 8px;border-radius:8px;color:var(--muted);text-decoration:none;border-left:2px solid transparent}
+.toc a.active{color:var(--ink);background:var(--surface);border-left-color:var(--accent)}
+.toc a .dot{width:8px;height:8px;border-radius:50%;border:1.5px solid var(--line);flex:none}
+.toc a.done .dot{background:var(--green);border-color:var(--green)}
+section.chap{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:28px;margin-bottom:24px;box-shadow:var(--shadow)}
+section.chap > .sec-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:8px}
+.secnum{color:var(--accent);font-weight:700;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase}
+.donebtn{border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:999px;padding:4px 10px;font-size:.8rem;cursor:pointer;white-space:nowrap}
+.donebtn.on{background:var(--green-soft);color:var(--green);border-color:var(--green)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.card{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:16px}
+.card h4{margin-bottom:.3em}
+.card p:last-child{margin-bottom:0}
+.callout{border-left:4px solid var(--accent);background:var(--accent-soft);padding:12px 16px;border-radius:0 10px 10px 0;margin:16px 0}
+.callout.green{border-color:var(--green);background:var(--green-soft)}
+.callout.blue{border-color:var(--blue);background:var(--blue-soft)}
+.callout.amber{border-color:var(--amber);background:var(--amber-soft)}
+.callout b:first-child{display:block;margin-bottom:2px}
+.analogy{display:flex;gap:12px;background:var(--purple-soft);border-radius:12px;padding:14px 16px;margin:16px 0}
+.analogy .ico{font-size:1.5rem;line-height:1}
+.tag{display:inline-block;padding:2px 9px;border-radius:999px;font-size:.78rem;font-weight:600;background:var(--surface2);border:1px solid var(--line);color:var(--muted)}
+.tag.blue{background:var(--blue-soft);color:var(--blue);border-color:transparent}
+.tag.green{background:var(--green-soft);color:var(--green);border-color:transparent}
+.tag.amber{background:var(--amber-soft);color:var(--amber);border-color:transparent}
+.tag.red{background:var(--red-soft);color:var(--red);border-color:transparent}
+.tag.purple{background:var(--purple-soft);color:var(--purple);border-color:transparent}
+.widget{border:1px dashed color-mix(in srgb,var(--accent) 45%,var(--line));border-radius:12px;padding:18px;margin:18px 0;background:var(--bg)}
+.widget > .wtitle{display:flex;align-items:center;gap:8px;font-weight:700;margin-bottom:10px}
+.widget > .wtitle::before{content:"▶ TRY IT";font-size:.7rem;letter-spacing:.08em;background:var(--accent);color:#fff;padding:2px 8px;border-radius:999px}
+.btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:7px 14px;border-radius:9px;cursor:pointer;font:inherit;font-size:.92rem}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.sel{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);font-weight:600}
+.btnrow{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+input[type=text],input[type=number],select,textarea{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:7px 10px}
+textarea{font-family:var(--mono);font-size:.85rem;width:100%}
+label{font-size:.9rem}
+input[type=range]{accent-color:var(--accent);width:100%}
+.tablewrap{overflow-x:auto;margin:10px 0}
+table{border-collapse:collapse;width:100%;font-size:.88rem}
+th,td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--surface2);font-weight:600;white-space:nowrap}
+td.bad,span.bad{background:var(--red-soft);color:var(--red)}
+td.good{background:var(--green-soft);color:var(--green)}
+td.warn{background:var(--amber-soft);color:var(--amber)}
+tr.hl td{background:var(--accent-soft)}
+td[contenteditable]{outline:none;cursor:text}
+td[contenteditable]:focus{box-shadow:inset 0 0 0 2px var(--accent)}
+pre{background:var(--code-bg);color:var(--code-ink);border-radius:10px;padding:14px 16px;overflow:auto;font:13px/1.55 var(--mono);position:relative;margin:10px 0}
+pre code{background:none;padding:0;color:inherit;font-size:inherit}
+pre .copy{position:absolute;top:8px;right:8px;font-size:.72rem;background:#ffffff1a;color:#ddd;border:1px solid #ffffff30;border-radius:6px;padding:2px 8px;cursor:pointer}
+.c-k{color:#f4a261}.c-s{color:#9ad59a}.c-c{color:#8b8f98;font-style:italic}.c-n{color:#82b8ff}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:14px;overflow-x:auto}
+.tabs button{border:0;background:none;color:var(--muted);padding:9px 14px;cursor:pointer;font:inherit;font-size:.93rem;border-bottom:2px solid transparent;white-space:nowrap}
+.tabs button.on{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+.tabpanel{display:none}.tabpanel.on{display:block}
+details.reveal{background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:8px 0}
+details.reveal summary{cursor:pointer;font-weight:600}
+.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.links a{display:block;text-decoration:none;color:var(--ink);background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;transition:border-color .15s,transform .15s}
+.links a:hover{border-color:var(--accent);transform:translateY(-1px)}
+.links a b{display:block;color:var(--accent);font-size:.95rem}
+.links a span{font-size:.84rem;color:var(--muted)}
+.quiz .q{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:10px 0}
+.quiz .q p{font-weight:600;margin-bottom:8px}
+.quiz .opts{display:grid;gap:6px}
+.quiz .opts button{text-align:left;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:9px;padding:8px 12px;cursor:pointer;font:inherit;font-size:.93rem}
+.quiz .opts button.right{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.quiz .opts button.wrong{background:var(--red-soft);border-color:var(--red);color:var(--red)}
+.quiz .why{display:none;margin-top:8px;font-size:.9rem;color:var(--muted)}
+.quiz .q.answered .why{display:block}
+.score{font-weight:700;color:var(--accent)}
+.flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;margin:12px 0}
+.flow .step{flex:1 1 130px;background:var(--surface2);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer;transition:all .15s;position:relative}
+.flow .step small{display:block;color:var(--muted);font-size:.8rem}
+.flow .step.on{border-color:var(--accent);background:var(--accent-soft)}
+.flow .arrow{align-self:center;color:var(--muted)}
+.feedback{margin-top:10px;padding:10px 12px;border-radius:9px;font-size:.92rem;display:none}
+.feedback.show{display:block}
+.feedback.ok{background:var(--green-soft);color:var(--green)}
+.feedback.no{background:var(--red-soft);color:var(--red)}
+.feedback.info{background:var(--blue-soft);color:var(--blue)}
+.meter{height:10px;background:var(--surface2);border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+.meter > div{height:100%;background:var(--green);transition:width .3s}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:10px 0}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.kpi .v{font-size:1.5rem;font-weight:700}
+.kpi .l{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.sorter{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.bucket{min-height:110px;border:2px dashed var(--line);border-radius:10px;padding:8px}
+.bucket h5{margin:0 0 6px;font-size:.85rem}
+.bucket.over{border-color:var(--accent);background:var(--accent-soft)}
+.chip{display:inline-block;margin:3px;padding:5px 10px;border-radius:8px;background:var(--surface);border:1px solid var(--line);font-size:.85rem;cursor:grab;user-select:none}
+.chip.sel{outline:2px solid var(--accent)}
+.chip.right{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.chip.wrong{background:var(--red-soft);border-color:var(--red);color:var(--red)}
+.pool{min-height:50px;padding:8px;border-radius:10px;background:var(--surface2);margin-bottom:10px}
+.small{font-size:.86rem;color:var(--muted)}
+.foot{max-width:1240px;margin:0 auto;padding:20px;color:var(--muted);font-size:.85rem;text-align:center}
+svg text{font-family:inherit}
+@media (max-width:900px){
+  .layout{grid-template-columns:minmax(0,1fr)}
+  .toc{display:none}
+  section.chap{padding:18px}
+  .hero{padding:28px 16px 16px}
+  .layout{padding:0 16px 60px}
+  .topbar-inner{padding:8px 16px}
+}
+@media print{.topbar,.toc,.widget,.donebtn{display:none}.layout{display:block}}
+@media (max-width:700px){#doneCount{display:none}.brand{display:none}}
+
+
+/* ---------- additions for the Social Media Analytics guides ---------- */
+.post{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;max-width:560px;box-shadow:var(--shadow)}
+.post .ph{display:flex;gap:10px;align-items:center}
+.post .av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--purple));flex:none}
+.post .nm{font-weight:700}.post .meta{font-size:.82rem;color:var(--muted)}
+.post .tx{margin:10px 0;font-size:1.02rem}
+.post .eng{display:flex;gap:18px;font-size:.88rem;color:var(--muted)}
+.hot{cursor:pointer;border-radius:6px;padding:1px 3px;transition:background .15s,box-shadow .15s}
+.hot:hover{background:var(--accent-soft)}
+.hot.on{background:var(--accent-soft);box-shadow:0 0 0 2px var(--accent)}
+.zone{cursor:pointer;border-radius:10px;transition:box-shadow .15s}
+.zone.on{box-shadow:0 0 0 2px var(--accent)}
+.flipgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.flip{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;min-height:92px;transition:border-color .15s}
+.flip:hover{border-color:var(--accent)}
+.flip .b{display:none;color:var(--muted);font-size:.9rem;margin-top:6px}
+.flip.open .b{display:block}
+.flip .h{font-weight:700}
+.flip .h::after{content:" ＋";color:var(--accent);font-weight:400}
+.flip.open .h::after{content:" −"}
+.gsvg{width:100%;height:auto;display:block;background:var(--surface);border:1px solid var(--line);border-radius:12px;touch-action:manipulation}
+.gsvg line{stroke:var(--line);stroke-width:1.4}
+.gsvg line.hl{stroke:var(--accent);stroke-width:2.6}
+.gsvg line.cross{stroke:var(--red);stroke-width:2.2}
+.gsvg line.fail{stroke:var(--red);stroke-dasharray:4 3}
+.gsvg circle{stroke:var(--surface);stroke-width:1.5;cursor:pointer;transition:r .2s}
+.gsvg circle.sel{stroke:var(--ink);stroke-width:3}
+.gsvg text{font-size:10px;fill:var(--ink);pointer-events:none;text-anchor:middle;dominant-baseline:central}
+.gsvg text.on{fill:#fff;font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:.85rem;color:var(--muted);margin:6px 0}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.bars{display:grid;gap:6px;margin:8px 0}
+.bars .row{display:grid;grid-template-columns:minmax(90px,170px) 1fr 64px;gap:8px;align-items:center;font-size:.88rem}
+.bars .track{background:var(--surface2);border-radius:6px;height:18px;overflow:hidden;border:1px solid var(--line)}
+.bars .fill{height:100%;background:var(--accent);transition:width .35s}
+.bars .fill.g{background:var(--green)}.bars .fill.b{background:var(--blue)}.bars .fill.a{background:var(--amber)}.bars .fill.p{background:var(--purple)}.bars .fill.r{background:var(--red)}.bars .fill.m{background:var(--muted)}
+.bars .val{font-variant-numeric:tabular-nums;text-align:right}
+.mono{font-family:var(--mono);font-size:.86rem}
+.out{background:var(--surface2);border:1px solid var(--line);border-radius:9px;padding:9px 12px;font-family:var(--mono);font-size:.85rem;white-space:pre-wrap;word-break:break-word;margin:6px 0}
+.pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:.8rem;font-weight:600}
+.pill.pos{background:var(--green-soft);color:var(--green)}.pill.neg{background:var(--red-soft);color:var(--red)}.pill.neu{background:var(--surface2);color:var(--muted);border:1px solid var(--line)}.pill.mix{background:var(--amber-soft);color:var(--amber)}
+.tok{display:inline-block;margin:2px;padding:2px 7px;border-radius:7px;background:var(--surface2);border:1px solid var(--line);font-family:var(--mono);font-size:.82rem}
+.tok.pos{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.tok.neg{background:var(--red-soft);border-color:var(--red);color:var(--red)}
+.tok.gone{text-decoration:line-through;opacity:.55;background:var(--red-soft)}
+.tok.keep{background:var(--blue-soft);border-color:var(--blue);color:var(--blue)}
+.gauge{position:relative;height:16px;border-radius:99px;background:linear-gradient(90deg,var(--red),var(--surface2) 50%,var(--green));border:1px solid var(--line);margin:22px 0 8px}
+.gauge .needle{position:absolute;top:-6px;width:4px;height:28px;background:var(--ink);border-radius:2px;transition:left .3s;transform:translateX(-2px)}
+.gauge .lab{position:absolute;top:-22px;transform:translateX(-50%);font-weight:700;font-size:.85rem;white-space:nowrap;transition:left .3s}
+.check{display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px dashed var(--line)}
+.check input{margin-top:5px;accent-color:var(--accent)}
+.canvas8{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.canvas8 label{display:block;background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:10px}
+.canvas8 label b{display:block;font-size:.8rem;color:var(--accent);letter-spacing:.05em;text-transform:uppercase}
+.canvas8 textarea{font-family:inherit;font-size:.9rem;min-height:70px;margin-top:6px}
+.matrix input{width:64px;text-align:center}
+.cm td{text-align:center;font-variant-numeric:tabular-nums}
+.timeline{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.timeline .t{flex:1 0 120px;background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:10px;font-size:.88rem}
+.timeline .t b{display:block;color:var(--accent);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase}
+.timeline .t.now{border-color:var(--accent);background:var(--accent-soft)}
+select.lbl{font-size:.85rem;padding:4px 6px}
+td.ok{background:var(--green-soft)}td.no{background:var(--red-soft)}
+.big{font-size:2rem;font-weight:800;letter-spacing:-.02em}
+.dash{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:14px}
+.kicker2{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+</style></head>
+<body data-chapter="5">
+<div class="topbar"><div class="topbar-inner"><a class="brand" href="index.html">Social Media Analytics</a><nav class="chapnav"><a href="Chapter1_Foundations.html" class="">Ch 1 · Foundations</a><a href="Chapter2_Preprocessing_Classical_Sentiment.html" class="">Ch 2 · Preprocessing & VADER</a><a href="Chapter3_Transformers_LLMs.html" class="">Ch 3 · Transformers & LLMs</a><a href="Chapter4_Networks_Influence_Communities.html" class="">Ch 4 · Networks I</a><a href="Chapter5_Information_Diffusion.html" class="on">Ch 5 · Diffusion</a><a href="Chapter6_Advanced_Topics_Project.html" class="">Ch 6 · Topics & Project</a></nav><span class="small" id="doneCount"></span><button class="iconbtn" id="themeBtn">☾ Dark</button></div><div class="progress" id="progress"></div></div>
+<header class="hero" id="top">
+  <div class="kicker">Chapter 5 · Interactive study guide</div>
+  <h1>Social Network Analytics II — Information Diffusion</h1>
+  <p class="lead">Chapter 4 asked who is connected to whom. Today we add <b>time</b> and ask how information moves through these connections — viral posts, rumours, misinformation, campaigns, product launches and public-health messages. We measure real cascades and simulate spread with two classic models. <b>We observe only part of the spread — so we measure carefully, simulate many times, and avoid causal claims.</b></p>
+  <div class="objectives">
+    <div><b>Part A · Cascades</b>Explain exposure vs. adoption; measure size, depth, breadth, speed, virality</div>
+    <div><b>Part A · Cascades</b>Connect diffusion with communities and sentiment</div>
+    <div><b>Part B · Models</b>Simulate Independent Cascade and Linear Threshold; compare seed strategies</div>
+    <div><b>Part C · Responsibly</b>Sensitivity, causality and responsible use</div>
+  </div>
+  <p class="small" style="margin-top:12px">⚙️ The simulations run live in your browser on the karate club network and reproduce the slide numbers (e.g. hub, p = 0.10 → mean 3.4 users, sd 2.3).</p>
+</header>
+<div class="layout">
+<aside class="toc"><h4>In this chapter</h4><nav id="tocList"></nav></aside>
+<main>
+
+<section class="chap" id="warmup" data-title="Warm-up & vocabulary">
+  <div class="sec-head"><div><div class="secnum">Section 1 · Part A</div><h2>Warm-up: same sentiment, 50 vs. 50,000</h2></div></div>
+  <div class="callout blue"><b>Warm-up (2 minutes)</b>Two posts have the same sentiment. One reaches 50 people, the other 50,000. Was it the content, the first person who shared it — or the network around them? Today we separate the cascade, the network structure and the starting point (the <b>seed</b>).</div>
+  <div class="grid2">
+    <div class="card"><h4>Chapter 4</h4><p class="small">Who is connected to whom? Nodes and edges, centralities, communities.</p></div>
+    <div class="card"><h4>Chapter 5</h4><p class="small">How does information move — and how fast? Timestamps and direction, who adopts after whom, which communities are reached.</p></div>
+  </div>
+  <div class="callout"><b>Structure tells us where information can go — diffusion shows where it went.</b></div>
+  <div class="widget"><div class="wtitle">Match the diffusion vocabulary</div><div id="sortVocab"></div></div>
+</section>
+
+<section class="chap" id="exposure" data-title="Exposure ≠ adoption">
+  <div class="sec-head"><div><div class="secnum">Section 2</div><h2>Exposure is not adoption</h2></div></div>
+  <div class="widget"><div class="wtitle">Many are exposed — few adopt</div>
+    <svg id="expSvg" viewBox="0 0 520 260" class="gsvg"></svg>
+    <label class="small">Adoption probability per exposed user: <b id="adV"></b><input type="range" id="adR" min="0" max="60" value="25"></label>
+    <div class="btnrow"><button class="btn primary" id="adRun">Run again</button></div>
+    <div class="feedback show info" id="expMsg"></div>
+  </div>
+  <div class="tablewrap"><table><tr><th></th><th>Exposure</th><th>Adoption</th></tr><tr><td>Meaning</td><td>may have seen it</td><td>reacted, shared or changed</td></tr><tr><td>Observed?</td><td class="bad">rarely</td><td class="good">yes — reposts, replies</td></tr></table></div>
+  <p class="small"><b>Example:</b> a student sees the same claim from three friends — and shares it only after the third. One exposure was not enough; repeated exposure was. (→ the Linear Threshold model.)</p>
+</section>
+
+<section class="chap" id="cascade" data-title="Cascades & their metrics">
+  <div class="sec-head"><div><div class="secnum">Section 3</div><h2>What is a cascade — and how do we measure it?</h2></div></div>
+  <p>A cascade is a structured record of how one piece of content spreads. Each event needs a <code>cascade_id</code>, <code>post_id / user_id</code>, a <b><code>parent_id</code></b>, a <code>timestamp</code>, a type (repost · reply · quote) — plus sentiment/stance (Ch 3) and community (Ch 4). <b>No parent_id? Then paths must be inferred — and are uncertain.</b></p>
+  <div class="widget"><div class="wtitle">Cascade builder — edit the events</div>
+    <p class="small">One event per line: <code>user, parent, minutes after the seed</code>. The seed has no parent. Metrics update live.</p>
+    <div class="grid2">
+      <div><textarea id="cbIn" rows="11"></textarea><div class="btnrow"><button class="btn" data-p="ex">Slide example</button><button class="btn" data-p="bc">Broadcast</button><button class="btn" data-p="vr">Viral chain</button></div></div>
+      <div><svg id="cbSvg" viewBox="0 0 360 300" class="gsvg"></svg></div>
+    </div>
+    <div class="kpis" id="cbK"></div>
+    <div class="feedback show info" id="cbMsg"></div>
+  </div>
+  <div class="tablewrap"><table><tr><th>Metric</th><th>Possible definitions — say which one you use</th></tr><tr><td>Size</td><td>reposts · replies · activated users · all events</td></tr><tr><td>Speed</td><td>time to first repost · time to 10 users · posts per hour · peak time</td></tr></table></div>
+  <h3>Cascades are trees: traversal meets diffusion</h3>
+  <div class="tablewrap"><table>
+    <tr><th>Graph concept (Ch 4)</th><th>Diffusion concept (Ch 5)</th></tr>
+    <tr><td>BFS level</td><td>generation of a cascade (depth)</td></tr>
+    <tr><td>Tree — one parent per node</td><td>a repost or reply cascade</td></tr>
+    <tr><td>DAG — directed, no cycles</td><td>cascades with quotes of several posts</td></tr>
+    <tr><td>Shortest path</td><td>fastest possible route of a post</td></tr>
+    <tr><td>Independent Cascade</td><td>BFS where each edge “opens” only with probability p</td></tr>
+  </table></div>
+</section>
+
+<section class="chap" id="shape" data-title="Broadcast vs. viral & phases">
+  <div class="sec-head"><div><div class="secnum">Section 4</div><h2>Broadcast or viral? Structural virality and phases</h2></div></div>
+  <p><b>Structural virality</b> (Goel et al., 2016) = the average distance between all pairs of users in the cascade. Load “Broadcast” and “Viral chain” in the cascade builder above: same size, very different spread (1.80 vs. 3.18).</p>
+  <div class="grid2">
+    <div class="card"><h4>Broadcast</h4><p class="small">One account posts, many repost it directly. Size 10, depth 1, breadth 9, virality 1.80. Typical for a news outlet.</p></div>
+    <div class="card"><h4>Viral (person-to-person)</h4><p class="small">Content passes from user to user over many generations. Size 10, depth 6, breadth 2, virality 3.18. Typical for a meme.</p></div>
+  </div>
+  <h3>Temporal phases of a cascade</h3>
+  <div class="widget"><div class="wtitle">Cumulative adoptions over 24 hours (illustrative)</div>
+    <svg id="phSvg" viewBox="0 0 560 240" class="gsvg"></svg>
+    <div class="btnrow" id="phBtns"></div>
+    <div class="feedback show info" id="phMsg"></div>
+  </div>
+</section>
+
+<section class="chap" id="reach" data-title="Cross-community reach & meaning">
+  <div class="sec-head"><div><div class="secnum">Section 5</div><h2>Cross-community reach, sentiment and misinformation</h2></div></div>
+  <div class="widget"><div class="wtitle">Which communities does a post reach? Click a seed</div>
+    <div class="legend" id="crLeg"></div>
+    <svg id="crSvg"></svg>
+    <label class="small">Activation probability p: <b id="crPV"></b><input type="range" id="crP" min="5" max="60" value="25"></label>
+    <div class="btnrow"><button class="btn primary" id="crRun">Spread again</button></div>
+    <div class="feedback show info" id="crMsg"></div>
+  </div>
+  <p class="small">Communities: Louvain (seed 42) from Chapter 4. Ask of your data: which bridge users carried it across? did sentiment or stance change after crossing? which communities never received it?</p>
+  <div class="grid2">
+    <div class="card"><h4>A landmark study</h4><p class="small">Vosoughi, Roy &amp; Aral (2018), <i>Science</i>: ~126,000 rumour cascades on Twitter, 2006–2017. False news spread farther, faster, deeper and more broadly than true news — driven by people, not bots.</p></div>
+    <div class="card"><h4>What we usually cannot observe</h4><p class="small"><b>External exposure</b> (TV, news sites, messengers) · <b>platform algorithms</b> (ranking decides who sees what) · <b>private sharing</b> (screenshots, DMs, closed groups).</p></div>
+  </div>
+  <div class="callout"><b>Observed cascades are only the visible part of the spread.</b></div>
+  <div class="flipgrid">
+    <div class="flip"><div class="h">Viral marketing</div><div class="b">which influencers start the largest cascades?</div></div>
+    <div class="flip"><div class="h">Misinformation monitoring</div><div class="b">which claims spread unusually fast — and through whom?</div></div>
+    <div class="flip"><div class="h">Political campaigns</div><div class="b">how do messages move between camps and regions?</div></div>
+    <div class="flip"><div class="h">Public health</div><div class="b">the same models describe how diseases and health messages spread</div></div>
+    <div class="flip"><div class="h">Cybersecurity</div><div class="b">malware and phishing spread through contact networks</div></div>
+    <div class="flip"><div class="h">Product adoption</div><div class="b">when do friends’ purchases tip a user into buying?</div></div>
+  </div>
+</section>
+
+<section class="chap" id="ic" data-title="Independent Cascade">
+  <div class="sec-head"><div><div class="secnum">Section 6 · Part B</div><h2>Simulation model 1: Independent Cascade</h2></div></div>
+  <p>Each newly active user gets <b>one chance</b> to activate each inactive neighbour, with probability <b>p</b>. A failed attempt is never repeated; the process stops when nobody new is activated. The result is random — so we run it many times.</p>
+  <div class="widget"><div class="wtitle">Step through one run</div>
+    <p class="small">Click members to choose seeds (default: hub 0). Green = active, red dashed = failed attempt.</p>
+    <svg id="icSvg"></svg>
+    <div class="btnrow"><label class="small">p = <b id="icPV"></b> <input type="range" id="icP" min="1" max="60" value="10" style="width:160px"></label><button class="btn primary" id="icStep">Next step</button><button class="btn" id="icNew">New run</button><button class="btn" id="icClear">Clear seeds</button></div>
+    <div class="feedback show info" id="icMsg"></div>
+  </div>
+  <div class="widget"><div class="wtitle">Activation probability changes everything (many runs)</div>
+    <div class="btnrow"><label class="small">runs per setting <select id="spRuns"><option>500</option><option selected>2000</option><option>5000</option></select></label><button class="btn primary" id="spRun">Run hub (0) vs. periphery (16)</button></div>
+    <svg id="spSvg" viewBox="0 0 560 260" class="gsvg"></svg>
+    <div class="tablewrap"><table id="spTbl"></table></div>
+    <div class="feedback show info" id="spMsg"></div>
+  </div>
+</section>
+
+<section class="chap" id="lt" data-title="Linear Threshold">
+  <div class="sec-head"><div><div class="secnum">Section 7</div><h2>Simulation model 2: Linear Threshold</h2></div></div>
+  <p>A user adopts when the <b>share of active neighbours</b> reaches their threshold θ — social reinforcement. 1 of 4 neighbours active → 25% &lt; θ = 0.5 (no) · 2 of 4 → 50% ≥ 0.5 (adopt).</p>
+  <div class="widget"><div class="wtitle">Find the tipping point</div>
+    <div class="btnrow"><button class="btn sel" data-s="hub">Seeds 33, 0, 32 (hubs)</button><button class="btn" data-s="per">Seeds 16, 26, 11 (periphery)</button></div>
+    <label class="small">Threshold θ = <b id="ltV"></b><input type="range" id="ltR" min="5" max="80" value="30"></label>
+    <svg id="ltSvg"></svg>
+    <div id="ltBars"></div>
+    <div class="feedback show info" id="ltMsg"></div>
+  </div>
+  <div class="tablewrap"><table>
+    <tr><th></th><th>Independent Cascade</th><th>Linear Threshold</th></tr>
+    <tr><td>Core idea</td><td>each contact is a chance to infect</td><td>adopt when enough neighbours have adopted</td></tr>
+    <tr><td>Parameter</td><td>activation probability p per edge</td><td>threshold θ per user</td></tr>
+    <tr><td>Randomness</td><td>stochastic → run many times</td><td>deterministic for fixed θ</td></tr>
+    <tr><td>Good for</td><td>news, links, simple information</td><td>behaviours, risky opinions, products</td></tr>
+    <tr><td>Typical pattern</td><td>smooth growth with p</td><td>tipping points</td></tr>
+  </table></div>
+  <div class="widget"><div class="wtitle">Which model fits?</div><div id="sortModel"></div></div>
+</section>
+
+<section class="chap" id="seeds" data-title="Seed strategies">
+  <div class="sec-head"><div><div class="secnum">Section 8</div><h2>Seed selection: who should post first?</h2></div></div>
+  <div class="widget"><div class="wtitle">Compare four strategies (k = 3, Independent Cascade)</div>
+    <div class="btnrow"><label class="small">runs <select id="ssRuns"><option>500</option><option selected>2000</option></select></label><button class="btn primary" id="ssRun">Run comparison</button></div>
+    <div class="tablewrap"><table id="ssTbl"></table></div>
+    <div id="ssBars"></div>
+    <div class="feedback show info" id="ssMsg"></div>
+  </div>
+  <div class="grid3">
+    <div class="card"><h4>Sensitivity analysis</h4><p class="small">vary p or θ over a range · report mean and spread · check whether the ranking of strategies stays the same</p></div>
+    <div class="card"><h4>Causality warning</h4><p class="small">A posted before B ≠ A caused B · both may react to the same news · simulations show what <i>could</i> happen, not what did</p></div>
+    <div class="card"><h4>Responsible use</h4><p class="small">seeding can inform health messages… or manipulate opinion · no targeting of vulnerable groups</p></div>
+  </div>
+  <div class="callout"><b>Report ranges, avoid causal language, and think about who could misuse the result.</b></div>
+</section>
+
+<section class="chap" id="visual" data-title="Visualising & mistakes">
+  <div class="sec-head"><div><div class="secnum">Section 9 · Part C</div><h2>Visualising diffusion — and common mistakes</h2></div></div>
+  <div class="tablewrap"><table>
+    <tr><th>Visual</th><th>Shows</th><th>Use it for</th></tr>
+    <tr><td>Cascade tree</td><td>parent → child structure</td><td>depth, breadth, broadcast vs. viral</td></tr>
+    <tr><td>Cumulative adoption curve</td><td>adoptions over time</td><td>phases, speed, comparing cascades</td></tr>
+    <tr><td>Activity timeline / heatmap</td><td>posts per hour × community</td><td>when each community joins</td></tr>
+    <tr><td>Network snapshots</td><td>active nodes at t1, t2, t3</td><td>how the spread moves through the graph</td></tr>
+    <tr><td>Simulation curve with range</td><td>mean ± spread over runs</td><td>comparing p, θ and seed strategies</td></tr>
+  </table></div>
+  <p class="small">Every diffusion figure needs: time on an axis · direction · scale · the time zone used.</p>
+  <div class="flipgrid">
+    <div class="flip"><div class="h">Ignoring timestamps</div><div class="b">no order, no diffusion</div></div>
+    <div class="flip"><div class="h">Ignoring time zones</div><div class="b">fake delays and peaks</div></div>
+    <div class="flip"><div class="h">Different collection windows</div><div class="b">cascades not comparable</div></div>
+    <div class="flip"><div class="h">Treating exposure as observed</div><div class="b">we only see adoptions</div></div>
+    <div class="flip"><div class="h">Trusting one simulation run</div><div class="b">randomness hides the result</div></div>
+    <div class="flip"><div class="h">One arbitrary p</div><div class="b">no sensitivity analysis</div></div>
+    <div class="flip"><div class="h">Ignoring external events</div><div class="b">news drives many cascades</div></div>
+    <div class="flip"><div class="h">Claiming causality from order</div><div class="b">earlier ≠ cause</div></div>
+    <div class="flip"><div class="h">Inferred paths as facts</div><div class="b">parent links are guesses</div></div>
+    <div class="flip"><div class="h">Ignoring ethics</div><div class="b">seeding can be misused</div></div>
+  </div>
+  <div class="widget"><div class="wtitle">Time-zone trap</div>
+    <p class="small">Two cascades logged by servers in different zones. Without converting to UTC, the second looks like it started first.</p>
+    <div class="btnrow"><button class="btn" id="tzRaw">Show local timestamps</button><button class="btn primary" id="tzUtc">Convert to UTC</button></div>
+    <div class="tablewrap"><table id="tzTbl"></table></div>
+    <div class="feedback show" id="tzMsg"></div>
+  </div>
+</section>
+
+<section class="chap" id="activity" data-title="Activity 5.1: trace a cascade">
+  <div class="sec-head"><div><div class="secnum">Section 10</div><h2>Activity 5.1 — trace a real cascade</h2></div></div>
+  <p>Open a busy public thread (e.g. Reddit with nested replies). The post is the seed; record depth and time of 15–20 replies; compute size, depth, max breadth, time to first reply, time to 50% of replies. Broadcast or viral? Did sentiment change with depth? <b>Write down your time zone. No user names.</b> Tip: enter your thread into the cascade builder above (minutes after the post).</p>
+  <details class="reveal"><summary>Sample answer</summary>
+    <div class="tablewrap"><table><tr><th>Metric</th><th>Value</th></tr><tr><td>Size</td><td>13 (post + 12 replies)</td></tr><tr><td>Depth</td><td>5</td></tr><tr><td>Max breadth</td><td>5 (depth 2)</td></tr><tr><td>Time to first reply</td><td>6 min</td></tr><tr><td>Time to 50% of replies</td><td>1 h 40 min</td></tr><tr><td>Shape</td><td>mostly broadcast, one deep chain</td></tr></table></div>
+    <p class="small">The deep chain is an argument between two users — sentiment turns more negative with every level. One thread can contain two shapes.</p>
+  </details>
+</section>
+
+<section class="chap" id="lab" data-title="Lab 5.1 & project">
+  <div class="sec-head"><div><div class="secnum">Section 11</div><h2>Lab 5.1 — cascades and simulations</h2></div></div>
+  <p><b>Goal:</b> measure real cascades, then simulate spread and compare seed strategies. Data: <code>ev_cascades.csv</code> (repost events with parent IDs) and the graph from Lab 4.1.</p>
+  <div class="timeline">
+    <div class="t"><b>Walkthrough</b>Rebuild cascades from parent IDs; size, depth, duration; adoption curve</div>
+    <div class="t"><b>Challenge 1</b>Five cascades: broadcast or viral?</div>
+    <div class="t"><b>Challenge 2</b>IC for p = 0.05 … 0.30, 1,000+ runs each</div>
+    <div class="t"><b>Challenge 3</b>Random vs. degree vs. PageRank vs. community-aware</div>
+    <div class="t"><b>Interpret</b>What holds across all settings — and what does not?</div>
+  </div>
+  <div class="tabs" data-group="code" style="margin-top:14px"><button class="on" data-tab="a">1 · One run</button><button data-tab="b">2 · Many runs</button><button data-tab="c">Sample results</button></div>
+  <div class="tabpanel on" data-group="code" data-tab="a"><pre><code data-hl="py">import random, statistics as st
+import networkx as nx
+def independent_cascade(G, seeds, p, rng):
+    active, frontier = set(seeds), list(seeds)
+    while frontier:
+        new = []
+        for u in frontier:
+            for v in G.neighbors(u):
+                if v not in active and rng.random() < p:
+                    active.add(v); new.append(v)
+        frontier = new
+    return len(active)</code></pre></div>
+  <div class="tabpanel" data-group="code" data-tab="b"><pre><code data-hl="py">G = nx.karate_club_graph()
+rng = random.Random(1)                 # fixed seed
+def mean_reach(seeds, p, runs=5000):
+    xs = [independent_cascade(G, seeds, p, rng) for _ in range(runs)]
+    return st.mean(xs), st.pstdev(xs)
+for p in [0.05, 0.10, 0.20, 0.30]:
+    print(p, mean_reach([0], p))
+# 0.1 -> mean 3.4, sd 2.3</code></pre></div>
+  <div class="tabpanel" data-group="code" data-tab="c"><div class="tablewrap"><table>
+    <tr><th>Cascade</th><th>Size</th><th>Depth</th><th>Max breadth</th><th>Duration</th><th>Shape</th><th>Communities</th></tr>
+    <tr><td>c1 · recall news</td><td>212</td><td>3</td><td>148</td><td>19 h</td><td>broadcast</td><td>3 of 4</td></tr>
+    <tr><td>c2 · charging tip</td><td>38</td><td>7</td><td>6</td><td>2 days</td><td>viral</td><td>2 of 4</td></tr>
+    <tr><td>c3 · subsidy (DE)</td><td>54</td><td>4</td><td>21</td><td>9 h</td><td>mixed</td><td>1 of 4</td></tr>
+  </table></div><p class="small">Cascade rows illustrative. Strong because shapes are named from depth and breadth, strategies are compared on the same network and p with ranges, and the conclusion is honest.</p></div>
+  <h3>Group project: your diffusion component</h3>
+  <div id="projCheck"></div>
+  <div class="callout"><b>Describe the spread you observed before you simulate the spread you imagine.</b></div>
+</section>
+
+<section class="chap" id="summary" data-title="Summary">
+  <div class="sec-head"><div><div class="secnum">Section 12</div><h2>Theory summary</h2></div></div>
+  <div class="grid3">
+    <div class="card"><h4>1 · Exposure ≠ adoption</h4><p>we observe adoptions; exposure is mostly invisible.</p></div>
+    <div class="card"><h4>2 · Cascade metrics</h4><p>size, depth, breadth, speed — with clear definitions.</p></div>
+    <div class="card"><h4>3 · Shape matters</h4><p>broadcast vs. viral: structural virality.</p></div>
+    <div class="card"><h4>4 · Two models</h4><p>Independent Cascade (one contact) vs. Linear Threshold (reinforcement).</p></div>
+    <div class="card"><h4>5 · Many runs, many settings</h4><p>report ranges and sensitivity, not one run.</p></div>
+    <div class="card"><h4>6 · No causal shortcuts</h4><p>order is not cause; seeding can be misused.</p></div>
+  </div>
+</section>
+
+<section class="chap" id="links" data-title="Real-world links">
+  <div class="sec-head"><div><div class="secnum">Section 13</div><h2>Explore real tools &amp; resources</h2></div></div>
+  <div class="links">
+    <a href="https://www.science.org/doi/10.1126/science.aap9559" target="_blank" rel="noopener"><b>Vosoughi, Roy &amp; Aral (2018)</b><span>The spread of true and false news online</span></a>
+    <a href="https://doi.org/10.1287/mnsc.2015.2158" target="_blank" rel="noopener"><b>Goel et al. (2016)</b><span>The structural virality of online diffusion</span></a>
+    <a href="https://www.cs.cornell.edu/home/kleinber/kdd03-inf.pdf" target="_blank" rel="noopener"><b>Kempe, Kleinberg &amp; Tardos (2003)</b><span>Maximizing the spread of influence</span></a>
+    <a href="https://ndlib.readthedocs.io/" target="_blank" rel="noopener"><b>NDlib</b><span>Python library for diffusion models</span></a>
+    <a href="https://networkx.org/documentation/stable/reference/algorithms/traversal.html" target="_blank" rel="noopener"><b>NetworkX traversal</b><span>BFS trees for cascades</span></a>
+    <a href="https://snap.stanford.edu/data/#cascades" target="_blank" rel="noopener"><b>SNAP cascade datasets</b><span>Real information cascades</span></a>
+    <a href="https://www.cs.cornell.edu/home/kleinber/networks-book/" target="_blank" rel="noopener"><b>Networks, Crowds, and Markets</b><span>Free textbook: cascading behaviour</span></a>
+    <a href="https://github.com/MehrdadJalali-AI/SocialMediaAnayltics" target="_blank" rel="noopener"><b>Course repository</b><span>Notebooks &amp; datasets</span></a>
+  </div>
+</section>
+
+<section class="chap" id="quiz" data-title="Self-check quiz">
+  <div class="sec-head"><div><div class="secnum">Section 14</div><h2>Self-check quiz</h2></div></div>
+  <div id="quizBox"></div>
+</section>
+</main></div>
+
+<footer class="foot">Social Media Analytics and Sentiment Analysis · Prof. Dr. Mehrdad Jalali · SRH University of Applied Sciences Heidelberg · Course repository: <a href="https://github.com/MehrdadJalali-AI/SocialMediaAnayltics" target="_blank" rel="noopener">github.com/MehrdadJalali-AI/SocialMediaAnayltics</a></footer>
+<script>const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+// theme
+(function () {
+  const saved = store.get('sma-theme', null);
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+  const b = $('#themeBtn');
+  if (!b) return;
+  const label = () => {
+    const t = document.documentElement.getAttribute('data-theme') ||
+      (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    b.textContent = t === 'dark' ? '☀ Light' : '☾ Dark';
+  };
+  label();
+  b.onclick = () => {
+    const cur = document.documentElement.getAttribute('data-theme') ||
+      (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    const nxt = cur === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', nxt);
+    store.set('sma-theme', nxt); label();
+  };
+})();
+
+// TOC, scroll spy, progress, "mark as understood"
+(function () {
+  const toc = $('#tocList'); const secs = $$('section.chap');
+  const key = 'sma-done-' + (document.body.dataset.chapter || 'x');
+  const done = new Set(store.get(key, []));
+  secs.forEach((s, i) => {
+    const a = document.createElement('a');
+    a.href = '#' + s.id; a.innerHTML = '<span class="dot"></span>' + esc(s.dataset.title || s.id);
+    if (done.has(s.id)) a.classList.add('done');
+    toc && toc.appendChild(a);
+    const head = s.querySelector('.sec-head');
+    if (head) {
+      const b = document.createElement('button'); b.className = 'donebtn';
+      const paint = () => { b.classList.toggle('on', done.has(s.id)); b.textContent = done.has(s.id) ? '✓ Understood' : 'Mark as understood'; a.classList.toggle('done', done.has(s.id)); updCount(); };
+      b.onclick = () => { done.has(s.id) ? done.delete(s.id) : done.add(s.id); store.set(key, [...done]); paint(); };
+      head.appendChild(b); setTimeout(paint);
+    }
+  });
+  function updCount() { const c = $('#doneCount'); if (c) c.textContent = done.size + ' / ' + secs.length + ' sections understood'; }
+  const links = toc ? $$('a', toc) : [];
+  const onScroll = () => {
+    const h = document.documentElement; const p = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
+    const bar = $('#progress'); if (bar) bar.style.width = (p * 100) + '%';
+    let cur = 0; secs.forEach((s, i) => { if (s.getBoundingClientRect().top < 140) cur = i; });
+    links.forEach((l, i) => l.classList.toggle('active', i === cur));
+  };
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+})();
+
+// tabs: <div class="tabs" data-group="x"><button data-tab="a">..</button></div> + <div class="tabpanel" data-group="x" data-tab="a">
+document.addEventListener('click', e => {
+  const b = e.target.closest('.tabs button'); if (!b) return;
+  const g = b.parentElement.dataset.group;
+  $$('.tabs[data-group="' + g + '"] button').forEach(x => x.classList.toggle('on', x === b));
+  $$('.tabpanel[data-group="' + g + '"]').forEach(p => p.classList.toggle('on', p.dataset.tab === b.dataset.tab));
+});
+
+// copy buttons on code
+function addCopy(root = document) {
+  $$('pre', root).forEach(p => {
+    if (p.querySelector('.copy')) return;
+    const b = document.createElement('button'); b.className = 'copy'; b.textContent = 'Copy';
+    b.onclick = () => { const t = p.querySelector('code') ? p.querySelector('code').innerText : p.innerText.replace(/Copy$/, ''); navigator.clipboard && navigator.clipboard.writeText(t); b.textContent = 'Copied'; setTimeout(() => b.textContent = 'Copy', 1200); };
+    p.appendChild(b);
+  });
+}
+addCopy();
+
+// quiz engine: renderQuiz('#el', [{q, opts:[...], a: idx, why}])
+function renderQuiz(sel, items) {
+  const root = $(sel); if (!root) return; root.classList.add('quiz');
+  let right = 0, answered = 0;
+  const sc = document.createElement('p'); sc.className = 'score';
+  const upd = () => sc.textContent = `Score: ${right} / ${items.length}` + (answered === items.length ? (right === items.length ? ' — perfect! 🎉' : ' — review the explanations and try again.') : '');
+  items.forEach((it, qi) => {
+    const d = document.createElement('div'); d.className = 'q';
+    d.innerHTML = `<p>${qi + 1}. ${it.q}</p><div class="opts"></div><div class="why">💡 ${it.why}</div>`;
+    const o = d.querySelector('.opts');
+    it.opts.forEach((t, i) => {
+      const b = document.createElement('button'); b.innerHTML = t;
+      b.onclick = () => {
+        if (d.classList.contains('answered')) return;
+        d.classList.add('answered'); answered++;
+        if (i === it.a) { b.classList.add('right'); right++; } else { b.classList.add('wrong'); o.children[it.a].classList.add('right'); }
+        upd();
+      };
+      o.appendChild(b);
+    });
+    root.appendChild(d);
+  });
+  const r = document.createElement('button'); r.className = 'btn'; r.textContent = '↺ Reset quiz';
+  r.onclick = () => { root.innerHTML = ''; renderQuiz(sel, items); };
+  root.appendChild(sc); root.appendChild(r); upd();
+}
+
+// sorter engine (click a chip, then click a bucket — or drag): makeSorter('#el', cats:[{id,label}], items:[{t, c, why?}])
+function makeSorter(sel, cats, items) {
+  const root = $(sel); if (!root) return;
+  root.innerHTML = `<div class="pool small">Click an item, then click the box it belongs to (or drag it).</div><div class="sorter"></div><div class="btnrow"><button class="btn primary chk">Check answers</button><button class="btn rst">Reset</button></div><div class="feedback"></div>`;
+  const pool = $('.pool', root), sorter = $('.sorter', root), fb = $('.feedback', root);
+  let selected = null;
+  const shuffled = items.map((x, i) => ({ ...x, i })).sort(() => Math.random() - .5);
+  shuffled.forEach(it => {
+    const c = document.createElement('span'); c.className = 'chip'; c.textContent = it.t; c.draggable = true; c.dataset.c = it.c; c.dataset.i = it.i;
+    if (it.why) c.title = it.why;
+    c.onclick = e => { e.stopPropagation(); $$('.chip', root).forEach(x => x.classList.remove('sel')); selected = c; c.classList.add('sel'); };
+    c.ondragstart = ev => { selected = c; ev.dataTransfer.setData('text', it.i); };
+    pool.appendChild(c);
+  });
+  cats.forEach(cat => {
+    const b = document.createElement('div'); b.className = 'bucket'; b.dataset.id = cat.id; b.innerHTML = `<h5>${cat.label}</h5>`;
+    const drop = () => { if (selected) { b.appendChild(selected); selected.classList.remove('sel', 'right', 'wrong'); selected = null; } };
+    b.onclick = drop;
+    b.ondragover = e => { e.preventDefault(); b.classList.add('over'); };
+    b.ondragleave = () => b.classList.remove('over');
+    b.ondrop = e => { e.preventDefault(); b.classList.remove('over'); drop(); };
+    sorter.appendChild(b);
+  });
+  pool.onclick = () => { if (selected) { pool.appendChild(selected); selected.classList.remove('sel'); selected = null; } };
+  $('.chk', root).onclick = () => {
+    let ok = 0, placed = 0;
+    $$('.bucket .chip', root).forEach(c => { placed++; const good = c.parentElement.dataset.id === c.dataset.c; c.classList.toggle('right', good); c.classList.toggle('wrong', !good); if (good) ok++; });
+    fb.className = 'feedback show ' + (ok === items.length ? 'ok' : 'info');
+    fb.textContent = ok === items.length ? `All ${ok} correct — well done!` : `${ok} of ${items.length} correct (${items.length - placed} not placed yet). Red items are in the wrong box — hover them for a hint.`;
+  };
+  $('.rst', root).onclick = () => makeSorter(sel, cats, items);
+}
+
+// tiny syntax highlighter for python / sql / yaml snippets marked data-hl
+function hl(code, lang) {
+  let s = esc(code);
+  if (lang === 'py' || lang === 'sql') {
+    s = s.replace(/(#.*|--.*)$/gm, '<span class="c-c">$1</span>');
+    s = s.replace(/(&quot;.*?&quot;|'[^'\n]*')/g, '<span class="c-s">$1</span>');
+    const kw = lang === 'py' ? 'def|return|import|from|as|for|in|if|else|try|except|with|lambda|True|False|None|print' : 'SELECT|FROM|WHERE|GROUP BY|ORDER BY|JOIN|LEFT JOIN|ON|AS|WITH|SUM|COUNT|AND|OR|MATCH|RETURN|PREFIX';
+    s = s.replace(new RegExp('\\b(' + kw + ')\\b', 'g'), '<span class="c-k">$1</span>');
+  } else if (lang === 'yaml') {
+    s = s.replace(/(#.*)$/gm, '<span class="c-c">$1</span>').replace(/^(\s*-?\s*)([\w_]+):/gm, '$1<span class="c-k">$2</span>:');
+  }
+  return s;
+}
+$$('pre code[data-hl]').forEach(c => { c.innerHTML = hl(c.textContent, c.dataset.hl); });
+
+// ---------- extra shared helpers (Social Media Analytics guides) ----------
+const fmt = (x, d = 2) => (x === null || x === undefined || isNaN(x)) ? '—' : (+x).toFixed(d);
+const pct = (x, d = 0) => (x * 100).toFixed(d) + '%';
+const mean = a => a.reduce((s, x) => s + x, 0) / (a.length || 1);
+const sdp = a => { const m = mean(a); return Math.sqrt(a.reduce((s, x) => s + (x - m) ** 2, 0) / (a.length || 1)); };
+const tbl = (head, rows, cls) => '<tr>' + head.map(h => `<th>${h}</th>`).join('') + '</tr>' + rows.map((r, i) => '<tr>' + r.map((c, j) => `<td class="${cls ? cls(i, j, c) || '' : ''}">${c === null || c === '' ? '<span class="small">∅</span>' : c}</td>`).join('') + '</tr>').join('');
+const pill = l => `<span class="pill ${({ positive: 'pos', negative: 'neg', neutral: 'neu', mixed: 'mix' })[l] || 'neu'}">${l}</span>`;
+// horizontal bar list: bars('#el', [{l, v, max?, c?, t?}])
+function bars(sel, rows, max) {
+  const el = typeof sel === 'string' ? $(sel) : sel; if (!el) return;
+  const m = max || Math.max(...rows.map(r => r.v), 1e-9);
+  el.className = 'bars';
+  el.innerHTML = rows.map(r => `<div class="row"><span>${r.l}</span><div class="track"><div class="fill ${r.c || ''}" style="width:${Math.max(0, r.v / m * 100)}%"></div></div><span class="val">${r.t !== undefined ? r.t : r.v}</span></div>`).join('');
+}
+// flip cards: click to reveal
+document.addEventListener('click', e => { const f = e.target.closest('.flip'); if (f) f.classList.toggle('open'); });
+// seeded RNG (mulberry32)
+function rngSeed(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+// "pick the label" tables: makeLabeler('#el', rows:[{t, cols:{name:answer}}], options:{name:[...]}, notes)
+function makeLabeler(sel, rows, options, opts = {}) {
+  const root = $(sel); if (!root) return;
+  const cols = Object.keys(options);
+  root.innerHTML = `<div class="tablewrap"><table><tr><th>#</th><th>${opts.textHead || 'Post'}</th>${cols.map(c => `<th>${c}</th>`).join('')}${opts.noteHead ? `<th>${opts.noteHead}</th>` : ''}</tr>${rows.map((r, i) => `<tr><td>${i + 1}</td><td>${r.t}</td>${cols.map(c => `<td data-c="${c}" data-i="${i}"><select class="lbl"><option value="">—</option>${options[c].map(o => `<option>${o}</option>`).join('')}</select></td>`).join('')}${opts.noteHead ? `<td class="small nt" data-i="${i}"></td>` : ''}</tr>`).join('')}</table></div><div class="btnrow"><button class="btn primary chk">Compare with the sample answer</button><button class="btn rst">Reset</button></div><div class="feedback"></div>`;
+  $('.chk', root).onclick = () => {
+    let ok = 0, tot = 0;
+    $$('td[data-c]', root).forEach(td => {
+      const r = rows[+td.dataset.i], ans = r.cols[td.dataset.c], v = $('select', td).value; tot++;
+      const good = Array.isArray(ans) ? ans.includes(v) : v === ans; if (good) ok++;
+      td.className = good ? 'ok' : 'no'; td.title = 'Sample answer: ' + (Array.isArray(ans) ? ans.join(' / ') : ans);
+    });
+    $$('.nt', root).forEach(n => n.textContent = rows[+n.dataset.i].note || '');
+    const fb = $('.feedback', root); fb.className = 'feedback show ' + (ok === tot ? 'ok' : 'info');
+    fb.innerHTML = `${ok} of ${tot} cells match the sample answer. Hover a red cell to see the sample label. ${opts.after || ''}`;
+  };
+  $('.rst', root).onclick = () => makeLabeler(sel, rows, options, opts);
+}
+// simple persistent checklist: makeChecklist('#el', key, items[])
+function makeChecklist(sel, key, items) {
+  const root = $(sel); if (!root) return;
+  const st = new Set(store.get(key, []));
+  const draw = () => {
+    root.innerHTML = items.map((t, i) => `<label class="check"><input type="checkbox" data-i="${i}" ${st.has(i) ? 'checked' : ''}><span>${t}</span></label>`).join('') + `<div class="meter" style="margin-top:10px"><div style="width:${st.size / items.length * 100}%"></div></div><p class="small">${st.size} of ${items.length} done</p>`;
+    $$('input', root).forEach(c => c.onchange = () => { c.checked ? st.add(+c.dataset.i) : st.delete(+c.dataset.i); store.set(key, [...st]); draw(); });
+  };
+  draw();
+}
+// download text as a file
+function downloadText(name, text) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type: 'text/plain' })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
+</script>
+<script>const KARATE={"E":[[0,1,4],[0,2,5],[0,3,3],[0,4,3],[0,5,3],[0,6,3],[0,7,2],[0,8,2],[0,10,2],[0,11,3],[0,12,1],[0,13,3],[0,17,2],[0,19,2],[0,21,2],[0,31,2],[1,2,6],[1,3,3],[1,7,4],[1,13,5],[1,17,1],[1,19,2],[1,21,2],[1,30,2],[2,3,3],[2,7,4],[2,8,5],[2,9,1],[2,13,3],[2,27,2],[2,28,2],[2,32,2],[3,7,3],[3,12,3],[3,13,3],[4,6,2],[4,10,3],[5,6,5],[5,10,3],[5,16,3],[6,16,3],[8,30,3],[8,32,3],[8,33,4],[9,33,2],[13,33,3],[14,32,3],[14,33,2],[15,32,3],[15,33,4],[18,32,1],[18,33,2],[19,33,1],[20,32,3],[20,33,1],[22,32,2],[22,33,3],[23,25,5],[23,27,4],[23,29,3],[23,32,5],[23,33,4],[24,25,2],[24,27,3],[24,31,2],[25,31,7],[26,29,4],[26,33,2],[27,33,4],[28,31,2],[28,33,2],[29,32,4],[29,33,2],[30,32,3],[30,33,3],[31,32,4],[31,33,4],[32,33,5]],"club":[0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,1,0,0,1,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1],"pos":[[0.186,0.319],[0.235,0.092],[0.037,0.065],[0.244,0.247],[0.126,0.621],[0.18,0.762],[0.274,0.735],[0.294,0.16],[-0.003,-0.116],[-0.37,0.036],[0.027,0.711],[0.501,0.562],[0.407,0.476],[0.121,0.031],[-0.452,-0.497],[-0.029,-0.533],[0.268,1.0],[0.598,0.241],[0.056,-0.678],[0.311,-0.054],[-0.319,-0.703],[0.487,0.287],[-0.349,-0.567],[-0.348,-0.358],[-0.596,-0.101],[-0.468,-0.201],[-0.157,-0.748],[-0.335,-0.176],[-0.203,0.024],[-0.218,-0.574],[0.071,-0.263],[-0.251,-0.109],[-0.178,-0.382],[-0.148,-0.312]],"parts":{"0.5":{"c":[[8,9,14,15,18,20,22,23,24,25,26,27,28,29,30,31,32,33],[0,1,2,3,4,5,6,7,10,11,12,13,16,17,19,21]],"q":0.404},"1.0":{"c":[[8,9,14,15,18,20,22,23,26,27,29,30,32,33],[0,4,5,6,10,11,16,17,19,21],[1,2,3,7,12,13],[24,25,28,31]],"q":0.427},"1.5":{"c":[[0,4,5,6,10,11,16,17,19,21],[8,9,14,15,18,20,22,30,32,33],[1,2,3,7,12,13],[23,24,25,27,28,31],[26,29]],"q":0.418},"2.0":{"c":[[9,14,15,18,20,22,30,32,33],[1,3,7,12,13,19],[23,24,25,27,28,31],[4,5,6,10,16],[0,11,17,21],[2,8],[26,29]],"q":0.344}}};
+// ---------- graph toolkit (karate club) ----------
+const KG = (function () {
+  const N = KARATE.club.length;
+  const adj = Array.from({ length: N }, () => []);
+  const W = {};
+  KARATE.E.forEach(([u, v, w]) => { adj[u].push(v); adj[v].push(u); W[u + '-' + v] = W[v + '-' + u] = w; });
+  adj.forEach(a => a.sort((x, y) => x - y));
+  const deg = adj.map(a => a.length);
+  function bfsDist(s, A = adj) { const d = Array(A.length).fill(-1); d[s] = 0; const q = [s]; while (q.length) { const u = q.shift(); for (const v of A[u]) if (d[v] < 0) { d[v] = d[u] + 1; q.push(v); } } return d; }
+  function bfsOrder(s) { const seen = new Set([s]), q = [s], o = []; while (q.length) { const u = q.shift(); o.push(u); for (const v of adj[u]) if (!seen.has(v)) { seen.add(v); q.push(v); } } return o; }
+  function dfsOrder(s) { const seen = new Set(), o = []; (function go(u) { seen.add(u); o.push(u); for (const v of adj[u]) if (!seen.has(v)) go(v); })(s); return o; }
+  function betweenness() { // Brandes, unweighted, normalised like networkx
+    const C = Array(N).fill(0);
+    for (let s = 0; s < N; s++) {
+      const S = [], P = Array.from({ length: N }, () => []), sig = Array(N).fill(0), d = Array(N).fill(-1); sig[s] = 1; d[s] = 0; const Q = [s];
+      while (Q.length) { const v = Q.shift(); S.push(v); for (const w of adj[v]) { if (d[w] < 0) { Q.push(w); d[w] = d[v] + 1; } if (d[w] === d[v] + 1) { sig[w] += sig[v]; P[w].push(v); } } }
+      const del = Array(N).fill(0);
+      while (S.length) { const w = S.pop(); for (const v of P[w]) del[v] += sig[v] / sig[w] * (1 + del[w]); if (w !== s) C[w] += del[w]; }
+    }
+    const sc = 1 / ((N - 1) * (N - 2)); return C.map(c => c * sc);
+  }
+  function closeness() { return Array.from({ length: N }, (_, s) => { const d = bfsDist(s); const tot = d.reduce((a, b) => a + (b > 0 ? b : 0), 0); return (N - 1) / tot; }); }
+  function pagerank(alpha = 0.85) {
+    const ws = adj.map((a, u) => a.reduce((s, v) => s + W[u + '-' + v], 0));
+    let x = Array(N).fill(1 / N);
+    for (let it = 0; it < 200; it++) {
+      const nx = Array(N).fill((1 - alpha) / N);
+      for (let u = 0; u < N; u++) for (const v of adj[u]) nx[v] += alpha * x[u] * W[u + '-' + v] / ws[u];
+      const err = nx.reduce((s, v, i) => s + Math.abs(v - x[i]), 0); x = nx; if (err < N * 1e-8) break;
+    }
+    return x;
+  }
+  function components(removed = new Set()) {
+    const seen = new Set(removed), comps = [];
+    for (let s = 0; s < N; s++) { if (seen.has(s)) continue; const c = [], q = [s]; seen.add(s); while (q.length) { const u = q.shift(); c.push(u); for (const v of adj[u]) if (!seen.has(v)) { seen.add(v); q.push(v); } } comps.push(c); }
+    return comps;
+  }
+  // Independent Cascade: returns {active:Set, steps:[[nodes]], fails:[[u,v]]}
+  function ic(seeds, p, rnd, trace = false) {
+    const active = new Set(seeds); let frontier = [...seeds]; const steps = [[...seeds]], tries = [];
+    while (frontier.length) {
+      const nw = [];
+      for (const u of frontier) for (const v of adj[u]) if (!active.has(v)) { const ok = rnd() < p; if (trace) tries.push([u, v, ok, steps.length]); if (ok) { active.add(v); nw.push(v); } }
+      frontier = nw; if (nw.length) steps.push(nw);
+    }
+    return { active, steps, tries };
+  }
+  // Linear Threshold with one theta for everyone (deterministic)
+  function lt(seeds, theta) {
+    const active = new Set(seeds); const steps = [[...seeds]];
+    while (true) {
+      const nw = [];
+      for (let v = 0; v < N; v++) if (!active.has(v)) { const f = adj[v].filter(u => active.has(u)).length / adj[v].length; if (f >= theta - 1e-12) nw.push(v); }
+      if (!nw.length) break; nw.forEach(v => active.add(v)); steps.push(nw);
+    }
+    return { active, steps };
+  }
+  // SVG drawing. opts: {size:fn(n)->r, color:fn(n)->css, label:bool, edgeClass:fn(u,v)->cls, onClick:fn(n), sel:Set}
+  const PAD = 24, Wd = 640, Ht = 440;
+  const xs = KARATE.pos.map(p => p[0]), ys = KARATE.pos.map(p => p[1]);
+  const mnx = Math.min(...xs), mxx = Math.max(...xs), mny = Math.min(...ys), mxy = Math.max(...ys);
+  const X = n => PAD + (KARATE.pos[n][0] - mnx) / (mxx - mnx) * (Wd - 2 * PAD), Y = n => PAD + (KARATE.pos[n][1] - mny) / (mxy - mny) * (Ht - 2 * PAD);
+  function draw(svg, o = {}) {
+    svg.setAttribute('viewBox', `0 0 ${Wd} ${Ht}`); svg.classList.add('gsvg');
+    const size = o.size || (n => 6 + deg[n] * 0.9), color = o.color || (n => KARATE.club[n] ? 'var(--amber)' : 'var(--blue)');
+    let h = '';
+    KARATE.E.forEach(([u, v]) => { const c = o.edgeClass ? o.edgeClass(u, v) || '' : ''; h += `<line class="${c}" x1="${X(u)}" y1="${Y(u)}" x2="${X(v)}" y2="${Y(v)}"/>`; });
+    for (let n = 0; n < N; n++) {
+      if (o.hide && o.hide.has(n)) continue;
+      const r = size(n);
+      h += `<circle data-n="${n}" class="${o.sel && o.sel.has(n) ? 'sel' : ''}" cx="${X(n)}" cy="${Y(n)}" r="${r}" fill="${color(n)}"><title>node ${n}</title></circle>`;
+      if (o.label !== false) h += `<text x="${X(n)}" y="${Y(n)}" class="${r > 9 ? 'on' : ''}" style="font-size:${r > 9 ? 10 : 8}px">${n}</text>`;
+    }
+    svg.innerHTML = h;
+    if (o.hide) $$('line', svg).forEach((l, i) => { const [u, v] = KARATE.E[i]; if (o.hide.has(u) || o.hide.has(v)) l.style.opacity = .08; });
+    if (o.onClick) $$('circle', svg).forEach(c => c.onclick = () => o.onClick(+c.dataset.n));
+  }
+  const commOf = parts => { const m = Array(N).fill(-1); parts.forEach((c, i) => c.forEach(n => m[n] = i)); return m; };
+  const PAL = ['var(--blue)', 'var(--amber)', 'var(--green)', 'var(--purple)', 'var(--red)', 'var(--accent)', 'var(--muted)'];
+  return { N, adj, W, deg, bfsDist, bfsOrder, dfsOrder, betweenness, closeness, pagerank, components, ic, lt, draw, commOf, PAL };
+})();
+</script>
+<script>
+const N = KG.N, COMM = KG.commOf(KARATE.parts['1.0'].c), DEG = KG.deg;
+const commColor = n => KG.PAL[COMM[n]];
+
+// ---------- Section 1 ----------
+makeSorter('#sortVocab', [{ id: 'seed', label: 'Seed' }, { id: 'exp', label: 'Exposure' }, { id: 'ad', label: 'Adoption' }, { id: 'cas', label: 'Cascade' }, { id: 'del', label: 'Delay' }, { id: 'reach', label: 'Reach' }], [
+  { t: 'the first user or post', c: 'seed' }, { t: 'a user may have seen the content', c: 'exp' }, { t: 'a user reacts, shares or changes behaviour', c: 'ad' },
+  { t: 'the chain of diffusion events', c: 'cas' }, { t: 'time between a parent and its reposts', c: 'del' }, { t: 'number or diversity of users reached', c: 'reach' }
+]);
+
+// ---------- Section 2: exposure ----------
+function drawExp() {
+  const p = +$('#adR').value / 100; $('#adV').textContent = Math.round(p * 100) + '%';
+  const r = Math.random; let h = '', adopt = 0; const cx = 260, cy = 130;
+  [70, 115].forEach((R, k) => h += `<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" style="stroke:var(--line);stroke-dasharray:4 4;cursor:default"></circle>`);
+  for (let i = 0; i < 12; i++) { const R = i % 2 ? 115 : 70, a = i / 12 * 2 * Math.PI; const x = cx + R * Math.cos(a), y = cy + R * Math.sin(a); const ad = r() < p; if (ad) adopt++; h += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" class="${ad ? 'hl' : ''}"/><circle cx="${x}" cy="${y}" r="11" fill="${ad ? 'var(--green)' : 'var(--surface2)'}" style="stroke:var(--line)"></circle>`; }
+  h += `<circle cx="${cx}" cy="${cy}" r="16" fill="var(--accent)"></circle><text x="${cx}" y="${cy}" class="on">seed</text>`;
+  $('#expSvg').innerHTML = h;
+  $('#expMsg').innerHTML = `12 users exposed (grey) — only <b>${adopt}</b> adopted (green). On a platform you would only <i>see</i> the ${adopt} reposts: the ${12 - adopt} silent exposures are invisible.`;
+}
+$('#adR').oninput = drawExp; $('#adRun').onclick = drawExp; drawExp();
+
+// ---------- Section 3: cascade builder ----------
+const PRE = {
+  ex: 'S,,0\nu1,S,4\nu2,S,9\nu3,S,15\nu4,u1,22\nu5,u1,31\nu6,u4,48\nu7,u3,70\nu8,u6,95',
+  bc: 'S,,0\n' + [...Array(9)].map((_, i) => `u${i + 1},S,${(i + 1) * 3}`).join('\n'),
+  vr: 'S,,0\nu1,S,5\nu2,u1,14\nu3,u2,30\nu4,u3,41\nu5,u4,60\nu6,u5,75\nu7,S,8\nu8,u2,35\nu9,u5,90'
+};
+$('#cbIn').value = PRE.ex;
+$$('#cascade [data-p]').forEach(b => b.onclick = () => { $('#cbIn').value = PRE[b.dataset.p]; drawCB(); });
+function drawCB() {
+  const ev = $('#cbIn').value.split('\n').map(l => l.split(',').map(s => s.trim())).filter(e => e[0]);
+  const par = {}, t = {}; ev.forEach(([u, p, m]) => { par[u] = p || null; t[u] = +m || 0; });
+  const users = Object.keys(par), seed = users.find(u => !par[u]);
+  const issues = [];
+  if (!seed) { $('#cbMsg').textContent = 'No seed found — one line needs an empty parent (e.g. "S,,0").'; return; }
+  const depth = {}; const dep = (u, guard = 0) => { if (depth[u] !== undefined) return depth[u]; if (!par[u]) return depth[u] = 0; if (!(par[u] in par) || guard > 99) { issues.push(`${u}: unknown parent “${par[u]}” (path must be inferred)`); return depth[u] = 1; } return depth[u] = dep(par[u], guard + 1) + 1; };
+  users.forEach(u => dep(u));
+  users.forEach(u => { if (par[u] && par[u] in t && t[u] < t[par[u]]) issues.push(`${u} is earlier than its parent — check time zones!`); });
+  const byD = {}; users.forEach(u => (byD[depth[u]] = byD[depth[u]] || []).push(u));
+  const D = Math.max(...Object.values(depth)), B = Math.max(...Object.keys(byD).filter(d => d > 0).map(d => byD[d].length), 0);
+  const times = users.map(u => t[u]).sort((a, b) => a - b), half = times[Math.ceil(users.length / 2) - 1];
+  const adj = {}; users.forEach(u => adj[u] = []); users.forEach(u => { if (par[u] && adj[par[u]]) { adj[u].push(par[u]); adj[par[u]].push(u); } });
+  let sum = 0, cnt = 0; users.forEach(s => { const d = { [s]: 0 }, q = [s]; while (q.length) { const x = q.shift(); adj[x].forEach(y => { if (d[y] === undefined) { d[y] = d[x] + 1; q.push(y); } }); } users.forEach(v => { if (v !== s && d[v] !== undefined) { sum += d[v]; cnt++; } }); });
+  const sv = cnt ? sum / cnt : 0;
+  $('#cbK').innerHTML = [['size', users.length], ['depth', D], ['max breadth', B], ['duration', (Math.max(...times) - Math.min(...times)) + ' min'], ['half-life', half + ' min'], ['structural virality', sv.toFixed(2)]].map(([l, v]) => `<div class="kpi"><div class="v">${v}</div><div class="l">${l}</div></div>`).join('');
+  // draw
+  const W = 360, H = 300, pos = {};
+  Object.entries(byD).forEach(([d, us]) => { us.sort((a, b) => t[a] - t[b]).forEach((u, i) => pos[u] = [ (i + 1) * W / (us.length + 1), 24 + d * (H - 48) / Math.max(D, 1)]); });
+  let h = ''; users.forEach(u => { if (par[u] && pos[par[u]]) h += `<line x1="${pos[par[u]][0]}" y1="${pos[par[u]][1]}" x2="${pos[u][0]}" y2="${pos[u][1]}" class="hl"/>`; });
+  users.forEach(u => { const [x, y] = pos[u]; h += `<circle cx="${x}" cy="${y}" r="13" fill="${u === seed ? 'var(--accent)' : 'var(--blue)'}"></circle><text x="${x}" y="${y}" class="on" style="font-size:9px">${esc(u)}</text><text x="${x}" y="${y + 21}" style="font-size:9px;fill:var(--muted)">${t[u]}′</text>`; });
+  $('#cbSvg').innerHTML = h;
+  const shape = D <= 1 ? 'broadcast' : sv >= 2.8 ? 'viral (person-to-person)' : 'mixed';
+  $('#cbMsg').innerHTML = `Longest chain has ${D} step(s); the widest generation has ${B} users. Shape: <b>${shape}</b>. Half-life = time until ${Math.ceil(users.length / 2)} of ${users.length} users were reached.` + (issues.length ? '<br>⚠️ ' + issues.join('<br>⚠️ ') : '');
+}
+$('#cbIn').oninput = drawCB; drawCB();
+
+// ---------- Section 4: phases ----------
+const PH = [['Early', 0, 4, 'seed and close contacts'], ['Growth', 4, 10, 'bridges carry it to new groups'], ['Peak', 7, 9, 'fastest new adoptions (around 8 h)'], ['Decay', 10, 16, 'fewer new adopters'], ['Long tail', 16, 24, 'occasional late shares']];
+const cum = h => 1000 / (1 + Math.exp(-(h - 8) / 1.6));
+function drawPh(sel = 2) {
+  const W = 560, H = 240, x = h => 40 + h / 24 * (W - 60), y = v => H - 30 - v / 1000 * (H - 50);
+  let s = `<line x1="40" y1="${H - 30}" x2="${W - 20}" y2="${H - 30}"/><line x1="40" y1="10" x2="40" y2="${H - 30}"/>`;
+  const p = PH[sel]; s += `<rect x="${x(p[1])}" y="10" width="${x(p[2]) - x(p[1])}" height="${H - 40}" fill="var(--accent-soft)" stroke="none"></rect>`;
+  let d = ''; for (let h = 0; h <= 24; h += 0.25) d += (d ? 'L' : 'M') + x(h) + ',' + y(cum(h)); s += `<path d="${d}" fill="none" stroke="var(--accent)" stroke-width="3"/>`;
+  for (let h = 0; h <= 24; h += 4) s += `<text x="${x(h)}" y="${H - 14}" style="font-size:10px">${h} h</text>`;
+  s += `<text x="12" y="20" style="font-size:10px;text-anchor:start">adoptions</text>`;
+  $('#phSvg').innerHTML = s;
+  $$('#phBtns .btn').forEach((b, i) => b.classList.toggle('sel', i === sel));
+  $('#phMsg').innerHTML = `<b>${p[0]}</b> (${p[1]}–${p[2]} h): ${p[3]}. Each phase can involve different users and communities — e.g. the first hour inside one fan community, the peak when a news account picks it up.`;
+}
+$('#phBtns').innerHTML = PH.map((p, i) => `<button class="btn" data-i="${i}">${p[0]}</button>`).join('');
+$$('#phBtns .btn').forEach(b => b.onclick = () => drawPh(+b.dataset.i)); drawPh();
+
+// ---------- Section 5: cross-community reach ----------
+$('#crLeg').innerHTML = KARATE.parts['1.0'].c.map((c, i) => `<span><i style="background:${KG.PAL[i]}"></i>C${i + 1} (${c.length})</span>`).join('');
+let crSeed = 5;
+function drawCR(first) {
+  const p = +$('#crP').value / 100; $('#crPV').textContent = p.toFixed(2);
+  let r = KG.ic([crSeed], p, Math.random, true);
+  for (let k = 0; first === true && k < 50 && new Set([...r.active].map(n => COMM[n])).size < 3; k++) r = KG.ic([crSeed], p, Math.random, true);
+  const okEdges = new Set(r.tries.filter(t => t[2]).map(([u, v]) => u + '-' + v));
+  const crossing = r.tries.filter(t => t[2] && COMM[t[0]] !== COMM[t[1]]);
+  KG.draw($('#crSvg'), { color: n => r.active.has(n) ? commColor(n) : 'var(--surface2)', sel: new Set([crSeed]), edgeClass: (u, v) => okEdges.has(u + '-' + v) || okEdges.has(v + '-' + u) ? (COMM[u] !== COMM[v] ? 'cross' : 'hl') : '', onClick: n => { crSeed = n; drawCR(); } });
+  const reached = new Set([...r.active].map(n => COMM[n]));
+  let firstNew = null; r.steps.forEach((s, i) => { if (firstNew === null && s.some(n => COMM[n] !== COMM[crSeed])) firstNew = i; });
+  $('#crMsg').innerHTML = `Seed <b>${crSeed}</b> (C${COMM[crSeed] + 1}) reached <b>${r.active.size}</b> members in <b>${reached.size} of 4</b> communities after ${r.steps.length - 1} step(s).` + (firstNew !== null ? ` First new community after <b>${firstNew}</b> step(s). Bridge moves (red): ${crossing.slice(0, 6).map(([u, v]) => u + '→' + v).join(', ')}.` : ' It never left its own community this time — run again.');
+}
+$('#crP').oninput = () => drawCR(); $('#crRun').onclick = () => drawCR(); drawCR(true);
+
+// ---------- Section 6: IC stepper ----------
+let icSeeds = new Set([0]), icState = null;
+function icReset() { icState = { active: new Set(icSeeds), frontier: [...icSeeds], tried: [], step: 0, done: false }; drawIC(); }
+function icStep() {
+  if (!icState || icState.done) return; const p = +$('#icP').value / 100, nw = [];
+  icState.frontier.forEach(u => KG.adj[u].forEach(v => { if (!icState.active.has(v)) { const ok = Math.random() < p; icState.tried.push([u, v, ok]); if (ok) { icState.active.add(v); nw.push(v); } } }));
+  icState.frontier = nw; icState.step++; if (!nw.length) icState.done = true; drawIC();
+}
+function drawIC() {
+  $('#icPV').textContent = (+$('#icP').value / 100).toFixed(2);
+  const st = icState, cls = {}; st.tried.forEach(([u, v, ok]) => cls[Math.min(u, v) + '-' + Math.max(u, v)] = ok ? 'hl' : 'fail');
+  KG.draw($('#icSvg'), { color: n => st.active.has(n) ? (icSeeds.has(n) ? 'var(--accent)' : 'var(--green)') : 'var(--surface2)', edgeClass: (u, v) => cls[Math.min(u, v) + '-' + Math.max(u, v)] || '', onClick: n => { icSeeds.has(n) ? icSeeds.delete(n) : icSeeds.add(n); icReset(); } });
+  const fails = st.tried.filter(t => !t[2]).length;
+  $('#icMsg').innerHTML = `Seeds: ${[...icSeeds].join(', ') || '— click members'} · step ${st.step} · active <b>${st.active.size}</b> · attempts ${st.tried.length} (${fails} failed, never repeated)` + (st.done ? ' · <b>stopped</b> — nobody new was activated.' : '');
+}
+$('#icStep').onclick = icStep; $('#icNew').onclick = icReset; $('#icClear').onclick = () => { icSeeds.clear(); icReset(); }; $('#icP').oninput = icReset;
+icReset();
+
+function runMany(seeds, p, runs, rnd) { const xs = []; for (let i = 0; i < runs; i++) xs.push(KG.ic(typeof seeds === 'function' ? seeds() : seeds, p, rnd).active.size); return [mean(xs), sdp(xs)]; }
+function drawSpread() {
+  const runs = +$('#spRuns').value, rnd = rngSeed(1), PS = [0.05, 0.10, 0.15, 0.20, 0.25, 0.30];
+  const hub = PS.map(p => runMany([0], p, runs, rnd)), per = PS.map(p => runMany([16], p, runs, rnd));
+  const W = 560, H = 260, x = p => 50 + (p - 0.05) / 0.25 * (W - 80), y = v => H - 30 - v / 34 * (H - 50);
+  let s = `<line x1="50" y1="${H - 30}" x2="${W - 20}" y2="${H - 30}"/><line x1="50" y1="10" x2="50" y2="${H - 30}"/>`;
+  [[hub, 'var(--accent)', 'hub (node 0)'], [per, 'var(--muted)', 'periphery (node 16)']].forEach(([r, c, l]) => {
+    let band = PS.map((p, i) => x(p) + ',' + y(Math.min(34, r[i][0] + r[i][1]))).join(' ') + ' ' + PS.map((p, i) => x(p) + ',' + y(Math.max(0, r[i][0] - r[i][1]))).reverse().join(' ');
+    s += `<polygon points="${band}" fill="${c}" opacity=".15" stroke="none"></polygon><polyline points="${PS.map((p, i) => x(p) + ',' + y(r[i][0])).join(' ')}" fill="none" stroke="${c}" stroke-width="3"/>`;
+    PS.forEach((p, i) => s += `<circle cx="${x(p)}" cy="${y(r[i][0])}" r="4" fill="${c}" style="stroke:none"></circle>`);
+    s += `<text x="${x(0.30) - 30}" y="${y(r[5][0]) - 12}" style="font-size:11px;fill:${c};font-weight:700">${l}</text>`;
+  });
+  PS.forEach(p => s += `<text x="${x(p)}" y="${H - 14}" style="font-size:10px">p=${p.toFixed(2)}</text>`);
+  [0, 10, 20, 30].forEach(v => s += `<text x="34" y="${y(v)}" style="font-size:10px">${v}</text>`);
+  $('#spSvg').innerHTML = s;
+  $('#spTbl').innerHTML = tbl(['p', 'hub: mean users', 'hub: sd', 'periphery: mean', 'periphery: sd'], PS.map((p, i) => [p.toFixed(2), hub[i][0].toFixed(1), hub[i][1].toFixed(1), per[i][0].toFixed(1), per[i][1].toFixed(1)]));
+  $('#spMsg').innerHTML = `${runs.toLocaleString()} runs per setting, fixed random seed. Shaded band = mean ± 1 sd. <b>Doubling p does not double the reach</b> (non-linear), and the spread varies a lot between runs — <b>report the range, not one run</b>.`;
+}
+$('#spRun').onclick = drawSpread; drawSpread();
+
+// ---------- Section 7: LT ----------
+let ltSeeds = [33, 0, 32];
+$$('#lt [data-s]').forEach(b => b.onclick = () => { $$('#lt [data-s]').forEach(x => x.classList.toggle('sel', x === b)); ltSeeds = b.dataset.s === 'hub' ? [33, 0, 32] : [16, 26, 11]; drawLT(); });
+function drawLT() {
+  const th = +$('#ltR').value / 100; $('#ltV').textContent = th.toFixed(2);
+  const r = KG.lt(ltSeeds, th), stepOf = {}; r.steps.forEach((s, i) => s.forEach(n => stepOf[n] = i));
+  KG.draw($('#ltSvg'), { color: n => r.active.has(n) ? (stepOf[n] === 0 ? 'var(--accent)' : `color-mix(in srgb,var(--green) ${100 - Math.min(70, stepOf[n] * 12)}%,var(--surface2))`) : 'var(--surface2)', sel: new Set(ltSeeds) });
+  const TH = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7];
+  bars('#ltBars', TH.map(t => { const a = KG.lt(ltSeeds, t).active.size; return { l: 'θ = ' + t.toFixed(1), v: a, t: a + ' / 34', c: Math.abs(t - th) < 0.051 ? '' : 'b' }; }), 34);
+  const lo = KG.lt(ltSeeds, Math.max(0.05, th - 0.1)).active.size;
+  $('#ltMsg').innerHTML = `Seeds ${ltSeeds.join(', ')}, θ = ${th.toFixed(2)} → <b>${r.active.size} of 34</b> adopt in ${r.steps.length - 1} round(s). Deterministic: the same θ always gives the same result.` + (lo - r.active.size >= 15 ? ` <b>Tipping point:</b> θ − 0.10 reaches ${lo} — a small change decides between (almost) everyone and almost nobody.` : '');
+}
+$('#ltR').oninput = drawLT; drawLT();
+makeSorter('#sortModel', [{ id: 'ic', label: 'Independent Cascade (one contact can be enough)' }, { id: 'lt', label: 'Linear Threshold (needs reinforcement)' }], [
+  { t: 'Sharing a funny video', c: 'ic' }, { t: 'Forwarding a breaking-news link', c: 'ic' }, { t: 'A computer virus spreading by e-mail', c: 'ic' },
+  { t: 'Joining a boycott', c: 'lt' }, { t: 'Buying an expensive EV after friends did', c: 'lt' }, { t: 'Publicly adopting a risky political opinion', c: 'lt' }
+]);
+
+// ---------- Section 8: seed strategies ----------
+function drawSS() {
+  const runs = +$('#ssRuns').value, rnd = rngSeed(7), PR = KG.pagerank();
+  const topk = arr => arr.map((v, i) => [v, i]).sort((a, b) => b[0] - a[0]).slice(0, 3).map(x => x[1]);
+  const randSeeds = () => { const s = new Set(); while (s.size < 3) s.add(Math.floor(rnd() * N)); return [...s]; };
+  const S = [['Random (baseline)', randSeeds, '3 random users'], ['Highest degree', topk(DEG), null], ['Highest PageRank', topk(PR), null], ['Community-aware', [33, 0, 2], 'top node in each of 3 largest communities']];
+  const PS = [0.05, 0.10, 0.20];
+  const R = S.map(([n, s]) => PS.map(p => runMany(s, p, runs, rnd)));
+  $('#ssTbl').innerHTML = tbl(['Strategy', 'Seeds (k = 3)', ...PS.map(p => 'p = ' + p.toFixed(2))], S.map(([n, s, d], i) => [n, d && typeof s === 'function' ? d : s.join(', ') + (d ? ` <span class="small">(${d})</span>` : ''), ...R[i].map(([m, sd]) => `${m.toFixed(1)} ± ${sd.toFixed(1)}`)]));
+  bars('#ssBars', S.map(([n], i) => ({ l: n + ' (p=0.10)', v: R[i][1][0], t: R[i][1][0].toFixed(1), c: i ? 'g' : 'm' })), 12);
+  const gain = (Math.max(R[1][1][0], R[2][1][0], R[3][1][0]) / R[0][1][0] - 1);
+  $('#ssMsg').innerHTML = `${runs.toLocaleString()} runs per cell. At p = 0.10 the informed strategies beat random by about <b>${pct(gain)}</b>. On this small network degree, PageRank and community seeds barely differ — an honest result. Test on <i>your</i> network, with the same p and many runs.`;
+}
+$('#ssRun').onclick = drawSS; drawSS();
+
+// ---------- Section 9: time zones ----------
+const TZ = [['c1', 'seed', '2026-03-04 15:05', '+01:00 (Berlin)'], ['c1', 'first repost', '2026-03-04 15:11', '+01:00 (Berlin)'], ['c2', 'seed', '2026-03-04 09:40', '−05:00 (New York)'], ['c2', 'first repost', '2026-03-04 09:52', '−05:00 (New York)']];
+const toUtc = (s, z) => { const off = z.startsWith('+01') ? 1 : -5; const [d, t] = s.split(' '); let [h, m] = t.split(':').map(Number); h -= off; return `${d} ${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`; };
+function drawTZ(utc) {
+  $('#tzTbl').innerHTML = tbl(['cascade', 'event', utc ? 'timestamp (UTC)' : 'local timestamp', 'logged zone'], TZ.map(([c, e, s, z]) => [c, e, utc ? toUtc(s, z) : s, z]));
+  $('#tzMsg').className = 'feedback show ' + (utc ? 'ok' : 'no');
+  $('#tzMsg').innerHTML = utc ? 'In UTC, c1 started at 14:05 and c2 at 14:40 — c1 was first. Always state the time zone.' : 'Local times suggest c2 (09:40) started hours before c1 (15:05) — wrong!';
+}
+$('#tzRaw').onclick = () => drawTZ(false); $('#tzUtc').onclick = () => drawTZ(true); drawTZ(false);
+
+makeChecklist('#projCheck', 'sma-ch5-proj', ['Diffusion question', 'Cascade definition and parent links', 'Time window and time zone', 'Size, depth, breadth, speed', 'Link to communities or sentiment', 'Simulation: model and parameters', 'Sensitivity: p or θ ranges', 'Causal and ethical limits']);
+
+// ---------- quiz ----------
+renderQuiz('#quizBox', [
+  { q: 'Which is an example of information diffusion?', opts: ['A user edits their profile', 'A rumour reposted from user to user through follower networks', 'A database backup', 'A user deletes an account'], a: 1, why: 'Diffusion = content moving through connections over time.' },
+  { q: 'In the Independent Cascade model, how often can a user try to activate a neighbour?', opts: ['Every step', 'Exactly once', 'Until it succeeds', 'Never'], a: 1, why: 'A failed attempt is never repeated.' },
+  { q: 'Why do we run a diffusion simulation thousands of times?', opts: ['To make it slower', 'It is random — one run can be very different from the average', 'To change the network', 'Because θ changes'], a: 1, why: 'Report mean and spread, not one run.' },
+  { q: 'Which graph structure describes a simple repost cascade?', opts: ['A complete graph', 'A tree — one parent per post, directed from the seed', 'A cycle', 'A bipartite graph'], a: 1, why: 'Each repost has exactly one parent.' },
+  { q: 'A post was shared right after a TV report. Did the first sharer cause the cascade?', opts: ['Yes', 'No — the TV report is external exposure; order is not cause', 'Only if it went viral', 'Only on weekends'], a: 1, why: 'Both may react to the same news.' },
+  { q: 'Two cascades both have size 10. One has depth 1 and breadth 9. Its shape is…', opts: ['viral', 'broadcast', 'impossible', 'a DAG'], a: 1, why: 'Structural virality is low (1.80): everyone reposted the seed directly.' },
+  { q: 'Which model shows tipping points?', opts: ['Independent Cascade', 'Linear Threshold', 'Both equally', 'Neither'], a: 1, why: 'A small change of θ can decide between everyone and nobody.' },
+  { q: 'What do we usually observe on social media?', opts: ['Exposure', 'Adoption (reposts, replies)', 'Both completely', 'Neither'], a: 1, why: 'We see who reposted, not who scrolled past.' },
+  { q: 'Seed strategies differ little on the karate club. What do you report?', opts: ['Hide the result', 'The honest result with ranges — and test on your own network', 'Only the best run', 'Change p until they differ'], a: 1, why: 'Same network, same p, many runs, honest conclusion.' },
+  { q: 'A reply appears earlier than its parent. Most likely cause?', opts: ['Time travel', 'Mixed time zones or clock errors', 'A bot', 'Structural virality'], a: 1, why: 'Convert all timestamps to UTC and state the zone.' }
+]);
+
+addCopy();
+</script>
+</body></html>
