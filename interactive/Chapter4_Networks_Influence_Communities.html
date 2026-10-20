@@ -228,7 +228,7 @@ td.ok{background:var(--green-soft)}td.no{background:var(--red-soft)}
 .kicker2{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
 </style></head>
 <body data-chapter="4">
-<div class="topbar"><div class="topbar-inner"><a class="brand" href="index.html">Social Media Analytics</a><nav class="chapnav"><a href="Chapter1_Foundations.html" class="">Ch 1 · Foundations</a><a href="Chapter2_Preprocessing_Classical_Sentiment.html" class="">Ch 2 · Preprocessing & VADER</a><a href="Chapter3_Transformers_LLMs.html" class="">Ch 3 · Transformers & LLMs</a><a href="Chapter4_Networks_Influence_Communities.html" class="on">Ch 4 · Networks I</a><a href="Chapter5_Information_Diffusion.html" class="">Ch 5 · Diffusion</a><a href="Chapter6_Advanced_Topics_Project.html" class="">Ch 6 · Topics & Project</a></nav><span class="small" id="doneCount"></span><button class="iconbtn" id="themeBtn">☾ Dark</button></div><div class="progress" id="progress"></div></div>
+<div class="topbar"><div class="topbar-inner"><a class="brand" href="index.html">Social Media Analytics</a><nav class="chapnav"><a href="Chapter1_Foundations.html" class="">Ch 1 · Foundations</a><a href="Chapter2_Preprocessing_Classical_Sentiment.html" class="">Ch 2 · Preprocessing & VADER</a><a href="Chapter3_Transformers_LLMs.html" class="">Ch 3 · Transformers & LLMs</a><a href="Chapter4_Networks_Influence_Communities.html" class="on">Ch 4 · Networks I</a><a href="Chapter5_Information_Diffusion.html" class="">Ch 5 · Diffusion</a><a href="Chapter6_Gephi_Project.html" class="">Ch 6 · Gephi & Project</a></nav><span class="small" id="doneCount"></span><button class="iconbtn" id="themeBtn">☾ Dark</button></div><div class="progress" id="progress"></div></div>
 <header class="hero" id="top">
   <div class="kicker">Chapter 4 · Interactive study guide</div>
   <h1>Social Network Analytics I — Influence, Communities &amp; Homophily</h1>
@@ -469,7 +469,7 @@ nx.degree_assortativity_coefficient(G)              # -0.476</code></pre>
   <div class="callout"><b>A network picture is a hypothesis — the metrics are the evidence.</b></div>
   <h3>Gephi workflow</h3>
   <div class="flow"><div class="step on">Export<small>nx.write_gexf(G, "karate.gexf")</small></div><span class="arrow">→</span><div class="step">Import<small>GEXF, GraphML, CSV</small></div><span class="arrow">→</span><div class="step">Layout<small>ForceAtlas2 — save it</small></div><span class="arrow">→</span><div class="step">Measure<small>degree, betweenness, modularity</small></div><span class="arrow">→</span><div class="step">Style<small>size = degree · colour = community</small></div><span class="arrow">→</span><div class="step">Filter<small>isolates, weak edges</small></div></div>
-  <p class="small"><b>Python computes, Gephi shows — report both settings.</b> Gephi is not a database and not a replacement for reproducible code.</p>
+  <p class="small"><b>Python computes, Gephi shows — report both settings.</b> Gephi is not a database and not a replacement for reproducible code. This is only a first look: <a href="Chapter6_Gephi_Project.html">Chapter 6</a> is a step-by-step Gephi workshop with these same karate numbers.</p>
 </section>
 
 <section class="chap" id="ethics" data-title="Ethics, scale & the future">
@@ -513,7 +513,7 @@ nx.degree_assortativity_coefficient(G)              # -0.476</code></pre>
     <div class="t"><b>Challenge 1</b>Degree, betweenness, PageRank: top 5 — why do they differ?</div>
     <div class="t"><b>Challenge 2</b>Louvain at two resolutions; compare with the club split; find a bridge</div>
     <div class="t"><b>Challenge 3</b>Assortativity for two attributes + one limitation</div>
-    <div class="t"><b>Transfer</b>Repeat on ev_mentions.csv; export GEXF; save for Ch 5</div>
+    <div class="t"><b>Transfer</b>Repeat on ev_mentions.csv; export GEXF; save for Ch 5 and 6</div>
   </div>
   <div class="tabs" data-group="code" style="margin-top:14px"><button class="on" data-tab="a">1 · Build &amp; describe</button><button data-tab="b">2 · Communities &amp; homophily</button></div>
   <div class="tabpanel on" data-group="code" data-tab="a"><pre><code data-hl="py">import networkx as nx

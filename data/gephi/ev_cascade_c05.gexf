@@ -1,0 +1,504 @@
+<?xml version='1.0' encoding='utf-8'?>
+<gexf xmlns="http://www.gexf.net/1.2draft" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd" version="1.2">
+  <meta lastmodifieddate="2026-10-20">
+    <creator>NetworkX 3.6.1</creator>
+  </meta>
+  <graph defaultedgetype="directed" mode="dynamic" name="" timeformat="double">
+    <attributes mode="static" class="node">
+      <attribute id="0" title="type" type="string" />
+      <attribute id="1" title="sentiment" type="string" />
+      <attribute id="2" title="depth" type="long" />
+    </attributes>
+    <nodes>
+      <node id="p00400" label="p00400" start="0.0">
+        <attvalues>
+          <attvalue for="0" value="post" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="0" />
+        </attvalues>
+      </node>
+      <node id="p00401" label="p00401" start="47.8">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="neutral" />
+          <attvalue for="2" value="1" />
+        </attvalues>
+      </node>
+      <node id="p00402" label="p00402" start="104.2">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="neutral" />
+          <attvalue for="2" value="2" />
+        </attvalues>
+      </node>
+      <node id="p00403" label="p00403" start="142.7">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="neutral" />
+          <attvalue for="2" value="3" />
+        </attvalues>
+      </node>
+      <node id="p00404" label="p00404" start="340.8">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="4" />
+        </attvalues>
+      </node>
+      <node id="p00405" label="p00405" start="350.1">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="5" />
+        </attvalues>
+      </node>
+      <node id="p00406" label="p00406" start="425.9">
+        <attvalues>
+          <attvalue for="0" value="quote" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="6" />
+        </attvalues>
+      </node>
+      <node id="p00407" label="p00407" start="458.3">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="7" />
+        </attvalues>
+      </node>
+      <node id="p00408" label="p00408" start="545.5">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="8" />
+        </attvalues>
+      </node>
+      <node id="p00409" label="p00409" start="351.6">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="positive" />
+          <attvalue for="2" value="6" />
+        </attvalues>
+      </node>
+      <node id="p00410" label="p00410" start="365.8">
+        <attvalues>
+          <attvalue for="0" value="quote" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="7" />
+        </attvalues>
+      </node>
+      <node id="p00411" label="p00411" start="471.7">
+        <attvalues>
+          <attvalue for="0" value="quote" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="8" />
+        </attvalues>
+      </node>
+      <node id="p00412" label="p00412" start="368.9">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="8" />
+        </attvalues>
+      </node>
+      <node id="p00413" label="p00413" start="484.8">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="9" />
+        </attvalues>
+      </node>
+      <node id="p00414" label="p00414" start="604.4">
+        <attvalues>
+          <attvalue for="0" value="reply" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="10" />
+        </attvalues>
+      </node>
+      <node id="p00415" label="p00415" start="498.9">
+        <attvalues>
+          <attvalue for="0" value="quote" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="9" />
+        </attvalues>
+      </node>
+      <node id="p00416" label="p00416" start="632.4">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="10" />
+        </attvalues>
+      </node>
+      <node id="p00417" label="p00417" start="660.5">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="11" />
+        </attvalues>
+      </node>
+      <node id="p00418" label="p00418" start="682.0">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="neutral" />
+          <attvalue for="2" value="12" />
+        </attvalues>
+      </node>
+      <node id="p00419" label="p00419" start="765.0">
+        <attvalues>
+          <attvalue for="0" value="reply" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="13" />
+        </attvalues>
+      </node>
+      <node id="p00420" label="p00420" start="828.8">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="14" />
+        </attvalues>
+      </node>
+      <node id="p00421" label="p00421" start="843.8">
+        <attvalues>
+          <attvalue for="0" value="reply" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="15" />
+        </attvalues>
+      </node>
+      <node id="p00422" label="p00422" start="912.0">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="16" />
+        </attvalues>
+      </node>
+      <node id="p00423" label="p00423" start="800.0">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="14" />
+        </attvalues>
+      </node>
+      <node id="p00424" label="p00424" start="875.9">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="15" />
+        </attvalues>
+      </node>
+      <node id="p00425" label="p00425" start="1009.2">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="16" />
+        </attvalues>
+      </node>
+      <node id="p00426" label="p00426" start="1022.3">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="neutral" />
+          <attvalue for="2" value="17" />
+        </attvalues>
+      </node>
+      <node id="p00427" label="p00427" start="1095.9">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="18" />
+        </attvalues>
+      </node>
+      <node id="p00428" label="p00428" start="1114.0">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="19" />
+        </attvalues>
+      </node>
+      <node id="p00429" label="p00429" start="1199.2">
+        <attvalues>
+          <attvalue for="0" value="reply" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="20" />
+        </attvalues>
+      </node>
+      <node id="p00430" label="p00430" start="1082.0">
+        <attvalues>
+          <attvalue for="0" value="reply" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="18" />
+        </attvalues>
+      </node>
+      <node id="p00431" label="p00431" start="1104.1">
+        <attvalues>
+          <attvalue for="0" value="quote" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="19" />
+        </attvalues>
+      </node>
+      <node id="p00432" label="p00432" start="1126.2">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="20" />
+        </attvalues>
+      </node>
+      <node id="p00433" label="p00433" start="1321.9">
+        <attvalues>
+          <attvalue for="0" value="reply" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="21" />
+        </attvalues>
+      </node>
+      <node id="p00434" label="p00434" start="1334.5">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="22" />
+        </attvalues>
+      </node>
+      <node id="p00435" label="p00435" start="1341.5">
+        <attvalues>
+          <attvalue for="0" value="reply" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="23" />
+        </attvalues>
+      </node>
+      <node id="p00436" label="p00436" start="1441.4">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="24" />
+        </attvalues>
+      </node>
+      <node id="p00437" label="p00437" start="1562.7">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="25" />
+        </attvalues>
+      </node>
+      <node id="p00438" label="p00438" start="1524.5">
+        <attvalues>
+          <attvalue for="0" value="reply" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="25" />
+        </attvalues>
+      </node>
+      <node id="p00439" label="p00439" start="1525.0">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="26" />
+        </attvalues>
+      </node>
+      <node id="p00440" label="p00440" start="1708.2">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="26" />
+        </attvalues>
+      </node>
+      <node id="p00441" label="p00441" start="1713.5">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="27" />
+        </attvalues>
+      </node>
+      <node id="p00442" label="p00442" start="1777.8">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="27" />
+        </attvalues>
+      </node>
+      <node id="p00443" label="p00443" start="1726.5">
+        <attvalues>
+          <attvalue for="0" value="quote" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="27" />
+        </attvalues>
+      </node>
+      <node id="p00444" label="p00444" start="1790.7">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="28" />
+        </attvalues>
+      </node>
+      <node id="p00445" label="p00445" start="1801.8">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="28" />
+        </attvalues>
+      </node>
+      <node id="p00446" label="p00446" start="1850.2">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="29" />
+        </attvalues>
+      </node>
+      <node id="p00447" label="p00447" start="1961.9">
+        <attvalues>
+          <attvalue for="0" value="reply" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="30" />
+        </attvalues>
+      </node>
+      <node id="p00448" label="p00448" start="1889.3">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="30" />
+        </attvalues>
+      </node>
+      <node id="p00449" label="p00449" start="2003.2">
+        <attvalues>
+          <attvalue for="0" value="reply" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="31" />
+        </attvalues>
+      </node>
+      <node id="p00450" label="p00450" start="2023.9">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="32" />
+        </attvalues>
+      </node>
+      <node id="p00451" label="p00451" start="2090.2">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="33" />
+        </attvalues>
+      </node>
+      <node id="p00452" label="p00452" start="2109.8">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="34" />
+        </attvalues>
+      </node>
+      <node id="p00453" label="p00453" start="2182.2">
+        <attvalues>
+          <attvalue for="0" value="quote" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="34" />
+        </attvalues>
+      </node>
+      <node id="p00454" label="p00454" start="2215.0">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="35" />
+        </attvalues>
+      </node>
+      <node id="p00455" label="p00455" start="2244.4">
+        <attvalues>
+          <attvalue for="0" value="reply" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="36" />
+        </attvalues>
+      </node>
+      <node id="p00456" label="p00456" start="2228.0">
+        <attvalues>
+          <attvalue for="0" value="reply" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="36" />
+        </attvalues>
+      </node>
+      <node id="p00457" label="p00457" start="2257.0">
+        <attvalues>
+          <attvalue for="0" value="reply" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="36" />
+        </attvalues>
+      </node>
+      <node id="p00458" label="p00458" start="2293.7">
+        <attvalues>
+          <attvalue for="0" value="quote" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="37" />
+        </attvalues>
+      </node>
+      <node id="p00459" label="p00459" start="2367.2">
+        <attvalues>
+          <attvalue for="0" value="reply" />
+          <attvalue for="1" value="neutral" />
+          <attvalue for="2" value="38" />
+        </attvalues>
+      </node>
+      <node id="p00460" label="p00460" start="2310.9">
+        <attvalues>
+          <attvalue for="0" value="repost" />
+          <attvalue for="1" value="negative" />
+          <attvalue for="2" value="37" />
+        </attvalues>
+      </node>
+    </nodes>
+    <edges>
+      <edge source="p00400" target="p00401" id="0" />
+      <edge source="p00401" target="p00402" id="1" />
+      <edge source="p00402" target="p00403" id="2" />
+      <edge source="p00403" target="p00404" id="3" />
+      <edge source="p00404" target="p00405" id="4" />
+      <edge source="p00405" target="p00406" id="5" />
+      <edge source="p00405" target="p00409" id="6" />
+      <edge source="p00406" target="p00407" id="7" />
+      <edge source="p00407" target="p00408" id="8" />
+      <edge source="p00409" target="p00410" id="9" />
+      <edge source="p00410" target="p00411" id="10" />
+      <edge source="p00410" target="p00412" id="11" />
+      <edge source="p00411" target="p00415" id="12" />
+      <edge source="p00412" target="p00413" id="13" />
+      <edge source="p00413" target="p00414" id="14" />
+      <edge source="p00413" target="p00416" id="15" />
+      <edge source="p00414" target="p00417" id="16" />
+      <edge source="p00417" target="p00418" id="17" />
+      <edge source="p00418" target="p00419" id="18" />
+      <edge source="p00419" target="p00420" id="19" />
+      <edge source="p00419" target="p00423" id="20" />
+      <edge source="p00420" target="p00421" id="21" />
+      <edge source="p00421" target="p00422" id="22" />
+      <edge source="p00423" target="p00424" id="23" />
+      <edge source="p00424" target="p00425" id="24" />
+      <edge source="p00425" target="p00426" id="25" />
+      <edge source="p00426" target="p00427" id="26" />
+      <edge source="p00426" target="p00430" id="27" />
+      <edge source="p00427" target="p00428" id="28" />
+      <edge source="p00428" target="p00429" id="29" />
+      <edge source="p00430" target="p00431" id="30" />
+      <edge source="p00431" target="p00432" id="31" />
+      <edge source="p00432" target="p00433" id="32" />
+      <edge source="p00433" target="p00434" id="33" />
+      <edge source="p00434" target="p00435" id="34" />
+      <edge source="p00435" target="p00436" id="35" />
+      <edge source="p00436" target="p00437" id="36" />
+      <edge source="p00436" target="p00438" id="37" />
+      <edge source="p00437" target="p00440" id="38" />
+      <edge source="p00438" target="p00439" id="39" />
+      <edge source="p00440" target="p00441" id="40" />
+      <edge source="p00440" target="p00442" id="41" />
+      <edge source="p00440" target="p00443" id="42" />
+      <edge source="p00442" target="p00445" id="43" />
+      <edge source="p00443" target="p00444" id="44" />
+      <edge source="p00445" target="p00446" id="45" />
+      <edge source="p00446" target="p00447" id="46" />
+      <edge source="p00446" target="p00448" id="47" />
+      <edge source="p00448" target="p00449" id="48" />
+      <edge source="p00449" target="p00450" id="49" />
+      <edge source="p00450" target="p00451" id="50" />
+      <edge source="p00451" target="p00452" id="51" />
+      <edge source="p00451" target="p00453" id="52" />
+      <edge source="p00452" target="p00454" id="53" />
+      <edge source="p00454" target="p00455" id="54" />
+      <edge source="p00454" target="p00456" id="55" />
+      <edge source="p00454" target="p00457" id="56" />
+      <edge source="p00456" target="p00460" id="57" />
+      <edge source="p00457" target="p00458" id="58" />
+      <edge source="p00458" target="p00459" id="59" />
+    </edges>
+  </graph>
+</gexf>
