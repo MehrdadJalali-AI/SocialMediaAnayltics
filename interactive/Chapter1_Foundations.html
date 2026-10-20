@@ -228,7 +228,7 @@ td.ok{background:var(--green-soft)}td.no{background:var(--red-soft)}
 .kicker2{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
 </style></head>
 <body data-chapter="1">
-<div class="topbar"><div class="topbar-inner"><a class="brand" href="index.html">Social Media Analytics</a><nav class="chapnav"><a href="Chapter1_Foundations.html" class="on">Ch 1 · Foundations</a><a href="Chapter2_Preprocessing_Classical_Sentiment.html" class="">Ch 2 · Preprocessing & VADER</a><a href="Chapter3_Transformers_LLMs.html" class="">Ch 3 · Transformers & LLMs</a><a href="Chapter4_Networks_Influence_Communities.html" class="">Ch 4 · Networks I</a><a href="Chapter5_Information_Diffusion.html" class="">Ch 5 · Diffusion</a><a href="Chapter6_Advanced_Topics_Project.html" class="">Ch 6 · Topics & Project</a></nav><span class="small" id="doneCount"></span><button class="iconbtn" id="themeBtn">☾ Dark</button></div><div class="progress" id="progress"></div></div>
+<div class="topbar"><div class="topbar-inner"><a class="brand" href="index.html">Social Media Analytics</a><nav class="chapnav"><a href="Chapter1_Foundations.html" class="on">Ch 1 · Foundations</a><a href="Chapter2_Preprocessing_Classical_Sentiment.html" class="">Ch 2 · Preprocessing & VADER</a><a href="Chapter3_Transformers_LLMs.html" class="">Ch 3 · Transformers & LLMs</a><a href="Chapter4_Networks_Influence_Communities.html" class="">Ch 4 · Networks I</a><a href="Chapter5_Information_Diffusion.html" class="">Ch 5 · Diffusion</a><a href="Chapter6_Gephi_Project.html" class="">Ch 6 · Gephi & Project</a></nav><span class="small" id="doneCount"></span><button class="iconbtn" id="themeBtn">☾ Dark</button></div><div class="progress" id="progress"></div></div>
 <header class="hero" id="top">
   <div class="kicker">Chapter 1 · Interactive study guide</div>
   <h1>Foundations of Social Media Analytics &amp; Sentiment Analysis</h1>
@@ -340,7 +340,7 @@ td.ok{background:var(--green-soft)}td.no{background:var(--red-soft)}
     <tr><td>Example fields</td><td>text, hashtags, emojis, URLs</td><td>created_at, lang, platform, user_id</td><td>likes, shares, replies, views</td><td>follows, mentions, replies, reposts</td></tr>
     <tr><td>Typical pandas type</td><td><code>object</code> (string)</td><td><code>datetime64</code>, <code>category</code></td><td><code>int64</code> (counts)</td><td>edge list: source → target</td></tr>
     <tr><td>Questions it answers</td><td>What do people say and feel?</td><td>When, where, which language?</td><td>Which posts resonate?</td><td>Who influences whom?</td></tr>
-    <tr><td>Main chapters</td><td>2–3</td><td>1 (profiling)</td><td>1 &amp; 6</td><td>4–5</td></tr>
+    <tr><td>Main chapters</td><td>2–3</td><td>1 (profiling)</td><td>1 &amp; 5</td><td>4–6</td></tr>
   </table></div>
   <div class="widget"><div class="wtitle">Sort the fields into the four kinds of data</div><div id="sortTypes"></div></div>
 </section>
@@ -763,7 +763,7 @@ const COURSE = [
   ['3', 'Transformers: Sentiment, Emotion & Stance', 'Pre-trained models & LLMs', 'Apply transformers and LLMs to sentiment, emotion and stance — and compare them honestly with the baselines.'],
   ['4', 'Social Network Analytics I', 'Influence, communities, homophily', 'Identify influencers, communities and homophily with centrality, community detection and assortativity.'],
   ['5', 'Social Network Analytics II', 'Information diffusion & cascades', 'Analyse and simulate diffusion: cascades, Independent Cascade and Linear Threshold models.'],
-  ['6', 'Advanced Topics & Project Kick-off', 'Applications & project', 'Design a responsible end-to-end study — kick off, discuss and refine your group project.'],
+  ['6', 'Gephi Workshop & Project Kick-off', 'Network visualisation · project', 'Visualise the networks and cascades from Chapters 4–5 in Gephi, step by step — then kick off, discuss and refine your group project.'],
   ['★', 'Examination Project', 'End-to-end, documented study', 'Combine the methods in one reproducible, responsible study: oral presentation + written documentation (50%).']
 ];
 $('#courseFlow').innerHTML = COURSE.map((c, i) => `<div class="step ${i === 0 ? 'on' : ''}" data-i="${i}"><b>${c[0] === '★' ? 'FINAL' : 'Ch ' + c[0]}</b><br>${c[1]}<small>${c[2]}</small></div>`).join('');
@@ -778,7 +778,7 @@ const PIPE = [
   ['Preprocess & baseline', 'Ch 2', 'Clean deliberately and build simple, transparent baselines: VADER and TF-IDF.'],
   ['Transformers', 'Ch 3', 'Sentiment, emotion and stance in context. If a transformer errs, revisit preprocessing and labels — don’t just accept it.'],
   ['Analyse networks', 'Ch 4–5', 'Who connects with whom, who influences others, and how information spreads.'],
-  ['Insight & project', 'Ch 6', 'Turn the analysis into a defensible insight — posts → evidence.']
+  ['Visualise & project', 'Ch 6', 'Make networks and cascades visible in Gephi — with captions and matching numbers — and turn the analysis into a project: posts → evidence.']
 ];
 $('#pipeFlow').innerHTML = PIPE.map((p, i) => (i ? '<span class="arrow">→</span>' : '') + `<div class="step ${i === 0 ? 'on' : ''}" data-i="${i}">${p[0]}<small>${p[1]}</small></div>`).join('');
 $$('#pipeFlow .step').forEach(s => s.onclick = () => { $$('#pipeFlow .step').forEach(x => x.classList.toggle('on', x === s)); $('#pipeMsg').textContent = PIPE[+s.dataset.i][2]; });

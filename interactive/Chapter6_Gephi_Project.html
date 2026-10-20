@@ -1,0 +1,1261 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ch6 · Gephi & Project Kick-off</title>
+<style>:root{
+  --bg:#f7f5f2; --surface:#ffffff; --surface2:#f1eee9; --ink:#1f1d1a; --muted:#5f5a53; --line:#e3ded6;
+  --accent:#c2255c; --accent-soft:#fce4ec; --blue:#1f5fa8; --blue-soft:#e6eef8; --green:#21794f; --green-soft:#e2f2ea;
+  --amber:#9a5a0f; --amber-soft:#fbf0de; --purple:#5a43a6; --purple-soft:#ece8f8; --red:#b42318; --red-soft:#fde8e6;
+  --code-bg:#1e1f24; --code-ink:#e8e6e3; --shadow:0 1px 2px rgba(0,0,0,.05),0 4px 16px rgba(0,0,0,.05);
+  --radius:14px; --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#141312; --surface:#1d1c1a; --surface2:#262421; --ink:#eeebe6; --muted:#a8a29a; --line:#35322e;
+  --accent:#f06595; --accent-soft:#3a1a26; --blue:#7fb0ec; --blue-soft:#1a2738; --green:#6fcf9f; --green-soft:#173027;
+  --amber:#e8b062; --amber-soft:#33281a; --purple:#b3a3f0; --purple-soft:#26213a; --red:#f2877d; --red-soft:#3a1d1a;
+  --code-bg:#0f0f11; --shadow:0 1px 2px rgba(0,0,0,.4);
+}}
+:root[data-theme="dark"]{
+  --bg:#141312; --surface:#1d1c1a; --surface2:#262421; --ink:#eeebe6; --muted:#a8a29a; --line:#35322e;
+  --accent:#f06595; --accent-soft:#3a1a26; --blue:#7fb0ec; --blue-soft:#1a2738; --green:#6fcf9f; --green-soft:#173027;
+  --amber:#e8b062; --amber-soft:#33281a; --purple:#b3a3f0; --purple-soft:#26213a; --red:#f2877d; --red-soft:#3a1d1a;
+  --code-bg:#0f0f11; --shadow:0 1px 2px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+code{font-family:var(--mono);font-size:.88em;background:var(--surface2);padding:.1em .35em;border-radius:5px}
+h1,h2,h3,h4{line-height:1.25;margin:0 0 .5em}
+h2{font-size:1.65rem;letter-spacing:-.01em}
+h3{font-size:1.15rem}
+p{margin:0 0 1em}
+.topbar{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topbar-inner{max-width:1240px;margin:0 auto;display:flex;align-items:center;gap:16px;padding:10px 20px}
+.brand{font-weight:700;color:var(--accent);text-decoration:none;white-space:nowrap}
+.chapnav{display:flex;gap:6px;overflow-x:auto;flex:1}
+.chapnav a{padding:6px 12px;border-radius:999px;text-decoration:none;color:var(--muted);font-size:.9rem;white-space:nowrap;border:1px solid transparent}
+.chapnav a.on{background:var(--accent-soft);color:var(--accent);border-color:color-mix(in srgb,var(--accent) 30%,transparent);font-weight:600}
+.iconbtn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 12px;cursor:pointer;font-size:.85rem}
+.progress{height:3px;background:var(--accent);width:0;transition:width .1s}
+.hero{max-width:1240px;margin:0 auto;padding:48px 20px 24px}
+.hero .kicker{color:var(--accent);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.8rem}
+.hero h1{font-size:clamp(1.9rem,4vw,2.8rem);letter-spacing:-.02em;margin:.2em 0 .35em}
+.hero p.lead{font-size:1.12rem;color:var(--muted);max-width:760px}
+.objectives{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:20px}
+.objectives div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:.93rem}
+.objectives b{display:block;color:var(--accent);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase}
+.layout{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:230px minmax(0,1fr);gap:32px;padding:0 20px 80px}
+.toc{position:sticky;top:76px;align-self:start;max-height:calc(100vh - 96px);overflow:auto;font-size:.9rem}
+.toc h4{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.toc a{display:flex;gap:8px;align-items:center;padding:5px 8px;border-radius:8px;color:var(--muted);text-decoration:none;border-left:2px solid transparent}
+.toc a.active{color:var(--ink);background:var(--surface);border-left-color:var(--accent)}
+.toc a .dot{width:8px;height:8px;border-radius:50%;border:1.5px solid var(--line);flex:none}
+.toc a.done .dot{background:var(--green);border-color:var(--green)}
+section.chap{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:28px;margin-bottom:24px;box-shadow:var(--shadow)}
+section.chap > .sec-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:8px}
+.secnum{color:var(--accent);font-weight:700;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase}
+.donebtn{border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:999px;padding:4px 10px;font-size:.8rem;cursor:pointer;white-space:nowrap}
+.donebtn.on{background:var(--green-soft);color:var(--green);border-color:var(--green)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.card{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:16px}
+.card h4{margin-bottom:.3em}
+.card p:last-child{margin-bottom:0}
+.callout{border-left:4px solid var(--accent);background:var(--accent-soft);padding:12px 16px;border-radius:0 10px 10px 0;margin:16px 0}
+.callout.green{border-color:var(--green);background:var(--green-soft)}
+.callout.blue{border-color:var(--blue);background:var(--blue-soft)}
+.callout.amber{border-color:var(--amber);background:var(--amber-soft)}
+.callout b:first-child{display:block;margin-bottom:2px}
+.analogy{display:flex;gap:12px;background:var(--purple-soft);border-radius:12px;padding:14px 16px;margin:16px 0}
+.analogy .ico{font-size:1.5rem;line-height:1}
+.tag{display:inline-block;padding:2px 9px;border-radius:999px;font-size:.78rem;font-weight:600;background:var(--surface2);border:1px solid var(--line);color:var(--muted)}
+.tag.blue{background:var(--blue-soft);color:var(--blue);border-color:transparent}
+.tag.green{background:var(--green-soft);color:var(--green);border-color:transparent}
+.tag.amber{background:var(--amber-soft);color:var(--amber);border-color:transparent}
+.tag.red{background:var(--red-soft);color:var(--red);border-color:transparent}
+.tag.purple{background:var(--purple-soft);color:var(--purple);border-color:transparent}
+.widget{border:1px dashed color-mix(in srgb,var(--accent) 45%,var(--line));border-radius:12px;padding:18px;margin:18px 0;background:var(--bg)}
+.widget > .wtitle{display:flex;align-items:center;gap:8px;font-weight:700;margin-bottom:10px}
+.widget > .wtitle::before{content:"▶ TRY IT";font-size:.7rem;letter-spacing:.08em;background:var(--accent);color:#fff;padding:2px 8px;border-radius:999px}
+.btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:7px 14px;border-radius:9px;cursor:pointer;font:inherit;font-size:.92rem}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.sel{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);font-weight:600}
+.btnrow{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+input[type=text],input[type=number],select,textarea{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:7px 10px}
+textarea{font-family:var(--mono);font-size:.85rem;width:100%}
+label{font-size:.9rem}
+input[type=range]{accent-color:var(--accent);width:100%}
+.tablewrap{overflow-x:auto;margin:10px 0}
+table{border-collapse:collapse;width:100%;font-size:.88rem}
+th,td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--surface2);font-weight:600;white-space:nowrap}
+td.bad,span.bad{background:var(--red-soft);color:var(--red)}
+td.good{background:var(--green-soft);color:var(--green)}
+td.warn{background:var(--amber-soft);color:var(--amber)}
+tr.hl td{background:var(--accent-soft)}
+td[contenteditable]{outline:none;cursor:text}
+td[contenteditable]:focus{box-shadow:inset 0 0 0 2px var(--accent)}
+pre{background:var(--code-bg);color:var(--code-ink);border-radius:10px;padding:14px 16px;overflow:auto;font:13px/1.55 var(--mono);position:relative;margin:10px 0}
+pre code{background:none;padding:0;color:inherit;font-size:inherit}
+pre .copy{position:absolute;top:8px;right:8px;font-size:.72rem;background:#ffffff1a;color:#ddd;border:1px solid #ffffff30;border-radius:6px;padding:2px 8px;cursor:pointer}
+.c-k{color:#f4a261}.c-s{color:#9ad59a}.c-c{color:#8b8f98;font-style:italic}.c-n{color:#82b8ff}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:14px;overflow-x:auto}
+.tabs button{border:0;background:none;color:var(--muted);padding:9px 14px;cursor:pointer;font:inherit;font-size:.93rem;border-bottom:2px solid transparent;white-space:nowrap}
+.tabs button.on{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+.tabpanel{display:none}.tabpanel.on{display:block}
+details.reveal{background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:8px 0}
+details.reveal summary{cursor:pointer;font-weight:600}
+.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.links a{display:block;text-decoration:none;color:var(--ink);background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;transition:border-color .15s,transform .15s}
+.links a:hover{border-color:var(--accent);transform:translateY(-1px)}
+.links a b{display:block;color:var(--accent);font-size:.95rem}
+.links a span{font-size:.84rem;color:var(--muted)}
+.quiz .q{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:10px 0}
+.quiz .q p{font-weight:600;margin-bottom:8px}
+.quiz .opts{display:grid;gap:6px}
+.quiz .opts button{text-align:left;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:9px;padding:8px 12px;cursor:pointer;font:inherit;font-size:.93rem}
+.quiz .opts button.right{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.quiz .opts button.wrong{background:var(--red-soft);border-color:var(--red);color:var(--red)}
+.quiz .why{display:none;margin-top:8px;font-size:.9rem;color:var(--muted)}
+.quiz .q.answered .why{display:block}
+.score{font-weight:700;color:var(--accent)}
+.flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;margin:12px 0}
+.flow .step{flex:1 1 130px;background:var(--surface2);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer;transition:all .15s;position:relative}
+.flow .step small{display:block;color:var(--muted);font-size:.8rem}
+.flow .step.on{border-color:var(--accent);background:var(--accent-soft)}
+.flow .arrow{align-self:center;color:var(--muted)}
+.feedback{margin-top:10px;padding:10px 12px;border-radius:9px;font-size:.92rem;display:none}
+.feedback.show{display:block}
+.feedback.ok{background:var(--green-soft);color:var(--green)}
+.feedback.no{background:var(--red-soft);color:var(--red)}
+.feedback.info{background:var(--blue-soft);color:var(--blue)}
+.meter{height:10px;background:var(--surface2);border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+.meter > div{height:100%;background:var(--green);transition:width .3s}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:10px 0}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.kpi .v{font-size:1.5rem;font-weight:700}
+.kpi .l{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.sorter{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.bucket{min-height:110px;border:2px dashed var(--line);border-radius:10px;padding:8px}
+.bucket h5{margin:0 0 6px;font-size:.85rem}
+.bucket.over{border-color:var(--accent);background:var(--accent-soft)}
+.chip{display:inline-block;margin:3px;padding:5px 10px;border-radius:8px;background:var(--surface);border:1px solid var(--line);font-size:.85rem;cursor:grab;user-select:none}
+.chip.sel{outline:2px solid var(--accent)}
+.chip.right{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.chip.wrong{background:var(--red-soft);border-color:var(--red);color:var(--red)}
+.pool{min-height:50px;padding:8px;border-radius:10px;background:var(--surface2);margin-bottom:10px}
+.small{font-size:.86rem;color:var(--muted)}
+.foot{max-width:1240px;margin:0 auto;padding:20px;color:var(--muted);font-size:.85rem;text-align:center}
+svg text{font-family:inherit}
+@media (max-width:900px){
+  .layout{grid-template-columns:minmax(0,1fr)}
+  .toc{display:none}
+  section.chap{padding:18px}
+  .hero{padding:28px 16px 16px}
+  .layout{padding:0 16px 60px}
+  .topbar-inner{padding:8px 16px}
+}
+@media print{.topbar,.toc,.widget,.donebtn{display:none}.layout{display:block}}
+@media (max-width:700px){#doneCount{display:none}.brand{display:none}}
+
+
+/* ---------- additions for the Social Media Analytics guides ---------- */
+.post{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;max-width:560px;box-shadow:var(--shadow)}
+.post .ph{display:flex;gap:10px;align-items:center}
+.post .av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--purple));flex:none}
+.post .nm{font-weight:700}.post .meta{font-size:.82rem;color:var(--muted)}
+.post .tx{margin:10px 0;font-size:1.02rem}
+.post .eng{display:flex;gap:18px;font-size:.88rem;color:var(--muted)}
+.hot{cursor:pointer;border-radius:6px;padding:1px 3px;transition:background .15s,box-shadow .15s}
+.hot:hover{background:var(--accent-soft)}
+.hot.on{background:var(--accent-soft);box-shadow:0 0 0 2px var(--accent)}
+.zone{cursor:pointer;border-radius:10px;transition:box-shadow .15s}
+.zone.on{box-shadow:0 0 0 2px var(--accent)}
+.flipgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.flip{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;min-height:92px;transition:border-color .15s}
+.flip:hover{border-color:var(--accent)}
+.flip .b{display:none;color:var(--muted);font-size:.9rem;margin-top:6px}
+.flip.open .b{display:block}
+.flip .h{font-weight:700}
+.flip .h::after{content:" ＋";color:var(--accent);font-weight:400}
+.flip.open .h::after{content:" −"}
+.gsvg{width:100%;height:auto;display:block;background:var(--surface);border:1px solid var(--line);border-radius:12px;touch-action:manipulation}
+.gsvg line{stroke:var(--line);stroke-width:1.4}
+.gsvg line.hl{stroke:var(--accent);stroke-width:2.6}
+.gsvg line.cross{stroke:var(--red);stroke-width:2.2}
+.gsvg line.fail{stroke:var(--red);stroke-dasharray:4 3}
+.gsvg circle{stroke:var(--surface);stroke-width:1.5;cursor:pointer;transition:r .2s}
+.gsvg circle.sel{stroke:var(--ink);stroke-width:3}
+.gsvg text{font-size:10px;fill:var(--ink);pointer-events:none;text-anchor:middle;dominant-baseline:central}
+.gsvg text.on{fill:#fff;font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:.85rem;color:var(--muted);margin:6px 0}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.bars{display:grid;gap:6px;margin:8px 0}
+.bars .row{display:grid;grid-template-columns:minmax(90px,170px) 1fr 64px;gap:8px;align-items:center;font-size:.88rem}
+.bars .track{background:var(--surface2);border-radius:6px;height:18px;overflow:hidden;border:1px solid var(--line)}
+.bars .fill{height:100%;background:var(--accent);transition:width .35s}
+.bars .fill.g{background:var(--green)}.bars .fill.b{background:var(--blue)}.bars .fill.a{background:var(--amber)}.bars .fill.p{background:var(--purple)}.bars .fill.r{background:var(--red)}.bars .fill.m{background:var(--muted)}
+.bars .val{font-variant-numeric:tabular-nums;text-align:right}
+.mono{font-family:var(--mono);font-size:.86rem}
+.out{background:var(--surface2);border:1px solid var(--line);border-radius:9px;padding:9px 12px;font-family:var(--mono);font-size:.85rem;white-space:pre-wrap;word-break:break-word;margin:6px 0}
+.pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:.8rem;font-weight:600}
+.pill.pos{background:var(--green-soft);color:var(--green)}.pill.neg{background:var(--red-soft);color:var(--red)}.pill.neu{background:var(--surface2);color:var(--muted);border:1px solid var(--line)}.pill.mix{background:var(--amber-soft);color:var(--amber)}
+.tok{display:inline-block;margin:2px;padding:2px 7px;border-radius:7px;background:var(--surface2);border:1px solid var(--line);font-family:var(--mono);font-size:.82rem}
+.tok.pos{background:var(--green-soft);border-color:var(--green);color:var(--green)}
+.tok.neg{background:var(--red-soft);border-color:var(--red);color:var(--red)}
+.tok.gone{text-decoration:line-through;opacity:.55;background:var(--red-soft)}
+.tok.keep{background:var(--blue-soft);border-color:var(--blue);color:var(--blue)}
+.gauge{position:relative;height:16px;border-radius:99px;background:linear-gradient(90deg,var(--red),var(--surface2) 50%,var(--green));border:1px solid var(--line);margin:22px 0 8px}
+.gauge .needle{position:absolute;top:-6px;width:4px;height:28px;background:var(--ink);border-radius:2px;transition:left .3s;transform:translateX(-2px)}
+.gauge .lab{position:absolute;top:-22px;transform:translateX(-50%);font-weight:700;font-size:.85rem;white-space:nowrap;transition:left .3s}
+.check{display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px dashed var(--line)}
+.check input{margin-top:5px;accent-color:var(--accent)}
+.canvas8{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.canvas8 label{display:block;background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:10px}
+.canvas8 label b{display:block;font-size:.8rem;color:var(--accent);letter-spacing:.05em;text-transform:uppercase}
+.canvas8 textarea{font-family:inherit;font-size:.9rem;min-height:70px;margin-top:6px}
+.matrix input{width:64px;text-align:center}
+.cm td{text-align:center;font-variant-numeric:tabular-nums}
+.timeline{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.timeline .t{flex:1 0 120px;background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:10px;font-size:.88rem}
+.timeline .t b{display:block;color:var(--accent);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase}
+.timeline .t.now{border-color:var(--accent);background:var(--accent-soft)}
+select.lbl{font-size:.85rem;padding:4px 6px}
+td.ok{background:var(--green-soft)}td.no{background:var(--red-soft)}
+.big{font-size:2rem;font-weight:800;letter-spacing:-.02em}
+.dash{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:14px}
+.kicker2{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.ws{display:grid;grid-template-columns:1fr 2fr 1fr;gap:8px}
+.wsz{background:var(--surface2);border:1px solid var(--line);padding:10px 12px;min-height:84px;font-size:.9rem}
+.wsz b{display:block;margin-bottom:4px}
+.pg{display:grid;grid-template-columns:230px minmax(0,1fr);gap:16px}
+.pgc label{display:block;margin-bottom:9px}.pgc select{width:100%;margin-top:2px}
+@media (max-width:760px){.pg{grid-template-columns:minmax(0,1fr)}.ws{grid-template-columns:minmax(0,1fr)}.ws .wsz{grid-row:auto!important;grid-column:auto!important}}
+</style></head>
+<body data-chapter="6g">
+<div class="topbar"><div class="topbar-inner"><a class="brand" href="index.html">Social Media Analytics</a><nav class="chapnav"><a href="Chapter1_Foundations.html" class="">Ch 1 · Foundations</a><a href="Chapter2_Preprocessing_Classical_Sentiment.html" class="">Ch 2 · Preprocessing & VADER</a><a href="Chapter3_Transformers_LLMs.html" class="">Ch 3 · Transformers & LLMs</a><a href="Chapter4_Networks_Influence_Communities.html" class="">Ch 4 · Networks I</a><a href="Chapter5_Information_Diffusion.html" class="">Ch 5 · Diffusion</a><a href="Chapter6_Gephi_Project.html" class="on">Ch 6 · Gephi & Project</a></nav><span class="small" id="doneCount"></span><button class="iconbtn" id="themeBtn">☾ Dark</button></div><div class="progress" id="progress"></div></div>
+<header class="hero" id="top">
+  <div class="kicker">Chapter 6 · Interactive study guide</div>
+  <h1>Visual Network Analytics with Gephi &amp; Project Kick-off</h1>
+  <p class="lead">The last chapter has two parts. <b>Part A–B</b>, the hands-on part: we open the networks and cascades from Chapters 4 and 5 in <b>Gephi</b> and turn them into figures you can trust and publish — step by step. <b>Part C</b>: your examination project. <b>A network picture is evidence only when the numbers and the settings behind it are reported.</b></p>
+  <div class="objectives">
+    <div><b>Part A · Gephi basics</b>Install Gephi and get any graph into it — by hand, from CSV, or from Python as GEXF</div>
+    <div><b>Part A · Gephi basics</b>Re-run Chapter 4 statistics in Gephi — and explain why numbers sometimes differ</div>
+    <div><b>Part B · Visualisation</b>Choose a layout and read it honestly; encode metrics with colour, size and labels</div>
+    <div><b>Part B · Visualisation</b>Filter, replay a cascade on the Timeline, export a captioned figure</div>
+    <div><b>Part C · Project</b>Formulate an answerable research question; plan data, methods and ethics</div>
+  </div>
+  <p class="small" style="margin-top:12px">🧪 This page contains a <b>mini-Gephi playground</b> with the real karate-club numbers from Chapter 4. It shows what each Gephi setting does — the lab itself happens in Gephi. 💾 Everything you type into the planning tools is saved in your browser only and can be downloaded as a text file.</p>
+</header>
+<div class="layout">
+<aside class="toc"><h4>In this chapter</h4><nav id="tocList"></nav></aside>
+<main>
+
+<section class="chap" id="warmup" data-title="Warm-up: two pictures">
+  <div class="sec-head"><div><div class="secnum">Section 1 · Part A</div><h2>Warm-up: same 34 people, same 78 ties — which picture goes into your report?</h2></div></div>
+  <p>Picture A uses random positions, one colour and one size. Picture B uses a force-directed layout, colours the Louvain communities and sizes nodes by PageRank. Name two things B shows that A hides — and one thing B could hide.</p>
+  <div class="grid2">
+    <div><span class="tag">A · as imported</span><svg class="gsvg" id="wuA" viewBox="0 0 600 420"></svg></div>
+    <div><span class="tag purple">B · after Gephi</span><svg class="gsvg" id="wuB" viewBox="0 0 600 420"></svg></div>
+  </div>
+  <details class="reveal"><summary>Show possible answers</summary><p class="small"><b>B shows</b> four groups, the hubs (33 and 0) and the bridges between the groups. <b>B can hide</b> that the colours come from one algorithm with one setting (Louvain, resolution 1.0) and that the layout is one run of a simulation — another run looks different. That is why every figure needs its numbers and settings.</p></details>
+  <div class="timeline" style="margin-top:12px"><div class="t"><b>From Ch 4–5</b>karate and EV graphs as GEXF · centralities, communities, cascades</div><div class="t now"><b>Ch 6 — you build</b>a Gephi workflow · publication-ready figures · an animated cascade</div><div class="t"><b>Your project gets</b>one strong network figure · a proposal and first feedback</div></div>
+</section>
+
+<section class="chap" id="whygephi" data-title="What is Gephi? Installing">
+  <div class="sec-head"><div><div class="secnum">Section 2</div><h2>What is Gephi — and how do you install it?</h2></div></div>
+  <p><b>Gephi</b> is a free, open-source desktop tool to explore, analyse and visualise networks. It is used in social network analysis, research and data journalism, fraud and security, marketing, and biology (e.g. the protein networks from Chapter 4).</p>
+  <div class="grid2">
+    <div class="card"><h4>🖱 Interactive</h4><p class="small">drag, zoom, select — every change is visible at once</p></div>
+    <div class="card"><h4>📊 Built-in statistics</h4><p class="small">degree, PageRank, modularity, paths</p></div>
+    <div class="card"><h4>🕸 Large graphs</h4><p class="small">tens of thousands of nodes on a normal laptop</p></div>
+    <div class="card"><h4>⬇ Export</h4><p class="small">SVG, PDF and PNG for reports and papers</p></div>
+  </div>
+  <div class="callout"><b>Our rule in this course</b>Python computes · Gephi shows · your caption explains the settings.</div>
+  <h3>Installing Gephi — tick it off before class</h3>
+  <div class="widget"><div class="wtitle">Installation checklist</div><div id="instCheck"></div></div>
+  <div class="grid2">
+    <div class="callout blue"><b>No installation possible? Gephi Lite</b>runs in the browser (<a href="https://gephi.org/lite/" target="_blank" rel="noopener">gephi.org/lite</a>). Fine for small graphs — but no Timeline, no SVG/PDF export and no plugins. Use the desktop version for the lab.</div>
+    <div class="callout amber"><b>Memory grows with the graph</b>~10,000 nodes + edges: 512 MB · ~100,000: 2 GB · ~1 million: more than 8 GB (<a href="https://gephi.org/users/requirements" target="_blank" rel="noopener">gephi.org</a>).</div>
+  </div>
+</section>
+
+<section class="chap" id="workspace" data-title="The Gephi workspace">
+  <div class="sec-head"><div><div class="secnum">Section 3</div><h2>The Gephi workspace</h2></div></div>
+  <p>Click a panel of this simplified Gephi window to see what it does.</p>
+  <div class="widget"><div class="wtitle">Explore the window</div>
+    <div class="ws" id="wsGrid"></div>
+    <div class="feedback show info" id="wsMsg"></div>
+  </div>
+  <div class="callout green"><b>Three tabs</b>Overview: explore · Data Laboratory: check the data · Preview: publish.</div>
+</section>
+
+<section class="chap" id="import" data-title="Getting a graph into Gephi">
+  <div class="sec-head"><div><div class="secnum">Section 4</div><h2>Three ways to get a graph into Gephi</h2></div></div>
+  <div class="tabs" data-group="imp"><button class="on" data-tab="hand">By hand</button><button data-tab="csv">Spreadsheet (CSV)</button><button data-tab="gexf">From Python (GEXF)</button></div>
+  <div class="tabpanel on" data-group="imp" data-tab="hand"><p><b>Data Laboratory → Nodes → Add node</b>; then <b>Edges → Add edge</b>. For tiny examples: Alice, Bob, Charlie with Alice → Bob and Bob → Charlie. Good for teaching — too slow for real data.</p></div>
+  <div class="tabpanel" data-group="imp" data-tab="csv"><p><b>File → Import spreadsheet</b> — import the nodes first, then the edges (“Append to existing workspace”). The column names matter:</p>
+<pre><code>nodes.csv   Id,Label,club
+            0,0,Mr. Hi
+edges.csv   Source,Target,Type,Weight
+            0,1,Undirected,4</code></pre></div>
+  <div class="tabpanel" data-group="imp" data-tab="gexf"><p><b>Our default.</b> GEXF keeps weights and all attributes — and can carry time for the Timeline. <code>nx.write_gexf(G, "karate_ch6.gexf")</code>, then <b>File → Open</b>. Gephi also opens GraphML, GML, edge lists and Pajek files.</p></div>
+  <div class="widget"><div class="wtitle">Will Gephi understand your CSV headers?</div>
+    <p class="small">Type the first line of your files (comma-separated). The checker tests what Gephi’s spreadsheet import needs — and one privacy rule.</p>
+    <label class="small">nodes.csv header <input type="text" id="hdrN" style="width:100%" value="user_id,username,group"></label>
+    <label class="small">edges.csv header <input type="text" id="hdrE" style="width:100%" value="from,to,count"></label>
+    <div id="hdrOut" style="margin-top:8px"></div>
+  </div>
+</section>
+
+<section class="chap" id="step12" data-title="Steps 1–2: export & check">
+  <div class="sec-head"><div><div class="secnum">Section 5</div><h2>Step 1 · Export from Python — Step 2 · Check the Data Laboratory</h2></div></div>
+<pre><code data-hl="py">import networkx as nx
+G = nx.karate_club_graph()                    # weights + "club"
+comms = nx.community.louvain_communities(G, seed=42)
+for i, c in enumerate(comms):
+    for n in c:
+        G.nodes[n]["community_nx"] = i      # Chapter 4 result as an attribute
+pr = nx.pagerank(G)
+for n in G:
+    G.nodes[n]["pagerank_nx"] = round(pr[n], 4)
+nx.write_gexf(G, "karate_ch6.gexf")</code></pre>
+  <p>In Gephi: <b>File → Open → karate_ch6.gexf</b> → check the Import report (<b>34 nodes · 78 edges · Undirected</b>) → <b>New workspace</b> → OK. The nodes start at random positions — Step 3 fixes this. We store the Python results so you can compare them with Gephi’s own numbers in Step 4.</p>
+  <div class="widget"><div class="wtitle">Data Laboratory — nodes table (click a column to sort)</div>
+    <div class="kpis"><div class="kpi"><div class="v">34</div><div class="l">nodes</div></div><div class="kpi"><div class="v">78</div><div class="l">edges</div></div><div class="kpi"><div class="v">undirected</div><div class="l">type</div></div><div class="kpi"><div class="v">1–7</div><div class="l">edge weights</div></div></div>
+    <div class="tablewrap" style="max-height:330px;overflow:auto"><table id="dlTbl"></table></div>
+    <div class="feedback show info" id="dlMsg">Sort by pagerank_nx: who is at the top — and is it the same node as for degree?</div>
+  </div>
+  <h3>Check before you draw</h3>
+  <div id="dlCheck"></div>
+</section>
+
+<section class="chap" id="layout" data-title="Step 3: layouts & ForceAtlas 2">
+  <div class="sec-head"><div><div class="secnum">Section 6 · Part B</div><h2>Step 3 · Layouts: from hairball to map</h2></div></div>
+  <div class="tablewrap"><table>
+    <tr><th>Layout</th><th>Best for</th><th>Note</th></tr>
+    <tr class="hl"><td><b>ForceAtlas 2</b></td><td>social networks up to tens of thousands of nodes</td><td>the default choice — tune it below</td></tr>
+    <tr><td>Fruchterman Reingold</td><td>small graphs, even spacing</td><td>slow on large graphs</td></tr>
+    <tr><td>Yifan Hu</td><td>medium to large graphs</td><td>fast first overview</td></tr>
+    <tr><td>OpenOrd</td><td>very large graphs</td><td>stresses clusters</td></tr>
+    <tr><td>Noverlap · Label Adjust</td><td>the finishing touch</td><td>removes node or label overlaps</td></tr>
+  </table></div>
+  <div class="widget"><div class="wtitle">A live ForceAtlas-style layout on the karate club</div>
+    <p class="small">A simplified force simulation with the same ideas as ForceAtlas 2: all nodes push apart (scaled by degree), linked nodes pull together, gravity keeps the graph in view. Press <b>Run</b>, change the settings while it runs, and press <b>Randomize</b> to see that every run ends differently. Colours = Louvain communities.</p>
+    <div class="grid2">
+      <svg class="gsvg" id="faSvg" viewBox="0 0 600 420"></svg>
+      <div>
+        <div class="btnrow"><button class="btn primary" id="faRun">▶ Run</button><button class="btn" id="faStop">■ Stop</button><button class="btn" id="faRnd">↺ Randomize</button></div>
+        <label class="small">Scaling (repulsion) = <b id="faScV"></b><input type="range" id="faSc" min="1" max="30" value="10"></label>
+        <label class="small">Gravity = <b id="faGrV"></b><input type="range" id="faGr" min="0" max="5" step="0.1" value="1"></label>
+        <label class="small"><input type="checkbox" id="faLin"> LinLog mode (tighter clusters)</label><br>
+        <label class="small"><input type="checkbox" id="faHub"> Dissuade hubs</label><br>
+        <label class="small"><input type="checkbox" id="faW" checked> Edge weight influence = 1 (use weights)</label><br>
+        <label class="small"><input type="checkbox" id="faOv"> Prevent overlap</label>
+        <p class="small" style="margin-top:8px">Movement: <b id="faMove">—</b></p>
+        <div class="feedback show info" id="faMsg">Press Run. Stop when the picture is stable — then save the project (.gephi).</div>
+      </div>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="callout green"><b>You can read</b>groups that hang together · bridges between groups · hubs · the periphery</div>
+    <div class="callout"><b>You cannot read</b>exact distances · left vs. right or top vs. bottom · the area of a cluster as its size</div>
+  </div>
+  <p class="small"><b>A layout is an argument, not a measurement.</b> Every run starts from new random positions — save the .gephi project to keep your picture.</p>
+</section>
+
+<section class="chap" id="stats" data-title="Step 4: statistics vs. Chapter 4">
+  <div class="sec-head"><div><div class="secnum">Section 7</div><h2>Step 4 · Statistics: re-run Chapter 4 in Gephi</h2></div></div>
+  <p>Statistics panel → <b>Run</b>. Each run adds a column to the Data Laboratory that you can use for colour, size and filters.</p>
+  <div class="tablewrap"><table>
+    <tr><th>Statistic in Gephi</th><th>Settings to use</th><th>You should see (= Chapter 4)</th></tr>
+    <tr><td>Average Degree</td><td>—</td><td>4.588</td></tr>
+    <tr><td>Graph Density</td><td>Undirected</td><td>0.139</td></tr>
+    <tr><td>Network Diameter</td><td>Undirected · Normalize: on</td><td>diameter 5 · avg. path length 2.41 · betweenness of node 0 = 0.438</td></tr>
+    <tr><td>Avg. Clustering Coefficient</td><td>—</td><td>0.571 (see the switchboard)</td></tr>
+    <tr><td>Modularity</td><td>Randomize: on · Use weights: on · Resolution 1.0</td><td>≈ 0.43 · usually 4 classes — may vary slightly per run</td></tr>
+    <tr><td>PageRank</td><td>p 0.85 · ε 0.001 · Use edge weight: on</td><td>33: 0.097 · 0: 0.089 · 32: 0.076</td></tr>
+    <tr><td>Connected Components</td><td>Undirected</td><td>1 component</td></tr>
+  </table></div>
+  <div class="widget"><div class="wtitle">When Gephi and Python disagree — the settings switchboard</div>
+    <p class="small">Flip the settings and watch what Gephi would show next to the Chapter 4 value. All numbers are computed on the karate club.</p>
+    <div class="btnrow" id="swBtns"></div>
+    <div class="tablewrap"><table id="swTbl"></table></div>
+    <div class="feedback show" id="swMsg"></div>
+  </div>
+  <div class="callout"><b>Write down every setting.</b>A number without its settings cannot be reproduced.</div>
+</section>
+
+<section class="chap" id="encode" data-title="Steps 5–7: colour, size, filters">
+  <div class="sec-head"><div><div class="secnum">Section 8</div><h2>Steps 5–7 · Colour, size, labels and filters — the mini-Gephi playground</h2></div></div>
+  <div class="tablewrap"><table>
+    <tr><th>Visual channel</th><th>Data type</th><th>Gephi panel</th><th>Example from Chapters 4–5</th></tr>
+    <tr><td>Position</td><td>structure</td><td>Layout</td><td>clusters, bridges, periphery</td></tr>
+    <tr><td>Colour · partition</td><td>categories</td><td>Appearance → Partition</td><td>community, club, stance</td></tr>
+    <tr><td>Colour · gradient</td><td>numbers</td><td>Appearance → Ranking</td><td>PageRank, mean sentiment</td></tr>
+    <tr><td>Node size</td><td>one number</td><td>Appearance → Size → Ranking</td><td>degree or PageRank — not both</td></tr>
+    <tr><td>Edge thickness</td><td>weight</td><td>Preview → Rescale weight</td><td>number of mentions</td></tr>
+    <tr><td>Labels</td><td>importance</td><td>Appearance → Label size</td><td>only the top nodes</td></tr>
+    <tr><td>Time</td><td>when</td><td>Timeline</td><td>cascade adoption (Chapter 5)</td></tr>
+  </table></div>
+  <div class="widget"><div class="wtitle">Mini-Gephi: layout, appearance and filters on the karate club</div>
+    <div class="pg">
+      <div class="pgc">
+        <label class="small"><b>Layout</b><select id="pgLay"><option value="r">Random (as imported)</option><option value="p" selected>Force-directed (after ForceAtlas 2)</option><option value="c">Circular (by Id)</option></select></label>
+        <label class="small"><b>Colour</b><select id="pgCol"><option value="u">Unique colour</option><option value="c" selected>Partition → Modularity Class</option><option value="k">Partition → club</option><option value="pr">Ranking → PageRank</option><option value="core">Ranking → k-core</option></select></label>
+        <label class="small"><b>Size</b><select id="pgSize"><option value="u">Unique size</option><option value="deg">Ranking → Degree</option><option value="pr" selected>Ranking → PageRank</option><option value="btw">Ranking → Betweenness</option></select></label>
+        <label class="small"><b>Labels</b><select id="pgLab"><option value="n">None</option><option value="t" selected>Top 4 by PageRank</option><option value="a">All</option></select></label>
+        <label class="small"><b>Filter</b><select id="pgFil"><option value="n">No filter</option><option value="deg">Topology → Degree Range</option><option value="ego">Topology → Ego Network (depth 1)</option><option value="core">Topology → K-Core</option><option value="com">Attributes → Partition (one community)</option></select></label>
+        <label class="small" id="pgParW"><span id="pgParL"></span> <b id="pgParV"></b><input type="range" id="pgPar"></label>
+        <label class="small"><b>Edge opacity</b><input type="range" id="pgOp" min="5" max="100" value="45"></label>
+        <label class="small"><input type="checkbox" id="pgW"> Edge thickness = weight</label><br>
+        <label class="small"><input type="checkbox" id="pgGrey"> View in greyscale</label>
+      </div>
+      <div><svg class="gsvg" id="pgSvg" viewBox="0 0 600 420"></svg><div class="legend" id="pgLeg"></div>
+        <div class="kpis" id="pgKpi"></div></div>
+    </div>
+    <div class="feedback show info" id="pgMsg"></div>
+  </div>
+  <h3>Step 6 · Homophily you can see</h3>
+  <p>Keep the same layout and switch only <b>Colour</b> between <i>Modularity Class</i> and <i>club</i>. All four communities sit inside one club — except <b>node 8</b> (Mr. Hi’s club, grouped with the officer’s community). Only 11 of 78 ties cross the clubs; assortativity +0.718 (Chapter 4). <b>Switching one colour setting can test a hypothesis</b> — but the club label came after the split; it is not a cause.</p>
+  <h3>Colour that works</h3>
+  <div class="widget"><div class="wtitle">Three kinds of palettes</div>
+    <div id="palBox"></div>
+    <label class="small"><input type="checkbox" id="palGrey"> View in greyscale</label>
+    <div class="feedback show info">About 1 in 12 men cannot tell red from green well. Use red – grey – blue for diverging data, and check every figure in greyscale.</div>
+  </div>
+  <div class="widget"><div class="wtitle">Which channel for which data?</div><div id="sortEnc"></div></div>
+  <div class="callout"><b>A filter changes the view — not the data.</b> Gephi’s statistics run on the <i>visible</i> graph: always say which view you used.</div>
+</section>
+
+<section class="chap" id="timeline" data-title="Step 8: replay a cascade">
+  <div class="sec-head"><div><div class="secnum">Section 9</div><h2>Step 8 · Replay a cascade with the Timeline</h2></div></div>
+  <p>Give every node a <code>start</code> time and mark the graph as dynamic — Gephi’s <b>Window → Timeline → Enable</b> then replays the spread (drag the window, press Play). Below: one Independent Cascade run from Chapter 5, and two real cascades from <code>ev_cascades.csv</code> (Lab 5.1).</p>
+<pre><code data-hl="py">import random
+rng = random.Random(1)                          # one IC run, seed node 0, p = 0.25 (Chapter 5)
+t = {0: 0}; frontier = [0]; step = 0
+while frontier:
+    step += 1; new = []
+    for u in frontier:
+        for v in G.neighbors(u):
+            if v not in t and rng.random() &lt; 0.25:
+                t[v] = step; new.append(v)
+    frontier = new
+G.graph["mode"] = "dynamic"
+for n in G:
+    G.nodes[n]["adopted"] = "yes" if n in t else "no"
+    if n in t: G.nodes[n]["start"] = float(t[n])
+nx.write_gexf(G, "karate_cascade.gexf")</code></pre>
+  <div class="widget"><div class="wtitle">Timeline replay</div>
+    <div class="btnrow" id="tlPick"></div>
+    <div class="grid2">
+      <svg class="gsvg" id="tlSvg" viewBox="0 0 600 420"></svg>
+      <div>
+        <div class="kpis" id="tlKpi"></div>
+        <svg id="tlCurve" viewBox="0 0 320 150" width="100%"></svg>
+        <div class="legend" id="tlLeg"></div>
+      </div>
+    </div>
+    <div class="btnrow"><button class="btn primary" id="tlPlay">▶ Play</button><button class="btn" id="tlReset">↺ Reset</button></div>
+    <input type="range" id="tlT" min="0" max="5" value="0">
+    <div class="feedback show info" id="tlMsg"></div>
+  </div>
+  <div class="callout amber"><b>One run is one story.</b> The Timeline shows <i>how</i> a cascade spread — the simulations from Chapter 5 tell you how typical it is.</div>
+</section>
+
+<section class="chap" id="export" data-title="Step 9: preview, export, caption">
+  <div class="sec-head"><div><div class="secnum">Section 10</div><h2>Step 9 · Preview, export and caption</h2></div></div>
+  <div class="grid2">
+    <div class="tablewrap"><table>
+      <tr><th>Preview setting</th><th>Recommended</th></tr>
+      <tr><td>Preset</td><td>Default Straight</td></tr><tr><td>Background</td><td>white</td></tr>
+      <tr><td>Node border</td><td>thin, slightly darker</td></tr><tr><td>Labels</td><td>on, proportional size, top nodes only</td></tr>
+      <tr><td>Edges</td><td>thin, light grey or mixed colour, opacity 30–50%</td></tr><tr><td>Then</td><td>Refresh → Export (bottom left)</td></tr>
+    </table></div>
+    <div>
+      <div class="card"><h4>SVG · PDF</h4><p class="small">vector: sharp at any zoom — reports and papers</p></div>
+      <div class="card" style="margin-top:8px"><h4>PNG</h4><p class="small">pixels: for slides; set a large width</p></div>
+      <div class="card" style="margin-top:8px"><h4>GEXF · GraphML</h4><p class="small">share the graph itself; Gephi Lite for a quick interactive view</p></div>
+    </div>
+  </div>
+  <div class="widget"><div class="wtitle">Caption builder</div>
+    <p class="small">Choose what your figure shows. The caption must let a reader rebuild the figure.</p>
+    <div class="grid3" id="capSel"></div>
+    <div class="out" id="capOut" style="font-family:inherit;font-size:.98rem"></div>
+    <div class="feedback show" id="capMsg"></div>
+    <div class="btnrow"><button class="btn primary" id="capCopy">Copy caption</button></div>
+  </div>
+  <div class="widget"><div class="wtitle">Good or misleading network figure?</div><div id="sortGood"></div></div>
+  <div class="callout"><b>The picture supports a claim — the numbers prove it.</b></div>
+</section>
+
+<section class="chap" id="workflow" data-title="Workflow & Activity 6.1">
+  <div class="sec-head"><div><div class="secnum">Section 11</div><h2>The Gephi workflow — and Activity 6.1</h2></div></div>
+  <div class="flow" id="wfFlow"></div>
+  <div class="feedback show info" id="wfMsg"></div>
+  <p class="small"><b>Three habits:</b> save the .gephi project after each step · keep a settings log · one figure, one message (duplicate the workspace for variants).</p>
+  <h3>Activity 6.1 — critique and redesign a network figure</h3>
+  <p>Work in pairs (15 minutes). Pick warm-up figure A — or a public network figure, e.g. one posted on r/dataisbeautiful (public content only, no user names). List what hides structure or misleads, and name the Gephi panel and setting that fixes each problem. Then rebuild figure A with <code>karate_ch6.gexf</code>.</p>
+  <div class="widget"><div class="wtitle">Your redesign plan</div>
+    <div class="canvas8" id="crForm"></div>
+    <div class="btnrow"><button class="btn primary" id="crDl">Download plan.txt</button></div>
+    <details class="reveal"><summary>Sample answer for figure A</summary><div class="tablewrap"><table>
+      <tr><th>Problem</th><th>Gephi fix (panel → setting)</th></tr>
+      <tr><td>random positions — no groups visible</td><td>Layout → ForceAtlas 2, then Noverlap</td></tr>
+      <tr><td>all nodes the same size</td><td>Appearance → Size → Ranking → PageRank</td></tr>
+      <tr><td>one colour — communities invisible</td><td>Appearance → Colour → Partition → Modularity Class</td></tr>
+      <tr><td>edges as dark as nodes</td><td>Preview → edge colour light grey, opacity 40%</td></tr>
+      <tr><td>no labels — nobody knows the hubs</td><td>label the top 4 by PageRank: 33, 0, 32, 2</td></tr>
+      <tr><td>no legend, no caption</td><td>legend for colour and size; caption with all settings</td></tr>
+    </table></div><p class="small">Why strong: every problem is paired with a concrete panel and setting, and the redesign keeps one message — four groups and their hubs.</p></details>
+  </div>
+</section>
+
+<section class="chap" id="lab" data-title="Lab 6.1: Gephi workshop">
+  <div class="sec-head"><div><div class="secnum">Section 12</div><h2>Lab 6.1 — Gephi workshop: from graph to figure</h2></div></div>
+  <p><b>Goal:</b> rebuild your Chapter 4 and 5 results in Gephi and produce one captioned, publication-ready figure. <b>Notebook:</b> <a href="https://github.com/MehrdadJalali-AI/SocialMediaAnayltics/blob/main/notebooks/Lab6.1_Gephi.ipynb" target="_blank" rel="noopener">Lab6.1_Gephi.ipynb</a> prepares the files · no Python at hand? Ready-made files are in <a href="https://github.com/MehrdadJalali-AI/SocialMediaAnayltics/tree/main/data/gephi" target="_blank" rel="noopener">data/gephi/</a>. Groups = project groups · hand in with your project proposal.</p>
+  <div class="timeline">
+    <div class="t"><b>Task 1</b>Import karate_ch6.gexf; confirm 34 nodes, 78 edges; inspect both tables</div>
+    <div class="t"><b>Task 2</b>Statistics vs. Chapter 4 — match Python, log every setting</div>
+    <div class="t"><b>Task 3</b>ForceAtlas 2; colour by community, size by PageRank; then colour by club</div>
+    <div class="t"><b>Task 4</b>ev_mentions_ch6.gexf: colour by mean sentiment (diverging)</div>
+    <div class="t"><b>Task 5</b>Replay c01 vs. c05 on the Timeline; export one SVG with a full caption</div>
+  </div>
+  <div class="tablewrap"><table>
+    <tr><th>File</th><th>Content</th><th>Use it for</th></tr>
+    <tr><td><code>karate_ch6.gexf</code></td><td>34 nodes, 78 weighted ties, club, community_nx, pagerank_nx</td><td>Tasks 1–3</td></tr>
+    <tr><td><code>karate_cascade.gexf</code></td><td>one IC run: 20 of 34 adopt in 5 steps (start = step)</td><td>Timeline practice</td></tr>
+    <tr><td><code>ev_mentions_ch6.gexf</code></td><td>260 users, 1,208 mention edges, group, lang, mean_sentiment, community_nx, pagerank_nx</td><td>Task 4</td></tr>
+    <tr><td><code>ev_cascade_c01.gexf</code> · <code>ev_cascade_c05.gexf</code></td><td>recall news (212 posts) · fire rumour (61 posts); start = minutes after the first post</td><td>Task 5</td></tr>
+  </table></div>
+  <details class="reveal"><summary>Expected values — check yourself after Task 2 and Task 4</summary>
+    <div class="tablewrap"><table>
+      <tr><th>Item (karate)</th><th>Value (Gephi = Python)</th><th>Setting that makes them match</th></tr>
+      <tr><td>Nodes · edges · type</td><td>34 · 78 · undirected</td><td>open the GEXF as exported</td></tr>
+      <tr><td>Average degree · density</td><td>4.588 · 0.139</td><td>Undirected</td></tr>
+      <tr><td>Diameter · avg. path length</td><td>5 · 2.41</td><td>Network Diameter, Undirected</td></tr>
+      <tr><td>Betweenness of node 0</td><td>0.438 (raw: 231.07)</td><td>Normalize: on</td></tr>
+      <tr><td>PageRank · top 3</td><td>33: 0.097 · 0: 0.089 · 32: 0.076</td><td>Use edge weight: on</td></tr>
+      <tr><td>Modularity · classes</td><td>≈ 0.43 · 4 (Python: 0.427 · 4)</td><td>Use weights: on · Resolution 1.0 · 3 runs</td></tr>
+      <tr><td>Avg. clustering</td><td>0.571 (or 0.588)</td><td>node 11 with one tie: counted as 0 or skipped</td></tr>
+    </table></div>
+    <div class="tablewrap"><table>
+      <tr><th>EV community (Louvain, seed 42 · Q = 0.443)</th><th>Users</th><th>Main group</th><th>Mean sentiment of mentions</th></tr>
+      <tr><td>0</td><td>65</td><td>german_users (83%)</td><td>−0.15</td></tr>
+      <tr class="hl"><td>1</td><td>63</td><td>critics (98%)</td><td>−0.42</td></tr>
+      <tr><td>2</td><td>49</td><td>news_brands (67%)</td><td>−0.05</td></tr>
+      <tr><td>3</td><td>46</td><td>owners (89%)</td><td>−0.07</td></tr>
+      <tr><td>4</td><td>37</td><td>owners (86%)</td><td>−0.01</td></tr>
+    </table></div>
+    <p class="small">The five most central accounts by PageRank are four news brands and one owner. c01 (recall news) reaches 212 posts in 2.6 hours but only depth 4 — a broadcast; c05 (fire rumour) has 61 posts, depth 38, 39.5 hours and 89% negative posts — viral and negative. All data is synthetic.</p>
+  </details>
+<pre><code data-hl="py">m = pd.read_csv("data/ev_mentions.csv"); users = pd.read_csv("data/ev_users.csv")
+E = nx.from_pandas_edgelist(m, "source", "target", ["weight"], create_using=nx.DiGraph)
+nx.set_node_attributes(E, users.set_index("user_id")["group"].to_dict(), "group")
+m["score"] = m["sentiment"].map({"positive": 1, "neutral": 0, "negative": -1})
+mean_sent = (m["score"] * m["weight"]).groupby(m["source"]).sum() / m.groupby("source")["weight"].sum()
+for n in E:
+    E.nodes[n]["mean_sentiment"] = round(float(mean_sent.get(n, 0.0)), 3)   # -1 ... +1
+nx.write_gexf(E, "ev_mentions_ch6.gexf")       # pseudonymised IDs only</code></pre>
+  <div class="widget"><div class="wtitle">Figure check before you upload</div><div id="figCheck"></div></div>
+</section>
+
+<section class="chap" id="kickoff" data-title="Project kick-off & requirements">
+  <div class="sec-head"><div><div class="secnum">Section 13 · Part C</div><h2>Project kick-off: your examination project</h2></div></div>
+  <p><b>Answer one real question about social media data — end to end, responsibly, as a group.</b> 50% of the final grade · oral presentation + written documentation.</p>
+  <div class="kpis"><div class="kpi"><div class="v">3–5</div><div class="l">students per group</div></div><div class="kpi"><div class="v">public</div><div class="l">data — your choice, our rules</div></div><div class="kpi"><div class="v">Ch 1–6</div><div class="l">methods</div></div><div class="kpi"><div class="v">Moodle</div><div class="l">only, by the group representative</div></div></div>
+  <h3>Roadmap</h3>
+  <div class="timeline">
+    <div class="t now"><b>0 · Today</b>Kick-off: groups, topic ideas, proposal canvas</div>
+    <div class="t"><b>1 · Proposal</b>question, data plan, ethics check</div>
+    <div class="t"><b>2 · Check-in</b>first results: profile + baseline</div>
+    <div class="t"><b>3 · Presentation</b>story, evidence, recommendation</div>
+    <div class="t"><b>4 · Documentation</b>report, notebook, AI disclosure</div>
+  </div>
+  <p class="small">Exact dates and assessment criteria are on Moodle. Small, early results beat a perfect plan.</p>
+  <h3>What your project must contain — track your progress</h3>
+  <div class="tablewrap"><table id="reqTbl"></table></div>
+  <div class="callout"><b>Depth beats breadth</b> — do fewer methods, but do them properly.</div>
+</section>
+
+<section class="chap" id="rq" data-title="A strong research question">
+  <div class="sec-head"><div><div class="secnum">Section 14</div><h2>A strong research question</h2></div></div>
+  <div class="tablewrap"><table>
+    <tr><th>Weak</th><th>Why it is weak</th><th>Stronger</th></tr>
+    <tr><td>“What do people think about EVs?”</td><td>too broad, not measurable</td><td>“How did sentiment about EV battery safety change in the two weeks after the March recall?”</td></tr>
+    <tr><td>“Who is the most influential user?”</td><td>no definition of influence</td><td>“Which users connect the German and English EV communities, and what do they share?”</td></tr>
+    <tr><td>“Do bots spread fake news?”</td><td>not answerable with your data</td><td>“Do posts with identical texts spread faster than unique posts in our dataset?”</td></tr>
+  </table></div>
+  <div class="widget"><div class="wtitle">Research-question checker</div>
+    <textarea id="rqIn" rows="2" style="font-family:inherit;font-size:1rem">What do people think about EVs?</textarea>
+    <div id="rqOut"></div>
+    <p class="small">The automatic hints are simple heuristics — the five ticks below are your own judgement.</p>
+    <div id="rqSelf"></div>
+  </div>
+  <div class="callout"><b>A good question already tells you which data and methods you need.</b></div>
+  <h3>Project ideas to start from</h3>
+  <div class="grid2">
+    <div class="card"><h4>Campus rules on Reddit</h4><p class="small">How do students’ stance and emotion differ across university subreddits? <span class="tag blue">Ch 2–3 + reply network in Gephi</span></p></div>
+    <div class="card"><h4>A product recall</h4><p class="small">How did sentiment change before and after a recall — and which communities drove it? <span class="tag blue">Ch 2–3 + communities + events</span></p></div>
+    <div class="card"><h4>A public-health message</h4><p class="small">How far did an official health post spread, and did replies become more negative with depth? <span class="tag blue">Ch 3 + diffusion + Timeline</span></p></div>
+    <div class="card"><h4>Gaming update reactions</h4><p class="small">Do players from different communities react with different emotions to the same patch? <span class="tag blue">Ch 3 + communities</span></p></div>
+  </div>
+  <p class="small">Your own idea is welcome — if the data is public and the question is answerable.</p>
+</section>
+
+<section class="chap" id="ethicsplan" data-title="Data & ethics plan">
+  <div class="sec-head"><div><div class="secnum">Section 15</div><h2>Before you collect anything: data and ethics plan</h2></div></div>
+  <div class="widget"><div class="wtitle">Your data &amp; ethics plan</div>
+    <div class="canvas8" id="epForm"></div>
+    <div class="meter" style="margin-top:10px"><div id="epMeter"></div></div>
+    <div class="feedback show" id="epMsg"></div>
+    <div class="btnrow"><button class="btn primary" id="epDl">Download plan.txt</button></div>
+  </div>
+  <div class="callout"><b>If you cannot fill in this plan, you are not ready to collect.</b></div>
+</section>
+
+<section class="chap" id="report" data-title="Report & storyboard">
+  <div class="sec-head"><div><div class="secnum">Section 16</div><h2>Written documentation and presentation storyboard</h2></div></div>
+  <div class="flow" id="docFlow"></div>
+  <div class="feedback show info" id="docMsg"></div>
+  <p class="small"><b>Every number in the report must be reproducible from your notebook.</b></p>
+  <div class="widget"><div class="wtitle">Storyboard your final presentation (six panels)</div>
+    <div class="canvas8" id="sbForm"></div>
+    <div class="btnrow"><button class="btn" id="sbSample">Load an example</button><button class="btn primary" id="sbDl">Download storyboard.txt</button></div>
+  </div>
+  <div class="callout"><b>One message per slide</b> — if you cannot sketch it, you cannot present it.</div>
+  <div class="widget"><div class="wtitle">Strong project or common weakness?</div><div id="sortStrong"></div></div>
+</section>
+
+<section class="chap" id="canvas" data-title="Activity 6.2: proposal canvas">
+  <div class="sec-head"><div><div class="secnum">Section 17</div><h2>Activity 6.2 — project proposal canvas</h2></div></div>
+  <p>In your project group: fill in every box (25 minutes), then pitch it in two minutes. Check the question first — a weak question makes every other box weak.</p>
+  <div class="widget"><div class="wtitle">Proposal canvas</div>
+    <div class="canvas8" id="pcForm"></div>
+    <div class="meter" style="margin-top:10px"><div id="pcMeter"></div></div>
+    <div class="btnrow"><button class="btn" id="pcSample">Load the sample canvas</button><button class="btn primary" id="pcDl">Download canvas.txt</button><button class="btn" id="pcClear">Clear</button></div>
+  </div>
+  <div class="callout green"><b>Why the sample canvas is strong</b>Narrow question, realistic data, a validated model choice, a named fallback and clear roles.</div>
+  <h3>Pitch and discussion round</h3>
+  <div class="grid3">
+    <div class="card"><h4>Pitch · 2 min</h4><p class="small">question, data, methods, first figure</p></div>
+    <div class="card"><h4>Peer feedback · 3 min</h4><p class="small">one strength · one question · one risk</p></div>
+    <div class="card"><h4>Instructor check · 2 min</h4><p class="small">scope, data access, ethics — go / adjust</p></div>
+  </div>
+  <div class="widget"><div class="wtitle">Feedback card for another group</div>
+    <div class="canvas8" id="fbForm"></div>
+    <div class="btnrow"><button class="btn primary" id="fbDl">Download feedback card</button></div>
+  </div>
+  <div class="callout"><b>Leave today with a question you can answer and data you can get.</b></div>
+</section>
+
+<section class="chap" id="wrapup" data-title="Course wrap-up">
+  <div class="sec-head"><div><div class="secnum">Section 18</div><h2>Course wrap-up: six chapters, one toolkit</h2></div></div>
+  <div class="grid3">
+    <a class="card" href="Chapter1_Foundations.html" style="text-decoration:none;color:inherit"><h4>1 · Foundations</h4><p class="small">data types, labels, ethics and bias</p></a>
+    <a class="card" href="Chapter2_Preprocessing_Classical_Sentiment.html" style="text-decoration:none;color:inherit"><h4>2 · Preprocessing &amp; baselines</h4><p class="small">noise vs. signal, VADER, TF-IDF, macro-F1</p></a>
+    <a class="card" href="Chapter3_Transformers_LLMs.html" style="text-decoration:none;color:inherit"><h4>3 · Transformers &amp; LLMs</h4><p class="small">context, prompts, validation, fair comparison</p></a>
+    <a class="card" href="Chapter4_Networks_Influence_Communities.html" style="text-decoration:none;color:inherit"><h4>4 · Networks I</h4><p class="small">centrality, communities, homophily</p></a>
+    <a class="card" href="Chapter5_Information_Diffusion.html" style="text-decoration:none;color:inherit"><h4>5 · Networks II</h4><p class="small">cascades, simulations, seeds</p></a>
+    <div class="card"><h4>6 · Gephi &amp; project</h4><p class="small">visual evidence with captions, your proposal</p></div>
+  </div>
+  <div class="callout green"><b>From posts to evidence — carefully, reproducibly and responsibly.</b>Good luck with your projects!</div>
+</section>
+
+<section class="chap" id="links" data-title="Real-world links">
+  <div class="sec-head"><div><div class="secnum">Section 19</div><h2>Explore real tools &amp; resources</h2></div></div>
+  <div class="links">
+    <a href="https://gephi.org/users/download/" target="_blank" rel="noopener"><b>Gephi download</b><span>Desktop version 0.10.1 — Java included</span></a>
+    <a href="https://gephi.org/lite/" target="_blank" rel="noopener"><b>Gephi Lite</b><span>Gephi in the browser, for small graphs</span></a>
+    <a href="https://docs.gephi.org/" target="_blank" rel="noopener"><b>Gephi documentation</b><span>User manual and tutorials</span></a>
+    <a href="https://docs.gephi.org/desktop/User_Manual/Import_Dynamic_Data" target="_blank" rel="noopener"><b>Import dynamic data</b><span>How the Timeline reads time</span></a>
+    <a href="https://doi.org/10.1371/journal.pone.0098679" target="_blank" rel="noopener"><b>ForceAtlas2 paper</b><span>Jacomy et al., PLOS ONE (2014)</span></a>
+    <a href="https://networkx.org/documentation/stable/reference/readwrite/generated/networkx.readwrite.gexf.write_gexf.html" target="_blank" rel="noopener"><b>networkx write_gexf</b><span>Export graphs with attributes</span></a>
+    <a href="https://colorbrewer2.org/" target="_blank" rel="noopener"><b>ColorBrewer</b><span>Qualitative, sequential and diverging palettes</span></a>
+    <a href="https://www.reddit.com/dev/api/" target="_blank" rel="noopener"><b>Reddit API</b><span>Terms and access for projects</span></a>
+    <a href="https://developers.google.com/youtube/v3" target="_blank" rel="noopener"><b>YouTube Data API</b><span>Public comments for projects</span></a>
+    <a href="https://github.com/MehrdadJalali-AI/SocialMediaAnayltics" target="_blank" rel="noopener"><b>Course repository</b><span>Notebooks, datasets, Gephi files</span></a>
+  </div>
+</section>
+
+<section class="chap" id="quiz" data-title="Self-check quiz">
+  <div class="sec-head"><div><div class="secnum">Section 20</div><h2>Self-check quiz</h2></div></div>
+  <div id="quizBox"></div>
+</section>
+</main></div>
+
+<footer class="foot">Social Media Analytics and Sentiment Analysis · Prof. Dr. Mehrdad Jalali · SRH University of Applied Sciences Heidelberg · Course repository: <a href="https://github.com/MehrdadJalali-AI/SocialMediaAnayltics" target="_blank" rel="noopener">github.com/MehrdadJalali-AI/SocialMediaAnayltics</a></footer>
+<script>const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+// theme
+(function () {
+  const saved = store.get('sma-theme', null);
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+  const b = $('#themeBtn');
+  if (!b) return;
+  const label = () => {
+    const t = document.documentElement.getAttribute('data-theme') ||
+      (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    b.textContent = t === 'dark' ? '☀ Light' : '☾ Dark';
+  };
+  label();
+  b.onclick = () => {
+    const cur = document.documentElement.getAttribute('data-theme') ||
+      (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    const nxt = cur === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', nxt);
+    store.set('sma-theme', nxt); label();
+  };
+})();
+
+// TOC, scroll spy, progress, "mark as understood"
+(function () {
+  const toc = $('#tocList'); const secs = $$('section.chap');
+  const key = 'sma-done-' + (document.body.dataset.chapter || 'x');
+  const done = new Set(store.get(key, []));
+  secs.forEach((s, i) => {
+    const a = document.createElement('a');
+    a.href = '#' + s.id; a.innerHTML = '<span class="dot"></span>' + esc(s.dataset.title || s.id);
+    if (done.has(s.id)) a.classList.add('done');
+    toc && toc.appendChild(a);
+    const head = s.querySelector('.sec-head');
+    if (head) {
+      const b = document.createElement('button'); b.className = 'donebtn';
+      const paint = () => { b.classList.toggle('on', done.has(s.id)); b.textContent = done.has(s.id) ? '✓ Understood' : 'Mark as understood'; a.classList.toggle('done', done.has(s.id)); updCount(); };
+      b.onclick = () => { done.has(s.id) ? done.delete(s.id) : done.add(s.id); store.set(key, [...done]); paint(); };
+      head.appendChild(b); setTimeout(paint);
+    }
+  });
+  function updCount() { const c = $('#doneCount'); if (c) c.textContent = done.size + ' / ' + secs.length + ' sections understood'; }
+  const links = toc ? $$('a', toc) : [];
+  const onScroll = () => {
+    const h = document.documentElement; const p = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
+    const bar = $('#progress'); if (bar) bar.style.width = (p * 100) + '%';
+    let cur = 0; secs.forEach((s, i) => { if (s.getBoundingClientRect().top < 140) cur = i; });
+    links.forEach((l, i) => l.classList.toggle('active', i === cur));
+  };
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+})();
+
+// tabs: <div class="tabs" data-group="x"><button data-tab="a">..</button></div> + <div class="tabpanel" data-group="x" data-tab="a">
+document.addEventListener('click', e => {
+  const b = e.target.closest('.tabs button'); if (!b) return;
+  const g = b.parentElement.dataset.group;
+  $$('.tabs[data-group="' + g + '"] button').forEach(x => x.classList.toggle('on', x === b));
+  $$('.tabpanel[data-group="' + g + '"]').forEach(p => p.classList.toggle('on', p.dataset.tab === b.dataset.tab));
+});
+
+// copy buttons on code
+function addCopy(root = document) {
+  $$('pre', root).forEach(p => {
+    if (p.querySelector('.copy')) return;
+    const b = document.createElement('button'); b.className = 'copy'; b.textContent = 'Copy';
+    b.onclick = () => { const t = p.querySelector('code') ? p.querySelector('code').innerText : p.innerText.replace(/Copy$/, ''); navigator.clipboard && navigator.clipboard.writeText(t); b.textContent = 'Copied'; setTimeout(() => b.textContent = 'Copy', 1200); };
+    p.appendChild(b);
+  });
+}
+addCopy();
+
+// quiz engine: renderQuiz('#el', [{q, opts:[...], a: idx, why}])
+function renderQuiz(sel, items) {
+  const root = $(sel); if (!root) return; root.classList.add('quiz');
+  let right = 0, answered = 0;
+  const sc = document.createElement('p'); sc.className = 'score';
+  const upd = () => sc.textContent = `Score: ${right} / ${items.length}` + (answered === items.length ? (right === items.length ? ' — perfect! 🎉' : ' — review the explanations and try again.') : '');
+  items.forEach((it, qi) => {
+    const d = document.createElement('div'); d.className = 'q';
+    d.innerHTML = `<p>${qi + 1}. ${it.q}</p><div class="opts"></div><div class="why">💡 ${it.why}</div>`;
+    const o = d.querySelector('.opts');
+    it.opts.forEach((t, i) => {
+      const b = document.createElement('button'); b.innerHTML = t;
+      b.onclick = () => {
+        if (d.classList.contains('answered')) return;
+        d.classList.add('answered'); answered++;
+        if (i === it.a) { b.classList.add('right'); right++; } else { b.classList.add('wrong'); o.children[it.a].classList.add('right'); }
+        upd();
+      };
+      o.appendChild(b);
+    });
+    root.appendChild(d);
+  });
+  const r = document.createElement('button'); r.className = 'btn'; r.textContent = '↺ Reset quiz';
+  r.onclick = () => { root.innerHTML = ''; renderQuiz(sel, items); };
+  root.appendChild(sc); root.appendChild(r); upd();
+}
+
+// sorter engine (click a chip, then click a bucket — or drag): makeSorter('#el', cats:[{id,label}], items:[{t, c, why?}])
+function makeSorter(sel, cats, items) {
+  const root = $(sel); if (!root) return;
+  root.innerHTML = `<div class="pool small">Click an item, then click the box it belongs to (or drag it).</div><div class="sorter"></div><div class="btnrow"><button class="btn primary chk">Check answers</button><button class="btn rst">Reset</button></div><div class="feedback"></div>`;
+  const pool = $('.pool', root), sorter = $('.sorter', root), fb = $('.feedback', root);
+  let selected = null;
+  const shuffled = items.map((x, i) => ({ ...x, i })).sort(() => Math.random() - .5);
+  shuffled.forEach(it => {
+    const c = document.createElement('span'); c.className = 'chip'; c.textContent = it.t; c.draggable = true; c.dataset.c = it.c; c.dataset.i = it.i;
+    if (it.why) c.title = it.why;
+    c.onclick = e => { e.stopPropagation(); $$('.chip', root).forEach(x => x.classList.remove('sel')); selected = c; c.classList.add('sel'); };
+    c.ondragstart = ev => { selected = c; ev.dataTransfer.setData('text', it.i); };
+    pool.appendChild(c);
+  });
+  cats.forEach(cat => {
+    const b = document.createElement('div'); b.className = 'bucket'; b.dataset.id = cat.id; b.innerHTML = `<h5>${cat.label}</h5>`;
+    const drop = () => { if (selected) { b.appendChild(selected); selected.classList.remove('sel', 'right', 'wrong'); selected = null; } };
+    b.onclick = drop;
+    b.ondragover = e => { e.preventDefault(); b.classList.add('over'); };
+    b.ondragleave = () => b.classList.remove('over');
+    b.ondrop = e => { e.preventDefault(); b.classList.remove('over'); drop(); };
+    sorter.appendChild(b);
+  });
+  pool.onclick = () => { if (selected) { pool.appendChild(selected); selected.classList.remove('sel'); selected = null; } };
+  $('.chk', root).onclick = () => {
+    let ok = 0, placed = 0;
+    $$('.bucket .chip', root).forEach(c => { placed++; const good = c.parentElement.dataset.id === c.dataset.c; c.classList.toggle('right', good); c.classList.toggle('wrong', !good); if (good) ok++; });
+    fb.className = 'feedback show ' + (ok === items.length ? 'ok' : 'info');
+    fb.textContent = ok === items.length ? `All ${ok} correct — well done!` : `${ok} of ${items.length} correct (${items.length - placed} not placed yet). Red items are in the wrong box — hover them for a hint.`;
+  };
+  $('.rst', root).onclick = () => makeSorter(sel, cats, items);
+}
+
+// tiny syntax highlighter for python / sql / yaml snippets marked data-hl
+function hl(code, lang) {
+  let s = esc(code);
+  if (lang === 'py' || lang === 'sql') {
+    s = s.replace(/(#.*|--.*)$/gm, '<span class="c-c">$1</span>');
+    s = s.replace(/(&quot;.*?&quot;|'[^'\n]*')/g, '<span class="c-s">$1</span>');
+    const kw = lang === 'py' ? 'def|return|import|from|as|for|in|if|else|try|except|with|lambda|True|False|None|print' : 'SELECT|FROM|WHERE|GROUP BY|ORDER BY|JOIN|LEFT JOIN|ON|AS|WITH|SUM|COUNT|AND|OR|MATCH|RETURN|PREFIX';
+    s = s.replace(new RegExp('\\b(' + kw + ')\\b', 'g'), '<span class="c-k">$1</span>');
+  } else if (lang === 'yaml') {
+    s = s.replace(/(#.*)$/gm, '<span class="c-c">$1</span>').replace(/^(\s*-?\s*)([\w_]+):/gm, '$1<span class="c-k">$2</span>:');
+  }
+  return s;
+}
+$$('pre code[data-hl]').forEach(c => { c.innerHTML = hl(c.textContent, c.dataset.hl); });
+
+// ---------- extra shared helpers (Social Media Analytics guides) ----------
+const fmt = (x, d = 2) => (x === null || x === undefined || isNaN(x)) ? '—' : (+x).toFixed(d);
+const pct = (x, d = 0) => (x * 100).toFixed(d) + '%';
+const mean = a => a.reduce((s, x) => s + x, 0) / (a.length || 1);
+const sdp = a => { const m = mean(a); return Math.sqrt(a.reduce((s, x) => s + (x - m) ** 2, 0) / (a.length || 1)); };
+const tbl = (head, rows, cls) => '<tr>' + head.map(h => `<th>${h}</th>`).join('') + '</tr>' + rows.map((r, i) => '<tr>' + r.map((c, j) => `<td class="${cls ? cls(i, j, c) || '' : ''}">${c === null || c === '' ? '<span class="small">∅</span>' : c}</td>`).join('') + '</tr>').join('');
+const pill = l => `<span class="pill ${({ positive: 'pos', negative: 'neg', neutral: 'neu', mixed: 'mix' })[l] || 'neu'}">${l}</span>`;
+// horizontal bar list: bars('#el', [{l, v, max?, c?, t?}])
+function bars(sel, rows, max) {
+  const el = typeof sel === 'string' ? $(sel) : sel; if (!el) return;
+  const m = max || Math.max(...rows.map(r => r.v), 1e-9);
+  el.className = 'bars';
+  el.innerHTML = rows.map(r => `<div class="row"><span>${r.l}</span><div class="track"><div class="fill ${r.c || ''}" style="width:${Math.max(0, r.v / m * 100)}%"></div></div><span class="val">${r.t !== undefined ? r.t : r.v}</span></div>`).join('');
+}
+// flip cards: click to reveal
+document.addEventListener('click', e => { const f = e.target.closest('.flip'); if (f) f.classList.toggle('open'); });
+// seeded RNG (mulberry32)
+function rngSeed(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+// "pick the label" tables: makeLabeler('#el', rows:[{t, cols:{name:answer}}], options:{name:[...]}, notes)
+function makeLabeler(sel, rows, options, opts = {}) {
+  const root = $(sel); if (!root) return;
+  const cols = Object.keys(options);
+  root.innerHTML = `<div class="tablewrap"><table><tr><th>#</th><th>${opts.textHead || 'Post'}</th>${cols.map(c => `<th>${c}</th>`).join('')}${opts.noteHead ? `<th>${opts.noteHead}</th>` : ''}</tr>${rows.map((r, i) => `<tr><td>${i + 1}</td><td>${r.t}</td>${cols.map(c => `<td data-c="${c}" data-i="${i}"><select class="lbl"><option value="">—</option>${options[c].map(o => `<option>${o}</option>`).join('')}</select></td>`).join('')}${opts.noteHead ? `<td class="small nt" data-i="${i}"></td>` : ''}</tr>`).join('')}</table></div><div class="btnrow"><button class="btn primary chk">Compare with the sample answer</button><button class="btn rst">Reset</button></div><div class="feedback"></div>`;
+  $('.chk', root).onclick = () => {
+    let ok = 0, tot = 0;
+    $$('td[data-c]', root).forEach(td => {
+      const r = rows[+td.dataset.i], ans = r.cols[td.dataset.c], v = $('select', td).value; tot++;
+      const good = Array.isArray(ans) ? ans.includes(v) : v === ans; if (good) ok++;
+      td.className = good ? 'ok' : 'no'; td.title = 'Sample answer: ' + (Array.isArray(ans) ? ans.join(' / ') : ans);
+    });
+    $$('.nt', root).forEach(n => n.textContent = rows[+n.dataset.i].note || '');
+    const fb = $('.feedback', root); fb.className = 'feedback show ' + (ok === tot ? 'ok' : 'info');
+    fb.innerHTML = `${ok} of ${tot} cells match the sample answer. Hover a red cell to see the sample label. ${opts.after || ''}`;
+  };
+  $('.rst', root).onclick = () => makeLabeler(sel, rows, options, opts);
+}
+// simple persistent checklist: makeChecklist('#el', key, items[])
+function makeChecklist(sel, key, items) {
+  const root = $(sel); if (!root) return;
+  const st = new Set(store.get(key, []));
+  const draw = () => {
+    root.innerHTML = items.map((t, i) => `<label class="check"><input type="checkbox" data-i="${i}" ${st.has(i) ? 'checked' : ''}><span>${t}</span></label>`).join('') + `<div class="meter" style="margin-top:10px"><div style="width:${st.size / items.length * 100}%"></div></div><p class="small">${st.size} of ${items.length} done</p>`;
+    $$('input', root).forEach(c => c.onchange = () => { c.checked ? st.add(+c.dataset.i) : st.delete(+c.dataset.i); store.set(key, [...st]); draw(); });
+  };
+  draw();
+}
+// download text as a file
+function downloadText(name, text) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type: 'text/plain' })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
+</script>
+<script>
+const KD={"nodes":[{"id":0,"club":"H","c":1,"pr":0.0885,"prU":0.097,"deg":16,"wdeg":42,"btw":0.438,"btwR":231.07,"core":4,"clo":0.569,"p":[0.613,0.623],"r":[0.623,0.742]},{"id":1,"club":"H","c":0,"pr":0.0574,"prU":0.0529,"deg":9,"wdeg":29,"btw":0.054,"btwR":28.48,"core":4,"clo":0.485,"p":[0.516,0.688],"r":[0.795,0.942]},{"id":2,"club":"H","c":0,"pr":0.0628,"prU":0.0571,"deg":10,"wdeg":33,"btw":0.144,"btwR":75.85,"core":4,"clo":0.559,"p":[0.42,0.659],"r":[0.74,0.922]},{"id":3,"club":"H","c":0,"pr":0.0372,"prU":0.0359,"deg":6,"wdeg":18,"btw":0.012,"btwR":6.29,"core":4,"clo":0.465,"p":[0.589,0.743],"r":[0.029,0.466]},{"id":4,"club":"H","c":1,"pr":0.0205,"prU":0.022,"deg":3,"wdeg":8,"btw":0.001,"btwR":0.33,"core":3,"clo":0.379,"p":[0.759,0.436],"r":[0.943,0.649]},{"id":5,"club":"H","c":1,"pr":0.0338,"prU":0.0291,"deg":4,"wdeg":14,"btw":0.03,"btwR":15.83,"core":3,"clo":0.384,"p":[0.848,0.435],"r":[0.901,0.113]},{"id":6,"club":"H","c":1,"pr":0.0315,"prU":0.0291,"deg":4,"wdeg":13,"btw":0.03,"btwR":15.83,"core":3,"clo":0.384,"p":[0.855,0.538],"r":[0.469,0.247]},{"id":7,"club":"H","c":0,"pr":0.0265,"prU":0.0245,"deg":4,"wdeg":13,"btw":0.0,"btwR":0.0,"core":4,"clo":0.44,"p":[0.531,0.832],"r":[0.544,0.574]},{"id":8,"club":"H","c":3,"pr":0.0334,"prU":0.0298,"deg":5,"wdeg":17,"btw":0.056,"btwR":29.53,"core":4,"clo":0.516,"p":[0.356,0.482],"r":[0.013,0.217]},{"id":9,"club":"O","c":3,"pr":0.0095,"prU":0.0143,"deg":2,"wdeg":3,"btw":0.001,"btwR":0.45,"core":2,"clo":0.434,"p":[0.205,0.902],"r":[0.279,0.916]},{"id":10,"club":"H","c":1,"pr":0.0207,"prU":0.022,"deg":3,"wdeg":8,"btw":0.001,"btwR":0.33,"core":3,"clo":0.379,"p":[0.788,0.301],"r":[0.766,0.16]},{"id":11,"club":"H","c":1,"pr":0.0098,"prU":0.0096,"deg":1,"wdeg":3,"btw":0.0,"btwR":0.0,"core":1,"clo":0.367,"p":[0.812,0.742],"r":[0.797,0.139]},{"id":12,"club":"H","c":0,"pr":0.0115,"prU":0.0146,"deg":2,"wdeg":4,"btw":0.0,"btwR":0.0,"core":2,"clo":0.371,"p":[0.752,0.889],"r":[0.617,0.127]},{"id":13,"club":"H","c":0,"pr":0.0335,"prU":0.0295,"deg":5,"wdeg":17,"btw":0.046,"btwR":24.22,"core":4,"clo":0.516,"p":[0.462,0.548],"r":[0.002,0.871]},{"id":14,"club":"O","c":3,"pr":0.0129,"prU":0.0145,"deg":2,"wdeg":5,"btw":0.0,"btwR":0.0,"core":2,"clo":0.371,"p":[0.002,0.473],"r":[0.209,0.215]},{"id":15,"club":"O","c":3,"pr":0.0164,"prU":0.0145,"deg":2,"wdeg":7,"btw":0.0,"btwR":0.0,"core":2,"clo":0.371,"p":[0.096,0.256],"r":[0.982,0.872]},{"id":16,"club":"H","c":1,"pr":0.0168,"prU":0.0168,"deg":2,"wdeg":6,"btw":0.0,"btwR":0.0,"core":2,"clo":0.284,"p":[1.0,0.429],"r":[0.289,0.961]},{"id":17,"club":"H","c":1,"pr":0.0097,"prU":0.0146,"deg":2,"wdeg":3,"btw":0.0,"btwR":0.0,"core":2,"clo":0.375,"p":[0.705,1.0],"r":[0.539,0.678]},{"id":18,"club":"O","c":3,"pr":0.0095,"prU":0.0145,"deg":2,"wdeg":3,"btw":0.0,"btwR":0.0,"core":2,"clo":0.371,"p":[0.077,0.035],"r":[0.205,0.941]},{"id":19,"club":"H","c":1,"pr":0.0131,"prU":0.0196,"deg":3,"wdeg":5,"btw":0.032,"btwR":17.15,"core":3,"clo":0.5,"p":[0.441,0.821],"r":[0.691,0.967]},{"id":20,"club":"O","c":3,"pr":0.0112,"prU":0.0145,"deg":2,"wdeg":4,"btw":0.0,"btwR":0.0,"core":2,"clo":0.371,"p":[0.0,0.185],"r":[0.894,0.299]},{"id":21,"club":"H","c":1,"pr":0.0114,"prU":0.0146,"deg":2,"wdeg":4,"btw":0.0,"btwR":0.0,"core":2,"clo":0.375,"p":[0.623,0.975],"r":[0.361,0.166]},{"id":22,"club":"O","c":3,"pr":0.013,"prU":0.0145,"deg":2,"wdeg":5,"btw":0.0,"btwR":0.0,"core":2,"clo":0.371,"p":[0.021,0.343],"r":[0.146,0.065]},{"id":23,"club":"O","c":3,"pr":0.0411,"prU":0.0315,"deg":5,"wdeg":21,"btw":0.018,"btwR":9.3,"core":3,"clo":0.393,"p":[0.111,0.5],"r":[0.301,0.603]},{"id":24,"club":"O","c":2,"pr":0.0166,"prU":0.0211,"deg":3,"wdeg":7,"btw":0.002,"btwR":1.17,"core":3,"clo":0.375,"p":[0.072,0.889],"r":[0.003,0.678]},{"id":25,"club":"O","c":2,"pr":0.0287,"prU":0.021,"deg":3,"wdeg":14,"btw":0.004,"btwR":2.03,"core":3,"clo":0.375,"p":[0.103,0.709],"r":[0.338,0.31]},{"id":26,"club":"O","c":3,"pr":0.0152,"prU":0.015,"deg":2,"wdeg":6,"btw":0.0,"btwR":0.0,"core":2,"clo":0.363,"p":[0.184,0.0],"r":[0.819,0.481]},{"id":27,"club":"O","c":3,"pr":0.0272,"prU":0.0256,"deg":4,"wdeg":13,"btw":0.022,"btwR":11.79,"core":3,"clo":0.458,"p":[0.171,0.683],"r":[0.316,0.481]},{"id":28,"club":"O","c":2,"pr":0.0145,"prU":0.0196,"deg":3,"wdeg":6,"btw":0.002,"btwR":0.95,"core":3,"clo":0.452,"p":[0.283,0.792],"r":[0.705,0.057]},{"id":29,"club":"O","c":3,"pr":0.0283,"prU":0.0263,"deg":4,"wdeg":13,"btw":0.003,"btwR":1.54,"core":3,"clo":0.384,"p":[0.156,0.192],"r":[0.975,0.023]},{"id":30,"club":"O","c":3,"pr":0.023,"prU":0.0246,"deg":4,"wdeg":11,"btw":0.014,"btwR":7.61,"core":4,"clo":0.458,"p":[0.33,0.371],"r":[0.75,0.845]},{"id":31,"club":"O","c":2,"pr":0.042,"prU":0.0372,"deg":6,"wdeg":21,"btw":0.138,"btwR":73.01,"core":3,"clo":0.541,"p":[0.242,0.643],"r":[0.018,0.788]},{"id":32,"club":"O","c":3,"pr":0.0759,"prU":0.0717,"deg":12,"wdeg":38,"btw":0.145,"btwR":76.69,"core":4,"clo":0.516,"p":[0.173,0.385],"r":[0.366,0.579]},{"id":33,"club":"O","c":3,"pr":0.097,"prU":0.1009,"deg":17,"wdeg":48,"btw":0.304,"btwR":160.55,"core":4,"clo":0.55,"p":[0.206,0.447],"r":[0.009,0.047]}],"edges":[[0,1,4],[0,2,5],[0,3,3],[0,4,3],[0,5,3],[0,6,3],[0,7,2],[0,8,2],[0,10,2],[0,11,3],[0,12,1],[0,13,3],[0,17,2],[0,19,2],[0,21,2],[0,31,2],[1,2,6],[1,3,3],[1,7,4],[1,13,5],[1,17,1],[1,19,2],[1,21,2],[1,30,2],[2,3,3],[2,7,4],[2,8,5],[2,9,1],[2,13,3],[2,27,2],[2,28,2],[2,32,2],[3,7,3],[3,12,3],[3,13,3],[4,6,2],[4,10,3],[5,6,5],[5,10,3],[5,16,3],[6,16,3],[8,30,3],[8,32,3],[8,33,4],[9,33,2],[13,33,3],[14,32,3],[14,33,2],[15,32,3],[15,33,4],[18,32,1],[18,33,2],[19,33,1],[20,32,3],[20,33,1],[22,32,2],[22,33,3],[23,25,5],[23,27,4],[23,29,3],[23,32,5],[23,33,4],[24,25,2],[24,27,3],[24,31,2],[25,31,7],[26,29,4],[26,33,2],[27,33,4],[28,31,2],[28,33,2],[29,32,4],[29,33,2],[30,32,3],[30,33,3],[31,32,4],[31,33,4],[32,33,5]],"ic":{"0":0,"1":1,"10":1,"11":1,"19":1,"2":2,"13":2,"17":2,"5":2,"3":3,"7":3,"27":3,"28":3,"32":3,"16":3,"33":4,"14":4,"20":5,"23":5,"30":5},"casc":{"c01":{"topic":"recall news","n":[[0.5,0.552,0.0,"pos",0],[0.7,0.571,57.6,"neg",1],[0.442,0.725,5.0,"pos",1],[0.739,0.606,42.2,"neu",1],[0.705,0.622,15.8,"neu",1],[0.705,0.597,9.9,"neu",1],[0.626,0.603,38.5,"neg",1],[0.668,0.611,17.1,"neu",1],[0.489,0.627,1.3,"neg",1],[0.769,0.598,5.6,"neu",1],[0.768,0.576,48.0,"neu",1],[0.586,0.623,5.8,"neu",1],[0.738,0.621,36.7,"neu",1],[0.23,0.562,5.0,"pos",1],[0.727,0.636,16.2,"neu",1],[0.324,0.533,18.1,"neu",1],[1.0,0.572,8.0,"pos",2],[0.495,0.373,4.0,"neu",1],[0.99,0.618,51.9,"pos",2],[0.963,0.675,6.0,"pos",2],[0.538,0.619,9.9,"neg",1],[0.414,0.725,19.7,"neu",1],[0.706,0.646,19.7,"pos",1],[0.669,0.638,2.9,"neu",1],[0.685,0.679,6.1,"neg",1],[0.63,0.634,14.3,"neu",1],[0.479,0.656,9.9,"pos",1],[0.278,0.839,31.6,"neg",2],[0.714,0.666,35.6,"pos",1],[0.583,0.719,3.8,"neu",1],[0.276,0.453,5.4,"pos",1],[0.254,0.626,1.0,"pos",1],[0.234,0.577,24.7,"neu",1],[0.682,0.658,10.0,"neu",1],[0.654,0.667,7.6,"pos",1],[0.621,0.66,8.8,"pos",1],[0.713,0.448,5.3,"neg",1],[0.925,0.722,59.8,"neu",2],[0.578,0.651,23.3,"neu",1],[0.252,0.48,14.5,"pos",1],[0.628,0.687,28.4,"pos",1],[0.595,0.68,53.6,"neu",1],[0.556,0.676,25.6,"pos",1],[0.535,0.699,10.8,"neu",1],[0.654,0.686,92.0,"pos",1],[0.497,0.701,22.7,"neu",1],[0.53,0.648,82.3,"neg",1],[0.868,0.77,41.4,"neu",2],[0.486,0.595,0.3,"neu",1],[0.815,0.801,75.7,"neu",2],[0.51,0.873,55.4,"pos",2],[0.512,0.676,80.1,"neu",1],[0.603,0.702,22.2,"neu",1],[0.771,0.534,23.9,"neu",1],[0.373,0.395,37.9,"neg",1],[0.572,0.7,35.2,"neg",1],[0.552,0.716,58.0,"neg",1],[0.234,0.6,3.2,"neu",1],[0.503,0.72,17.2,"pos",1],[0.528,0.719,16.3,"neu",1],[0.467,0.684,14.1,"pos",1],[0.301,0.672,19.4,"neu",1],[0.432,0.673,0.1,"neu",1],[0.454,0.705,32.7,"neu",1],[0.425,0.699,31.5,"neu",1],[0.478,0.717,10.2,"neu",1],[0.424,0.386,72.5,"pos",1],[0.396,0.702,37.9,"pos",1],[0.441,0.611,10.8,"neg",1],[0.323,0.254,20.0,"pos",2],[0.443,0.577,28.3,"neu",1],[0.394,0.682,0.4,"pos",1],[0.371,0.697,28.1,"neg",1],[0.361,0.671,4.8,"neu",1],[0.632,0.705,0.7,"neu",1],[0.35,0.69,10.4,"neg",1],[0.331,0.679,2.6,"pos",1],[0.334,0.414,1.0,"neg",1],[0.737,0.834,10.0,"neg",2],[0.439,0.642,17.2,"neg",1],[0.296,0.653,13.6,"pos",1],[0.325,0.66,2.8,"pos",1],[0.065,0.71,57.4,"neg",2],[0.396,0.626,111.7,"pos",1],[0.653,0.857,8.4,"neu",2],[0.432,0.545,4.4,"neg",1],[0.131,0.769,20.6,"neu",2],[0.397,0.655,24.4,"pos",1],[0.353,0.616,60.2,"neg",1],[0.041,0.68,15.9,"pos",2],[0.237,0.508,50.1,"neg",1],[0.317,0.636,6.5,"neu",1],[0.356,0.644,40.4,"neu",1],[0.001,0.578,36.2,"pos",2],[0.395,0.594,33.3,"neg",1],[0.28,0.641,34.9,"pos",1],[0.283,0.624,4.1,"neu",1],[0.267,0.607,17.8,"neg",1],[0.264,0.587,1.3,"pos",1],[0.31,0.609,9.9,"pos",1],[0.541,0.381,31.9,"neg",1],[0.3,0.586,77.5,"neu",1],[0.448,0.87,12.3,"neu",2],[0.346,0.587,21.6,"neu",1],[0.266,0.564,2.3,"neg",1],[0.246,0.546,68.2,"neu",1],[0.393,0.563,11.5,"pos",1],[0.348,0.857,27.6,"neu",2],[0.01,0.619,9.2,"neg",2],[0.348,0.559,24.1,"neu",1],[0.241,0.531,0.6,"neu",1],[0.645,0.404,33.1,"neu",1],[0.278,0.539,9.6,"neu",1],[0.303,0.56,59.2,"neu",1],[0.161,0.317,40.2,"neg",2],[0.464,0.518,55.5,"neu",1],[0.0,0.544,24.9,"pos",2],[0.41,0.422,4.7,"neu",1],[0.619,0.241,19.1,"neg",2],[0.335,0.506,7.1,"neu",1],[0.259,0.518,3.5,"neg",1],[0.293,0.513,21.6,"pos",1],[0.376,0.496,52.8,"neu",1],[0.016,0.469,56.9,"pos",2],[0.374,0.531,30.4,"pos",1],[0.297,0.488,40.0,"pos",1],[0.264,0.497,132.7,"neg",1],[0.334,0.477,49.8,"neg",1],[0.278,0.473,10.6,"neg",1],[0.305,0.461,11.8,"pos",1],[0.734,0.464,41.9,"pos",1],[0.304,0.443,26.6,"neg",1],[0.217,0.816,45.3,"pos",2],[0.376,0.467,40.0,"pos",1],[0.421,0.481,61.1,"neg",1],[0.085,0.373,24.0,"pos",2],[0.34,0.45,33.9,"pos",1],[0.322,0.432,7.2,"pos",1],[0.415,0.514,25.8,"pos",1],[0.044,0.42,60.7,"neu",2],[0.419,0.452,17.1,"neu",1],[0.353,0.426,11.5,"pos",1],[0.375,0.414,46.4,"pos",1],[0.405,0.402,40.5,"neg",1],[0.456,0.39,6.8,"pos",1],[0.468,0.487,13.9,"pos",1],[0.198,0.297,11.7,"neg",2],[0.38,0.439,9.1,"pos",1],[0.513,0.509,0.6,"neu",1],[0.353,0.247,74.3,"neg",2],[0.554,0.236,67.7,"pos",2],[0.449,0.43,13.6,"neu",1],[0.437,0.403,52.2,"neu",1],[0.483,0.392,26.7,"neu",1],[0.568,0.392,26.6,"neu",1],[0.467,0.456,12.4,"pos",1],[0.768,0.283,33.5,"neu",2],[0.502,0.439,16.8,"neu",1],[0.474,0.412,68.9,"neu",1],[0.514,0.392,8.0,"pos",1],[0.592,0.395,2.1,"neu",1],[0.614,0.402,10.3,"pos",1],[0.512,0.414,114.3,"neu",1],[0.704,0.438,36.6,"neu",1],[0.545,0.401,5.3,"neg",1],[0.512,0.473,22.6,"pos",1],[0.556,0.524,5.8,"pos",1],[0.853,0.326,34.7,"pos",2],[0.405,0.239,40.5,"pos",2],[0.555,0.49,85.6,"neu",1],[0.548,0.427,26.3,"neu",1],[0.673,0.428,3.1,"pos",1],[0.652,0.421,13.7,"neu",1],[0.62,0.42,6.9,"pos",1],[0.548,0.454,25.2,"neg",1],[0.564,0.558,6.5,"neu",1],[0.908,0.367,47.2,"pos",2],[0.938,0.398,155.2,"neu",2],[0.665,0.117,34.9,"neu",3],[0.601,0.536,20.4,"neu",1],[0.592,0.44,35.8,"neg",1],[0.581,0.414,6.1,"pos",1],[0.635,0.442,30.9,"neu",1],[0.631,0.468,6.3,"neu",1],[0.672,0.446,4.5,"pos",1],[0.707,0.472,9.8,"neg",1],[0.589,0.468,18.1,"neg",1],[0.705,0.0,44.8,"neg",4],[0.601,0.499,0.8,"pos",1],[0.675,0.467,58.5,"pos",1],[0.734,0.484,40.2,"neu",1],[0.652,0.492,24.2,"pos",1],[0.696,0.494,26.1,"neg",1],[0.732,0.5,4.8,"neu",1],[0.72,0.521,58.6,"neg",1],[0.76,0.501,7.4,"pos",1],[0.658,0.549,9.3,"neu",1],[0.98,0.461,25.5,"neg",2],[0.535,0.588,3.7,"pos",1],[0.505,1.0,89.4,"pos",3],[0.583,0.59,119.0,"neu",1],[0.998,0.515,152.8,"neu",2],[0.66,0.581,1.1,"neu",1],[0.637,0.52,53.0,"neg",1],[0.751,0.519,47.5,"neu",1],[0.76,0.555,10.2,"pos",1],[0.68,0.52,4.9,"neu",1],[0.742,0.54,47.2,"pos",1],[0.738,0.565,32.6,"pos",1],[0.704,0.546,4.2,"neu",1],[0.618,0.567,15.1,"neg",1],[0.739,0.586,26.3,"neu",1]],"e":[[0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[0,7],[0,8],[0,9],[0,10],[0,11],[0,12],[0,13],[0,14],[0,15],[9,16],[0,17],[10,18],[9,19],[0,20],[0,21],[0,22],[0,23],[0,24],[0,25],[0,26],[2,27],[0,28],[0,29],[0,30],[0,31],[0,32],[0,33],[0,34],[0,35],[0,36],[28,37],[0,38],[0,39],[0,40],[0,41],[0,42],[0,43],[0,44],[0,45],[0,46],[24,47],[0,48],[28,49],[21,50],[0,51],[0,52],[0,53],[0,54],[0,55],[0,56],[0,57],[0,58],[0,59],[0,60],[0,61],[0,62],[0,63],[0,64],[0,65],[0,66],[0,67],[0,68],[17,69],[0,70],[0,71],[0,72],[0,73],[0,74],[0,75],[0,76],[0,77],[74,78],[0,79],[0,80],[0,81],[57,82],[0,83],[29,84],[0,85],[61,86],[0,87],[0,88],[31,89],[0,90],[0,91],[0,92],[32,93],[0,94],[0,95],[0,96],[0,97],[0,98],[0,99],[0,100],[0,101],[2,102],[0,103],[0,104],[0,105],[0,106],[21,107],[13,108],[0,109],[0,110],[0,111],[0,112],[0,113],[54,114],[0,115],[57,116],[0,117],[17,118],[0,119],[0,120],[0,121],[0,122],[90,123],[0,124],[0,125],[0,126],[0,127],[0,128],[0,129],[0,130],[0,131],[21,132],[0,133],[0,134],[30,135],[0,136],[0,137],[0,138],[39,139],[0,140],[0,141],[0,142],[0,143],[0,144],[0,145],[77,146],[0,147],[0,148],[66,149],[100,150],[0,151],[0,152],[0,153],[0,154],[0,155],[111,156],[0,157],[0,158],[0,159],[0,160],[0,161],[0,162],[0,163],[0,164],[0,165],[0,166],[36,167],[54,168],[0,169],[0,170],[0,171],[0,172],[0,173],[0,174],[0,175],[130,176],[163,177],[118,178],[0,179],[0,180],[0,181],[0,182],[0,183],[0,184],[0,185],[0,186],[178,187],[0,188],[0,189],[0,190],[0,191],[0,192],[0,193],[0,194],[0,195],[0,196],[195,197],[0,198],[50,199],[0,200],[53,201],[0,202],[0,203],[0,204],[0,205],[0,206],[0,207],[0,208],[0,209],[0,210],[0,211]]},"c05":{"topic":"fire rumour","n":[[0.803,1.0,0.0,"neg",0],[0.791,0.973,47.8,"neu",1],[0.78,0.946,104.2,"neu",2],[0.77,0.918,142.7,"neu",3],[0.763,0.889,340.8,"neg",4],[0.764,0.857,350.1,"neg",5],[0.844,0.849,425.9,"neg",6],[0.924,0.847,458.3,"neg",7],[1.0,0.849,545.5,"neg",8],[0.697,0.838,351.6,"pos",6],[0.62,0.826,365.8,"neg",7],[0.559,0.849,471.7,"neg",8],[0.593,0.796,368.9,"neg",8],[0.537,0.774,484.8,"neg",9],[0.514,0.745,604.4,"neg",10],[0.504,0.871,498.9,"neg",9],[0.468,0.79,632.4,"neg",10],[0.465,0.722,660.5,"neg",11],[0.405,0.702,682.0,"neu",12],[0.335,0.684,765.0,"neg",13],[0.258,0.699,828.8,"neg",14],[0.185,0.714,843.8,"neg",15],[0.115,0.727,912.0,"neg",16],[0.339,0.653,800.0,"neg",14],[0.326,0.623,875.9,"neg",15],[0.295,0.596,1009.2,"neg",16],[0.247,0.57,1022.3,"neu",17],[0.161,0.573,1095.9,"neg",18],[0.079,0.576,1114.0,"neg",19],[0.0,0.58,1199.2,"neg",20],[0.281,0.541,1082.0,"neg",18],[0.303,0.513,1104.1,"neg",19],[0.315,0.484,1126.2,"neg",20],[0.317,0.456,1321.9,"neg",21],[0.309,0.427,1334.5,"neg",22],[0.288,0.399,1341.5,"neg",23],[0.248,0.372,1441.4,"neg",24],[0.279,0.342,1562.7,"neg",25],[0.162,0.374,1524.5,"neg",25],[0.08,0.374,1525.0,"neg",26],[0.271,0.31,1708.2,"neg",26],[0.207,0.311,1713.5,"neg",27],[0.333,0.29,1777.8,"neg",27],[0.188,0.292,1726.5,"neg",27],[0.108,0.283,1790.7,"neg",28],[0.378,0.265,1801.8,"neg",28],[0.394,0.236,1850.2,"neg",29],[0.327,0.218,1961.9,"neg",30],[0.456,0.217,1889.3,"neg",30],[0.494,0.192,2003.2,"neg",31],[0.517,0.164,2023.9,"neg",32],[0.523,0.134,2090.2,"neg",33],[0.584,0.114,2109.8,"neg",34],[0.449,0.119,2182.2,"neg",34],[0.624,0.087,2215.0,"neg",35],[0.558,0.071,2244.4,"neg",36],[0.708,0.089,2228.0,"neg",36],[0.629,0.056,2257.0,"neg",36],[0.618,0.027,2293.7,"neg",37],[0.607,0.0,2367.2,"neu",38],[0.786,0.084,2310.9,"neg",37]],"e":[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[5,9],[9,10],[10,11],[10,12],[12,13],[13,14],[11,15],[13,16],[14,17],[17,18],[18,19],[19,20],[20,21],[21,22],[19,23],[23,24],[24,25],[25,26],[26,27],[27,28],[28,29],[26,30],[30,31],[31,32],[32,33],[33,34],[34,35],[35,36],[36,37],[36,38],[38,39],[37,40],[40,41],[40,42],[40,43],[43,44],[42,45],[45,46],[46,47],[46,48],[48,49],[49,50],[50,51],[51,52],[51,53],[52,54],[54,55],[54,56],[54,57],[57,58],[58,59],[56,60]]}}};
+// ================= Chapter 6 · Gephi & project =================
+const N = KD.nodes, EDG = KD.edges;
+const ADJ = N.map(() => new Set()); EDG.forEach(([u, v]) => { ADJ[u].add(v); ADJ[v].add(u); });
+const CCOL = ['#1f5fa8', '#2e8b6a', '#9a5b13', '#5b5fc7'], CLUBC = { H: '#1f7a8c', O: '#ea5b0c' }, GREY = '#8a8580';
+const TOP4 = [33, 0, 32, 2];
+const PRMAX = Math.max(...N.map(n => n.pr)), BTMAX = Math.max(...N.map(n => n.btw));
+const lerp = (a, b, t) => a + (b - a) * t;
+const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+const mix = (c1, c2, t) => { const a = hex(c1), b = hex(c2); return 'rgb(' + a.map((x, i) => Math.round(lerp(x, b[i], t))).join(',') + ')'; };
+const seqBlue = t => mix('#dbe7f5', '#123f73', Math.max(0, Math.min(1, t)));
+
+// generic network drawer. nodes: [{x,y (0..1), r, fill, label, ring, dim}] edges: [[i,j,w,color]]
+function drawNet(svg, nodes, edges, o = {}) {
+  const W = 600, H = 420, P = o.pad || 26;
+  const X = x => P + x * (W - 2 * P), Y = y => P + y * (H - 2 * P);
+  let s = '';
+  edges.forEach(([i, j, w, c]) => {
+    const a = nodes[i], b = nodes[j]; if (!a || !b) return;
+    s += `<line x1="${X(a.x)}" y1="${Y(a.y)}" x2="${X(b.x)}" y2="${Y(b.y)}" style="stroke:${c || 'var(--muted)'};stroke-opacity:${o.op === undefined ? .45 : o.op};stroke-width:${o.ew ? o.ew(w) : 1.2}"></line>`;
+  });
+  nodes.forEach(n => {
+    if (!n) return;
+    s += `<circle cx="${X(n.x)}" cy="${Y(n.y)}" r="${n.r}" style="fill:${n.fill};stroke:${n.ring || 'var(--surface)'};stroke-width:${n.ring ? 3 : 1.5}"></circle>`;
+    if (n.label !== undefined && n.label !== null) {
+      const inside = n.r >= 9;
+      s += `<text x="${X(n.x)}" y="${inside ? Y(n.y) : Y(n.y) - n.r - 7}" style="fill:${inside ? '#fff' : 'var(--ink)'};font-weight:700;font-size:${inside ? 10 : 9}px">${n.label}</text>`;
+    }
+  });
+  svg.innerHTML = s;
+}
+
+// ---------- Section 1: warm-up ----------
+drawNet($('#wuA'), N.map(n => ({ x: n.r[0], y: n.r[1], r: 7, fill: GREY })), EDG, { op: .55 });
+drawNet($('#wuB'), N.map(n => ({ x: n.p[0], y: n.p[1], r: 5 + 15 * n.pr / PRMAX, fill: CCOL[n.c], label: TOP4.includes(n.id) ? n.id : null })), EDG, { op: .35 });
+
+// ---------- Section 2: install checklist ----------
+makeChecklist('#instCheck', 'sma-ch6-install', ['Downloaded Gephi 0.10.1 from gephi.org (the file for my system: Windows, macOS or Linux)', 'Installed it — Java is embedded, no separate install needed', 'Opened Gephi and loaded a sample graph from the welcome screen', 'Downloaded karate_ch6.gexf from data/gephi/ (or ran Lab6.1_Gephi.ipynb)']);
+
+// ---------- Section 3: workspace ----------
+const WS = [['tabs', 'Tabs: Overview · Data Laboratory · Preview', 'Three tabs: explore the graph (Overview), check the data as tables (Data Laboratory), style and export the final figure (Preview).', 'grid-column:1/4;grid-row:1;min-height:0', ''],
+  ['app', 'Appearance', 'Colour, size and labels from attributes. Unique = one value for all; Partition = categories (e.g. Modularity Class); Ranking = numbers (e.g. PageRank).', 'grid-column:1;grid-row:2', 'Nodes | Edges · Unique | Partition | Ranking · Apply'],
+  ['graph', 'Graph', 'See, zoom, drag and select nodes. The toolbar below switches labels and edges on or off.', 'grid-column:2;grid-row:2/4', ''],
+  ['ctx', 'Context', 'Live counts: nodes, edges, directed or undirected. After a filter it shows the visible graph.', 'grid-column:3;grid-row:2', 'Nodes: 34 · Edges: 78 · Undirected Graph'],
+  ['lay', 'Layout', 'Algorithms that position the nodes: choose, Run, watch, Stop. ForceAtlas 2 is the default choice for social networks.', 'grid-column:1;grid-row:3', 'ForceAtlas 2 ▾ · Run · Scaling · Gravity'],
+  ['fs', 'Filters | Statistics', 'Filters focus the view (drag into Queries → Filter). Statistics compute metrics and add a column to the Data Laboratory.', 'grid-column:3;grid-row:3', 'Modularity ▸ Run · PageRank ▸ Run · Network Diameter ▸ Run']];
+$('#wsGrid').innerHTML = WS.map(([k, t, , st, sub]) => `<div class="zone wsz" data-k="${k}" style="${st}"><b>${t}</b>${sub ? `<span class="small">${sub}</span>` : ''}${k === 'graph' ? '<svg id="wsSvg" viewBox="0 0 600 420" style="width:100%"></svg>' : ''}</div>`).join('');
+drawNet($('#wsSvg'), N.map(n => ({ x: n.p[0], y: n.p[1], r: 4 + 9 * n.pr / PRMAX, fill: CCOL[n.c] })), EDG, { op: .3 });
+$$('#wsGrid .zone').forEach(z => z.onclick = () => { $$('#wsGrid .zone').forEach(x => x.classList.toggle('on', x === z)); $('#wsMsg').textContent = WS.find(w => w[0] === z.dataset.k)[2]; });
+$('#wsMsg').textContent = 'Click a panel.';
+
+// ---------- Section 4: CSV header checker ----------
+function chkHdr() {
+  const sp = s => s.split(/[;,\t]/).map(x => x.trim()).filter(Boolean);
+  const nH = sp($('#hdrN').value), eH = sp($('#hdrE').value), low = a => a.map(x => x.toLowerCase());
+  const out = [], ok = (c, g, b) => out.push(`<div>${c ? '✅' : '⚠️'} ${c ? g : b}</div>`);
+  ok(low(nH).includes('id'), 'nodes: an <code>Id</code> column', 'nodes: no <code>Id</code> column — rename your ID column to <code>Id</code>');
+  ok(low(nH).includes('label') || !nH.length, 'nodes: a <code>Label</code> column (optional)', 'nodes: no <code>Label</code> — fine, Gephi uses the Id (optional)');
+  ok(low(eH).includes('source') && low(eH).includes('target'), 'edges: <code>Source</code> and <code>Target</code>', 'edges: Gephi needs <code>Source</code> and <code>Target</code> — e.g. rename from/to');
+  ok(low(eH).includes('weight'), 'edges: a numeric <code>Weight</code> column', 'edges: no <code>Weight</code> — every edge counts 1 (rename count → Weight?)');
+  ok(low(eH).includes('type') || true, low(eH).includes('type') ? 'edges: <code>Type</code> (Directed / Undirected)' : 'edges: no <code>Type</code> — choose directed or undirected in the import dialog', '');
+  const priv = [...nH, ...eH].filter(x => /user ?name|screen_?name|handle|real_?name|email|^name$/i.test(x));
+  ok(!priv.length, 'privacy: no name-like columns', `privacy: <b>${priv.map(esc).join(', ')}</b> — drop it; use pseudonymised IDs only`);
+  $('#hdrOut').innerHTML = out.join('');
+}
+$('#hdrN').oninput = chkHdr; $('#hdrE').oninput = chkHdr; chkHdr();
+
+// ---------- Section 5: Data Laboratory ----------
+const DLC = [['Id', n => n.id], ['Label', n => n.id], ['club', n => n.club === 'H' ? 'Mr. Hi' : 'Officer'], ['community_nx', n => n.c], ['pagerank_nx', n => n.pr], ['Degree', n => n.deg], ['Weighted Degree', n => n.wdeg]];
+let dlSort = [0, 1];
+function drawDL() {
+  const [ci, dir] = dlSort, rows = [...N].sort((a, b) => { const x = DLC[ci][1](a), y = DLC[ci][1](b); return (x > y ? 1 : x < y ? -1 : 0) * dir; });
+  $('#dlTbl').innerHTML = '<tr>' + DLC.map((c, i) => `<th data-i="${i}" style="cursor:pointer">${c[0]}${i === ci ? (dir > 0 ? ' ▲' : ' ▼') : ''}</th>`).join('') + '</tr>' + rows.map(n => '<tr>' + DLC.map(c => `<td>${typeof c[1](n) === 'number' && !Number.isInteger(c[1](n)) ? c[1](n).toFixed(4) : c[1](n)}</td>`).join('') + '</tr>').join('');
+  $$('#dlTbl th').forEach(th => th.onclick = () => { const i = +th.dataset.i; dlSort = [i, dlSort[0] === i ? -dlSort[1] : -1]; drawDL(); });
+  if (ci === 4 || ci === 5 || ci === 6) $('#dlMsg').innerHTML = ci === 4 ? 'PageRank: 33 (0.0970), 0 (0.0885), 32 (0.0759) — weighted, as in Chapter 4.' : ci === 5 ? 'Degree: 33 has 17 ties, 0 has 16. Same top two as PageRank, but the order of the others differs.' : '<b>Weighted Degree</b> sums the edge weights: 33 → 48. If Gephi shows 48 for “degree”, you opened this column.';
+}
+drawDL();
+makeChecklist('#dlCheck', 'sma-ch6-dlcheck', ['Counts: 34 nodes, 78 edges?', 'Type: directed or undirected, as intended?', 'Weights: numbers, not text?', 'Attributes: numbers stored as numbers?', 'Duplicates and self-loops: none you did not expect?', 'Privacy: IDs only — no user names in the Label column']);
+
+// ---------- Section 6: live ForceAtlas-style layout ----------
+const FA = { pos: [], run: false, raf: null, seed: 7 };
+function faInit() { const r = rngSeed(FA.seed++); FA.pos = N.map(() => [(r() - .5) * 100, (r() - .5) * 100]); faDraw(); }
+function faTick() {
+  const kr = +$('#faSc').value, kg = +$('#faGr').value, lin = $('#faLin').checked, hub = $('#faHub').checked, useW = $('#faW').checked, ov = $('#faOv').checked;
+  const P = FA.pos, D = P.map(() => [0, 0]), rad = N.map(n => 1.5 + 2.5 * n.deg / 17);
+  for (let i = 0; i < N.length; i++) for (let j = i + 1; j < N.length; j++) {
+    let dx = P[i][0] - P[j][0], dy = P[i][1] - P[j][1], d = Math.hypot(dx, dy) || .01;
+    let f = kr * (N[i].deg + 1) * (N[j].deg + 1) / (d * d);
+    if (ov && d < rad[i] + rad[j] + 1) f *= 50;
+    D[i][0] += f * dx; D[i][1] += f * dy; D[j][0] -= f * dx; D[j][1] -= f * dy;
+  }
+  EDG.forEach(([u, v, w]) => {
+    let dx = P[u][0] - P[v][0], dy = P[u][1] - P[v][1], d = Math.hypot(dx, dy) || .01;
+    if (ov && d < rad[u] + rad[v] + 1) return;
+    let f = (lin ? Math.log(1 + d) / d : 1) * (useW ? w / 3 : 1);
+    if (hub) f /= (N[u].deg + 1);
+    D[u][0] -= f * dx; D[u][1] -= f * dy; D[v][0] += f * dx; D[v][1] += f * dy;
+  });
+  let move = 0;
+  P.forEach((p, i) => {
+    const d = Math.hypot(p[0], p[1]) || .01, g = kg * (N[i].deg + 1) / d;
+    D[i][0] -= g * p[0]; D[i][1] -= g * p[1];
+    let mx = D[i][0] * .02, my = D[i][1] * .02; const m = Math.hypot(mx, my);
+    if (m > 3) { mx *= 3 / m; my *= 3 / m; }
+    p[0] += mx; p[1] += my; move += Math.min(m, 3);
+  });
+  return move / N.length;
+}
+function faDraw() {
+  const xs = FA.pos.map(p => p[0]), ys = FA.pos.map(p => p[1]);
+  const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys), sc = Math.max(x1 - x0, (y1 - y0) * 600 / 420) || 1;
+  drawNet($('#faSvg'), N.map((n, i) => ({ x: (FA.pos[i][0] - x0) / sc + (1 - (x1 - x0) / sc) / 2, y: (FA.pos[i][1] - y0) / (sc * 420 / 600) + (1 - (y1 - y0) / (sc * 420 / 600)) / 2, r: 4 + 8 * n.deg / 17, fill: CCOL[n.c], label: TOP4.includes(n.id) ? n.id : null })), EDG, { op: .35 });
+}
+function faLoop() {
+  let m = 0; for (let k = 0; k < 3; k++) m = faTick(); faDraw();
+  $('#faMove').textContent = m.toFixed(2) + (m < .25 ? ' — stable: press Stop' : ' — still moving');
+  if (FA.run) FA.raf = requestAnimationFrame(faLoop);
+}
+$('#faRun').onclick = () => { if (!FA.run) { FA.run = true; faLoop(); } $('#faMsg').textContent = 'Running — change Scaling, Gravity or LinLog while it runs. Stop when the movement is small.'; };
+$('#faStop').onclick = () => { FA.run = false; cancelAnimationFrame(FA.raf); $('#faMsg').textContent = 'Stopped. In Gephi: switch on Prevent overlap for a few more seconds, then save the project (.gephi).'; };
+$('#faRnd').onclick = () => { faInit(); $('#faMsg').textContent = 'New random start. Run again: the groups come back, but the picture is rotated, mirrored or arranged differently — positions are not measurements.'; };
+[['faSc', 'faScV'], ['faGr', 'faGrV']].forEach(([a, b]) => { const f = () => $('#' + b).textContent = $('#' + a).value; $('#' + a).addEventListener('input', f); f(); });
+faInit();
+
+// ---------- Section 7: settings switchboard ----------
+const SW = [['norm', 'Network Diameter: Normalize', true], ['prw', 'PageRank: Use edge weight', true], ['wdeg', 'Read the “Weighted Degree” column', false], ['skip', 'Clustering: skip nodes with one tie', false], ['modw', 'Modularity: Use weights', true]];
+const swSt = Object.fromEntries(SW.map(([k, , v]) => [k, v]));
+$('#swBtns').innerHTML = SW.map(([k, l]) => `<label class="small" style="margin-right:12px"><input type="checkbox" data-k="${k}" ${swSt[k] ? 'checked' : ''}> ${l}</label>`).join('');
+$$('#swBtns input').forEach(c => c.onchange = () => { swSt[c.dataset.k] = c.checked; drawSW(); });
+function drawSW() {
+  const n0 = N[0], n33 = N[33];
+  const rows = [['Betweenness of node 0', '0.438', swSt.norm ? '0.438' : n0.btwR.toFixed(2), swSt.norm, 'raw path counts unless Normalize is on'],
+    ['PageRank of node 33', '0.097', swSt.prw ? '0.097' : n33.prU.toFixed(3), swSt.prw, 'edge weights ignored'],
+    ['Degree of node 33', '17', swSt.wdeg ? String(n33.wdeg) : '17', !swSt.wdeg, 'Weighted Degree sums the weights'],
+    ['Avg. clustering', '0.571', swSt.skip ? '0.588' : '0.571', !swSt.skip, 'node 11 has one tie: counted as 0 (networkx) or skipped'],
+    ['Modularity · classes', '0.427 · 4', swSt.modw ? '≈ 0.43 · 4' : 'another partition', swSt.modw, 'without weights Louvain sees another graph (networkx: 3 groups, 0.385)']];
+  $('#swTbl').innerHTML = '<tr><th>What you compare</th><th>Python (Ch 4)</th><th>Gephi shows</th><th>Why it can differ</th></tr>' + rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td class="${r[3] ? 'good' : 'bad'}">${r[2]}</td><td class="small">${r[4]}</td></tr>`).join('');
+  const bad = rows.filter(r => !r[3]).length;
+  $('#swMsg').className = 'feedback show ' + (bad ? 'no' : 'ok');
+  $('#swMsg').innerHTML = bad ? `${bad} value(s) differ from Chapter 4 — the graph is the same, only the settings changed. Write the setting into your caption.` : '✓ All values match Chapter 4. Same graph, same settings, same numbers — that is reproducibility.';
+}
+drawSW();
+
+// ---------- Section 8: mini-Gephi playground ----------
+const PGF = { deg: ['Degree ≥', 1, 17, 10], ego: ['Ego node =', 0, 33, 0], core: ['K-core k =', 1, 4, 4], com: ['Modularity Class =', 0, 3, 3] };
+function pgParam() {
+  const f = $('#pgFil').value, cfg = PGF[f];
+  $('#pgParW').style.display = cfg ? '' : 'none';
+  if (cfg) { $('#pgParL').textContent = cfg[0]; const r = $('#pgPar'); r.min = cfg[1]; r.max = cfg[2]; r.value = cfg[3]; $('#pgParV').textContent = r.value; }
+}
+function drawPG() {
+  const lay = $('#pgLay').value, col = $('#pgCol').value, sz = $('#pgSize').value, lab = $('#pgLab').value, fil = $('#pgFil').value, par = +$('#pgPar').value;
+  $('#pgParV').textContent = par;
+  const vis = N.map(n => fil === 'n' ? true : fil === 'deg' ? n.deg >= par : fil === 'ego' ? (n.id === par || ADJ[par].has(n.id)) : fil === 'core' ? n.core >= par : n.c === par);
+  const pos = n => lay === 'p' ? n.p : lay === 'r' ? n.r : [.5 + .5 * Math.cos(2 * Math.PI * n.id / 34 - Math.PI / 2), .5 + .5 * Math.sin(2 * Math.PI * n.id / 34 - Math.PI / 2)];
+  const fill = n => col === 'u' ? '#1f5fa8' : col === 'c' ? CCOL[n.c] : col === 'k' ? CLUBC[n.club] : col === 'pr' ? seqBlue(n.pr / PRMAX) : seqBlue((n.core - 1) / 3);
+  const rad = n => sz === 'u' ? 8 : sz === 'deg' ? 4 + 14 * n.deg / 17 : sz === 'pr' ? 4 + 14 * n.pr / PRMAX : 4 + 14 * n.btw / BTMAX;
+  const nodes = N.map(n => vis[n.id] ? { x: pos(n)[0], y: pos(n)[1], r: rad(n), fill: fill(n), label: lab === 'a' || (lab === 't' && TOP4.includes(n.id)) ? n.id : null, ring: (fil === 'ego' && n.id === par) ? 'var(--ink)' : null } : null);
+  const ed = EDG.filter(([u, v]) => vis[u] && vis[v]);
+  drawNet($('#pgSvg'), nodes, ed, { op: +$('#pgOp').value / 100, ew: $('#pgW').checked ? w => .6 + w * .7 : null });
+  $('#pgSvg').style.filter = $('#pgGrey').checked ? 'grayscale(1)' : '';
+  const n = vis.filter(Boolean).length, m = ed.length;
+  $('#pgKpi').innerHTML = [[n + ' / 34', 'visible nodes'], [m + ' / 78', 'visible edges'], [n > 1 ? (2 * m / (n * (n - 1))).toFixed(3) : '—', 'density (visible)'], [n ? (2 * m / n).toFixed(2) : '—', 'avg. degree (visible)']].map(([v, l]) => `<div class="kpi"><div class="v" style="font-size:1.2rem">${v}</div><div class="l">${l}</div></div>`).join('');
+  $('#pgLeg').innerHTML = col === 'c' ? [0, 1, 2, 3].map(i => `<span><i style="background:${CCOL[i]}"></i>class ${i} · ${N.filter(x => x.c === i).length} nodes</span>`).join('') : col === 'k' ? `<span><i style="background:${CLUBC.H}"></i>Mr. Hi · 17</span><span><i style="background:${CLUBC.O}"></i>Officer · 17</span>` : col === 'pr' ? `<span><i style="background:${seqBlue(0)}"></i>low PageRank</span><span><i style="background:${seqBlue(1)}"></i>high (33: 0.097)</span>` : col === 'core' ? `<span><i style="background:${seqBlue(0)}"></i>k-core 1</span><span><i style="background:${seqBlue(1)}"></i>k-core 4</span>` : '<span>one colour — no legend needed</span>';
+  const msg = [];
+  if (lay === 'r') msg.push('Random positions: no groups visible — run a layout first (Step 3).');
+  if (lay === 'c') msg.push('Circular by Id: tidy, but the order of Ids carries no meaning — structure is hidden.');
+  if (col === 'k' && fil === 'n' && lay === 'p') msg.push('Club colours on the force layout: compare with Modularity Class — only node 8 switches sides.');
+  if (col === 'c' && fil === 'n' && lay === 'p' && sz === 'pr') msg.push('Step 5 result: colour answers “which group?”, size answers “how important?”.');
+  if (sz === 'btw') msg.push('Size by betweenness: node 0 (0.438) and 33 (0.304) — the brokers; node 31 grows although it has only 6 ties.');
+  if (lab === 'a') msg.push('All labels: cluttered — label only the nodes you discuss.');
+  if (fil === 'deg') msg.push(`Degree Range ≥ ${par}: ${n} hub(s)` + (par === 10 ? ' — 0, 2, 32, 33.' : '.'));
+  if (fil === 'ego') msg.push(`Ego network of node ${par}: ${n} nodes (the node + its ${n - 1} neighbours).`);
+  if (fil === 'core') msg.push(`K-core k = ${par}: ${n} nodes` + (par === 4 ? ' — the dense core.' : '.'));
+  if (fil === 'com') msg.push(`Modularity Class ${par}: ${n} nodes.`);
+  if (fil !== 'n') msg.push('<b>Statistics now describe the visible graph</b> — e.g. the density changed. Say which view you used.');
+  if ($('#pgGrey').checked) msg.push('Greyscale: can you still tell the groups apart? If not, add labels or shapes, or choose lighter/darker colours.');
+  $('#pgMsg').innerHTML = msg.join(' ') || 'Change one setting at a time and watch what it reveals — or hides.';
+}
+$('#pgFil').onchange = () => { pgParam(); drawPG(); };
+['pgLay', 'pgCol', 'pgSize', 'pgLab', 'pgOp', 'pgW', 'pgGrey', 'pgPar'].forEach(id => $('#' + id).addEventListener('input', drawPG));
+pgParam(); drawPG();
+
+// palettes
+const PAL = [['Qualitative · Partition', 'categories without order: community, club, stance', ['#1f5fa8', '#ea5b0c', '#2e8b6a', '#5b5fc7', '#9a5b13', '#1f7a8c', '#b9b2ab'], '≤ 7–8 colours, then grey for “other”'],
+  ['Sequential · Ranking', 'low → high: PageRank, degree, number of posts', ['#eaf2fb', '#c5daf1', '#8db4e2', '#4e89cc', '#1f5fa8', '#153f70'], 'light = low, dark = high'],
+  ['Diverging · Ranking', 'a meaningful middle: mean sentiment −1 … 0 … +1', ['#c0392b', '#e08a7f', '#f2d3ce', '#e6e3e0', '#c5daf1', '#6e9fd6', '#1f5fa8'], 'red – grey – blue, not red – green'],
+  ['Avoid: red – green', 'the same diverging data in red – green', ['#c0392b', '#e08a7f', '#f2d3ce', '#e6e3e0', '#cfe8d8', '#7cc49b', '#2e8b6a'], 'hard for colour-blind readers']];
+$('#palBox').innerHTML = PAL.map(([a, b, cs, r]) => `<div class="check" style="align-items:center;flex-wrap:wrap"><div style="flex:1 1 220px"><b>${a}</b><br><span class="small">${b}</span></div><div class="pal" style="display:flex;gap:4px">${cs.map(c => `<span style="width:30px;height:30px;border-radius:5px;background:${c};border:1px solid var(--line)"></span>`).join('')}</div><span class="tag" style="margin-left:8px">${r}</span></div>`).join('');
+$('#palGrey').onchange = () => $$('#palBox .pal').forEach(p => p.style.filter = $('#palGrey').checked ? 'grayscale(1)' : '');
+
+makeSorter('#sortEnc', [{ id: 'part', label: '🎨 Colour · Partition' }, { id: 'rank', label: '🌡 Colour · Ranking' }, { id: 'size', label: '⚪ Node size' }, { id: 'time', label: '⏱ Timeline' }], [
+  { t: 'Louvain community', c: 'part' }, { t: 'club (Mr. Hi / Officer)', c: 'part' }, { t: 'stance: favour / against / none', c: 'part' },
+  { t: 'mean sentiment −1 … +1', c: 'rank', why: 'A number with a meaningful middle → diverging gradient.' }, { t: 'k-core number', c: 'rank' },
+  { t: 'PageRank (one metric for size)', c: 'size' }, { t: 'number of posts', c: 'size' },
+  { t: 'adoption step of a cascade', c: 'time' }, { t: 'minutes after the first post', c: 'time' }
+]);
+
+// ---------- Section 9: Timeline replay ----------
+const TL = { k: 'ic', t: 0, play: false, timer: null };
+const SENTC = { pos: '#2e8b6a', neu: GREY, neg: '#c0392b' };
+const TLD = {
+  ic: { name: 'Karate · one IC run (p = 0.25)', max: 5, step: 1, unit: 'step' },
+  c01: { name: 'EV cascade c01 · recall news', max: Math.ceil(Math.max(...KD.casc.c01.n.map(x => x[2]))), step: 1, unit: 'min' },
+  c05: { name: 'EV cascade c05 · fire rumour', max: Math.ceil(Math.max(...KD.casc.c05.n.map(x => x[2]))), step: 10, unit: 'min' }
+};
+$('#tlPick').innerHTML = Object.entries(TLD).map(([k, d]) => `<button class="btn ${k === 'ic' ? 'sel' : ''}" data-k="${k}">${d.name}</button>`).join('');
+$$('#tlPick .btn').forEach(b => b.onclick = () => { $$('#tlPick .btn').forEach(x => x.classList.toggle('sel', x === b)); TL.k = b.dataset.k; tlStop(); TL.t = 0; tlSetup(); drawTL(); });
+const fmtT = (k, t) => k === 'ic' ? 'step ' + t : (t >= 60 ? Math.floor(t / 60) + ' h ' + String(Math.round(t % 60)).padStart(2, '0') + ' min' : Math.round(t) + ' min');
+function tlSetup() { const d = TLD[TL.k], r = $('#tlT'); r.min = 0; r.max = d.max; r.step = d.step; r.value = TL.t; }
+function drawTL() {
+  const k = TL.k, t = TL.t; let nodes, edges, times, kp, msg, leg;
+  if (k === 'ic') {
+    times = N.map(n => KD.ic[n.id]);
+    nodes = N.map(n => { const a = KD.ic[n.id]; if (a !== undefined && a > t) return null; return { x: n.p[0], y: n.p[1], r: a !== undefined ? 8 : 5, fill: a !== undefined ? '#ea5b0c' : '#cfc8c1', ring: n.id === 0 ? 'var(--ink)' : null, label: n.id === 0 ? 0 : null }; });
+    edges = EDG.filter(([u, v]) => nodes[u] && nodes[v]).map(([u, v, w]) => [u, v, w, (KD.ic[u] !== undefined && KD.ic[v] !== undefined) ? '#ea5b0c' : null]);
+    const ad = Object.values(KD.ic).filter(s => s <= t).length;
+    kp = [[ad + ' / 34', 'adopted'], [fmtT(k, t), 'time'], [(ad / 34 * 100).toFixed(0) + '%', 'reach']];
+    msg = t === 5 ? '20 of 34 people adopted in 5 steps (1 · 5 · 9 · 15 · 17 · 20). Non-adopters stay visible in grey — in Gephi colour by the “adopted” attribute.' : 'Adopters appear when their start time is reached — exactly what Gephi’s Timeline does.';
+    leg = `<span><i style="background:#ea5b0c"></i>adopted</span><span><i style="background:#cfc8c1"></i>not (yet) adopted</span>`;
+  } else {
+    const C = KD.casc[k]; times = C.n.map(x => x[2]);
+    nodes = C.n.map((x, i) => x[2] > t ? null : { x: x[0], y: x[1], r: i === 0 ? 9 : 5, fill: SENTC[x[3]], ring: i === 0 ? 'var(--ink)' : null });
+    edges = C.e.filter(([a, b]) => nodes[a] && nodes[b]).map(([a, b]) => [a, b, 1, null]);
+    const vis = C.n.filter(x => x[2] <= t), dep = Math.max(0, ...vis.map(x => x[4])), neg = vis.filter(x => x[3] === 'neg').length;
+    kp = [[vis.length + ' / ' + C.n.length, 'posts'], [fmtT(k, t), 'after the first post'], [String(dep), 'depth'], [vis.length ? (neg / vis.length * 100).toFixed(0) + '%' : '—', 'negative']];
+    msg = k === 'c01' ? 'Recall news: 212 posts within 2.6 hours, but only depth 4 — most reposts come straight from the source. A broadcast.' : 'Fire rumour: 61 posts over 39.5 hours, depth 38, 89% negative — a long chain of person-to-person reposts. Viral, and it gets more negative.';
+    leg = `<span><i style="background:${SENTC.pos}"></i>positive</span><span><i style="background:${SENTC.neu}"></i>neutral</span><span><i style="background:${SENTC.neg}"></i>negative</span><span>ringed = first post</span>`;
+  }
+  drawNet($('#tlSvg'), nodes, edges, { op: .5, pad: 22 });
+  $('#tlKpi').innerHTML = kp.map(([v, l]) => `<div class="kpi"><div class="v" style="font-size:1.15rem">${v}</div><div class="l">${l}</div></div>`).join('');
+  $('#tlLeg').innerHTML = leg; $('#tlMsg').textContent = msg;
+  // cumulative curve
+  const ts = times.filter(x => x !== undefined).sort((a, b) => a - b), mx = TLD[k].max || 1, tot = k === 'ic' ? 34 : ts.length;
+  const X = v => 30 + v / mx * 280, Y = c => 130 - c / tot * 115;
+  let pts = `${X(0)},${Y(0)}`, c = 0; ts.forEach(v => { pts += ` ${X(v)},${Y(c)}`; c++; pts += ` ${X(v)},${Y(c)}`; }); pts += ` ${X(mx)},${Y(c)}`;
+  $('#tlCurve').innerHTML = `<line x1="30" y1="130" x2="310" y2="130" stroke="var(--line)"/><line x1="30" y1="12" x2="30" y2="130" stroke="var(--line)"/><polyline points="${pts}" fill="none" stroke="var(--accent)" stroke-width="2"/><line x1="${X(t)}" y1="12" x2="${X(t)}" y2="130" stroke="var(--ink)" stroke-dasharray="3 3"/><text x="26" y="${Y(tot) + 4}" text-anchor="end" font-size="10" fill="var(--muted)">${tot}</text><text x="26" y="134" text-anchor="end" font-size="10" fill="var(--muted)">0</text><text x="310" y="145" text-anchor="end" font-size="10" fill="var(--muted)">${fmtT(k, mx)}</text><text x="34" y="22" font-size="10" fill="var(--muted)">cumulative ${k === 'ic' ? 'adopters' : 'posts'}</text>`;
+}
+function tlStop() { TL.play = false; clearInterval(TL.timer); $('#tlPlay').textContent = '▶ Play'; }
+$('#tlPlay').onclick = () => {
+  if (TL.play) return tlStop();
+  const d = TLD[TL.k]; if (TL.t >= d.max) TL.t = 0;
+  TL.play = true; $('#tlPlay').textContent = '❚❚ Pause';
+  const inc = TL.k === 'ic' ? 1 : d.max / 80;
+  TL.timer = setInterval(() => { TL.t = Math.min(d.max, TL.t + inc); $('#tlT').value = TL.t; drawTL(); if (TL.t >= d.max) tlStop(); }, TL.k === 'ic' ? 700 : 90);
+};
+$('#tlReset').onclick = () => { tlStop(); TL.t = 0; $('#tlT').value = 0; drawTL(); };
+$('#tlT').oninput = () => { tlStop(); TL.t = +$('#tlT').value; drawTL(); };
+tlSetup(); drawTL();
+
+// ---------- Section 10: caption builder ----------
+const CAP = [['lay', 'Layout', [['ForceAtlas 2 (scaling 10, prevent overlap)', 1], ['Fruchterman Reingold (area 10,000)', 1], ['not stated', 0]]],
+  ['col', 'Colour', [['Louvain communities (Gephi Modularity, weights on, resolution 1.0, Q = 0.43)', 1], ['club after the split (Mr. Hi / Officer)', 1], ['not stated', 0]]],
+  ['size', 'Size', [['PageRank (edge weights)', 1], ['degree (number of ties)', 1], ['not stated', 0]]],
+  ['lab', 'Labels', [['top 4 nodes by PageRank', 1], ['all nodes', .5], ['not stated', 0]]],
+  ['fil', 'Filter', [['none — all 34 nodes', 1], ['K-core k = 4 (10 of 34 nodes)', 1], ['not stated', 0]]]];
+$('#capSel').innerHTML = CAP.map(([k, l, os]) => `<label class="small"><b>${l}</b><select data-k="${k}" style="width:100%">${os.map((o, i) => `<option value="${i}">${o[0]}</option>`).join('')}</select></label>`).join('');
+function drawCap() {
+  const v = Object.fromEntries($$('#capSel select').map(s => [s.dataset.k, +s.value]));
+  const g = k => CAP.find(c => c[0] === k)[2][v[k]];
+  const parts = ['<b>Figure 2.</b> Karate club network (34 nodes, 78 weighted ties).'];
+  if (g('lay')[1]) parts.push('Layout: ' + g('lay')[0] + '.');
+  if (g('col')[1]) parts.push('Colour: ' + g('col')[0] + '.');
+  if (g('size')[1]) parts.push('Size: ' + g('size')[0] + '.');
+  if (g('lab')[1]) parts.push('Labels: ' + g('lab')[0] + '.');
+  if (g('fil')[1]) parts.push('Filter: ' + g('fil')[0] + '.');
+  $('#capOut').innerHTML = parts.join(' ');
+  const miss = CAP.filter(([k]) => !g(k)[1]).map(c => c[1].toLowerCase()), warn = v.lab === 1;
+  $('#capMsg').className = 'feedback show ' + (miss.length ? 'no' : warn ? 'info' : 'ok');
+  $('#capMsg').innerHTML = miss.length ? `Missing: ${miss.join(', ')} — a reader cannot rebuild the figure.` : warn ? 'Complete — but all labels on 34 nodes clutter the figure. Label only the nodes you discuss.' : '✓ Complete: a reader can rebuild this figure from the caption.';
+}
+$$('#capSel select').forEach(s => s.onchange = drawCap); drawCap();
+$('#capCopy').onclick = () => { navigator.clipboard && navigator.clipboard.writeText($('#capOut').innerText); $('#capCopy').textContent = 'Copied'; setTimeout(() => $('#capCopy').textContent = 'Copy caption', 1200); };
+makeSorter('#sortGood', [{ id: 'g', label: '✅ Good practice' }, { id: 'b', label: '⚠️ Misleading or risky' }], [
+  { t: 'One message per figure', c: 'g' }, { t: 'Filter to the question', c: 'g' }, { t: '≤ 8 colours plus grey for “other”', c: 'g' }, { t: 'A legend and a full caption', c: 'g' }, { t: 'The numbers next to the picture', c: 'g' }, { t: 'Pseudonymised IDs only', c: 'g' },
+  { t: 'A hairball of every node and edge', c: 'b' }, { t: '20 rainbow colours', c: 'b' }, { t: 'Every label switched on', c: 'b' }, { t: 'The most dramatic of ten layout runs', c: 'b', why: 'Cherry-picking a layout run is like cherry-picking a result.' }, { t: 'User names on the nodes', c: 'b' }
+]);
+
+// ---------- Section 11: workflow + Activity 6.1 ----------
+const WF = [['1 · Python', 'Clean and compute: centralities, communities, adoption times — with fixed seeds.'], ['2 · GEXF', 'nx.write_gexf keeps weights and all attributes.'], ['3 · Data Lab', 'Check counts, type, weights, attributes, privacy.'], ['4 · Layout', 'ForceAtlas 2 → Run → Stop when stable → Noverlap.'], ['5 · Statistics', 'Re-run Chapter 4 and match the numbers; log every setting.'], ['6 · Appearance', 'Colour = which group? Size = how important? Labels only where they help.'], ['7 · Filters', 'Focus on one question; statistics run on the visible graph.'], ['8 · Timeline', 'Replay a cascade from its start times (Chapter 5).'], ['9 · Preview', 'Default Straight, white background, light edges.'], ['10 · Export', 'SVG or PDF — plus a caption that can rebuild the figure.']];
+$('#wfFlow').innerHTML = WF.map((w, i) => `<div class="step ${i ? '' : 'on'}" data-i="${i}">${w[0]}</div>`).join('');
+$$('#wfFlow .step').forEach(s => s.onclick = () => { $$('#wfFlow .step').forEach(x => x.classList.toggle('on', x === s)); $('#wfMsg').textContent = WF[+s.dataset.i][1]; });
+$('#wfMsg').textContent = WF[0][1];
+const CR = [1, 2, 3, 4, 5, 6].map(i => ['p' + i, 'Problem ' + i + ' → Gephi fix', 'what you see → panel → setting']);
+const crF = makeForm('#crForm', 'sma-ch6-critique', CR);
+$('#crDl').onclick = () => downloadText('figure_redesign_plan.txt', crF.text('Activity 6.1 — figure redesign plan'));
+
+// ---------- Section 12: lab figure check ----------
+makeChecklist('#figCheck', 'sma-ch6-figcheck', ['Layout named (with its key settings)', 'Legend for colour and size', '≤ 8 colours plus grey for “other”', 'Caption with all settings (statistics, palette, filter)', 'SVG or PDF exported', 'No user names — pseudonymised IDs only', 'One Gephi number matches the notebook (Chapter 4)']);
+
+// ---------- generic persistent form ----------
+function makeForm(sel, key, fields, onChange) {
+  const st = store.get(key, {});
+  $(sel).innerHTML = fields.map(([k, l, ph]) => `<label><b>${l}</b><span class="small">${ph || ''}</span><textarea data-k="${k}">${esc(st[k] || '')}</textarea></label>`).join('');
+  const upd = () => onChange && onChange(st);
+  $$(sel + ' textarea').forEach(t => t.oninput = () => { st[t.dataset.k] = t.value; store.set(key, st); upd(); });
+  upd();
+  return { st, set(vals) { Object.assign(st, vals); store.set(key, st); $$(sel + ' textarea').forEach(t => t.value = st[t.dataset.k] || ''); upd(); }, text(title) { return title + '\n' + '='.repeat(title.length) + '\n\n' + fields.map(([k, l]) => `${l}:\n${st[k] || '(empty)'}\n`).join('\n'); } };
+}
+
+// ---------- Section 13: requirements ----------
+const REQ = [['Data profile and ethics / GDPR check', 'Ch 1', 'required', 'profile card, data minimisation, pseudonymisation'], ['Documented preprocessing + classical baseline', 'Ch 2', 'required', 'VADER and TF-IDF macro-F1, error table'], ['Transformer or LLM model', 'Ch 3', 'optional', 'same split, gain vs. cost, disclosure'], ['Network analysis or diffusion analysis', 'Ch 4–5', 'at least one', 'named communities / cascade metrics'], ['Network figure from Gephi', 'Ch 6', 'with networks', 'legend, caption with settings, matching numbers'], ['Story, limitations, recommendation', 'all chapters', 'required', 'storyboard, uncertainty, scope']];
+const reqSt = store.get('sma-ch6-req2', {});
+function drawReq() {
+  $('#reqTbl').innerHTML = '<tr><th>Component</th><th>From</th><th>Status</th><th>Evidence you show</th><th>Our progress</th></tr>' + REQ.map((r, i) => `<tr><td>${r[0]}</td><td>${r[1]}</td><td><span class="tag ${r[2] === 'required' ? 'red' : r[2] === 'optional' ? '' : 'amber'}">${r[2]}</span></td><td class="small">${r[3]}</td><td><select class="lbl" data-i="${i}">${['not started', 'in progress', 'done', 'not used'].map(o => `<option ${reqSt[i] === o ? 'selected' : ''}>${o}</option>`).join('')}</select></td></tr>`).join('');
+  $$('#reqTbl select').forEach(s => s.onchange = () => { reqSt[s.dataset.i] = s.value; store.set('sma-ch6-req2', reqSt); });
+}
+drawReq();
+
+// ---------- Section 14: RQ checker ----------
+function drawRQ() {
+  const q = $('#rqIn').value.trim(), L = q.toLowerCase(), hints = [];
+  const ok = (c, good, bad) => hints.push(`<div>${c ? '✅' : '⚠️'} ${c ? good : bad}</div>`);
+  ok(q.split(/\s+/).length >= 10, 'specific enough in length', 'very short — probably too broad');
+  ok(/\b(\d{4}|week|weeks|month|months|day|days|before|after|during|march|april|2025|2026)\b/.test(L), 'has a time window', 'no time window (when?)');
+  ok(/\b(share|sentiment|stance|emotion|spread|reach|faster|more|less|differ|change|proportion|centrality|communit|cascade|topic)/.test(L), 'names something measurable', 'not clearly measurable — what will you count or compare?');
+  ok(!/\b(people|everyone|the public|society|users in general)\b/.test(L) || /\bin our dataset|subreddit|community|communities|posts\b/.test(L), 'scoped to your data', 'speaks about “people” or “the public” — scope it to your data');
+  ok(!/\b(bots?|fake news|cause[sd]?|because)\b/.test(L), 'no claim you cannot verify', 'mentions bots, fake news or causes — can your data really answer this?');
+  $('#rqOut').innerHTML = hints.join('');
+}
+$('#rqIn').oninput = drawRQ; drawRQ();
+makeChecklist('#rqSelf', 'sma-ch6-rq', ['Specific', 'Answerable with our data', 'Measurable', 'Relevant to someone (who decides what?)', 'Ethical']);
+
+// ---------- Section 15: ethics plan ----------
+const EP = [['src', 'Source and terms', 'platform, API or dataset; licence and terms of service checked'], ['scope', 'Scope', 'time window, languages, keywords — and why'], ['size', 'Size', 'enough posts for your methods (and a test set)'], ['pd', 'Personal data', 'only needed fields; pseudonymised IDs; no screenshots'], ['lab', 'Labels', 'who labels, how many, guidelines, agreement check'], ['sto', 'Storage', 'university storage only; delete raw data after the project']];
+const epF = makeForm('#epForm', 'sma-ch6-ethics', EP, st => {
+  const n = EP.filter(([k]) => (st[k] || '').trim().length > 8).length; $('#epMeter').style.width = (n / EP.length * 100) + '%';
+  $('#epMsg').className = 'feedback show ' + (n === EP.length ? 'ok' : 'info'); $('#epMsg').innerHTML = n === EP.length ? '✓ All six boxes filled — you are ready to collect (after the instructor check).' : `${n} of ${EP.length} boxes filled.`;
+});
+$('#epDl').onclick = () => downloadText('data_ethics_plan.txt', epF.text('Data and ethics plan'));
+
+// ---------- Section 16: report & storyboard ----------
+const DOC = [['1 · Question', 'why it matters, for whom'], ['2 · Data & ethics', 'source, scope, profile, GDPR decisions'], ['3 · Preprocessing', 'what you kept, removed, replaced — and why'], ['4 · Methods', 'baseline, models, networks, parameters'], ['5 · Results', 'figures and tables that answer the question'], ['6 · Limitations', 'bias, uncertainty, what you cannot claim'], ['7 · Recommendation', 'what follows, with scope'], ['A · Appendix', 'prompts, AI disclosure, Gephi settings, notebook link']];
+$('#docFlow').innerHTML = DOC.map((d, i) => `<div class="step ${i ? '' : 'on'}" data-i="${i}">${d[0]}</div>`).join('');
+$$('#docFlow .step').forEach(s => s.onclick = () => { $$('#docFlow .step').forEach(x => x.classList.toggle('on', x === s)); $('#docMsg').textContent = DOC[+s.dataset.i][1]; });
+$('#docMsg').textContent = DOC[0][1];
+const SB = [['hook', '1 · Hook', 'one striking post or number'], ['q', '2 · Question', 'what you asked and why'], ['d', '3 · Data', 'where, when, how many — and the ethics'], ['m', '4 · Method', 'one diagram of your pipeline'], ['e', '5 · Evidence', 'your two strongest figures — e.g. one Gephi network'], ['so', '6 · So what?', 'limits and a recommendation']];
+const sbF = makeForm('#sbForm', 'sma-ch6-story', SB);
+$('#sbSample').onclick = () => sbF.set({ hook: '“Waiting 40 min at the charger. Love it.” — sarcasm our first model got wrong.', q: 'How did sentiment about charging change after the March recall, and which community drove it?', d: '2,400 public EV posts, 1–14 March 2026, EN + DE, pseudonymised; Reddit terms checked.', m: 'raw → two text views → VADER & TF-IDF baseline → RoBERTa → mention network + Louvain → Gephi figure.', e: 'Fig 1: share negative per day with the 4 March spike marked. Fig 2: Gephi mention network, colour = mean sentiment (red–grey–blue), size = PageRank, with caption.', so: 'Critics’ community most negative (−0.42 mean); one platform only. Recommend targeted communication of the fix.' });
+$('#sbDl').onclick = () => downloadText('storyboard.txt', sbF.text('Presentation storyboard'));
+makeSorter('#sortStrong', [{ id: 's', label: '💪 Strong project' }, { id: 'w', label: '⚠️ Common weakness' }], [
+  { t: 'One clear, answerable question', c: 's' }, { t: 'A baseline before complex models', c: 's' }, { t: 'Decisions explained, not only reported', c: 's' }, { t: 'Error analysis with real examples', c: 's' }, { t: 'Reproducible notebook, fixed seeds', c: 's' },
+  { t: 'Many methods, none done properly', c: 'w' }, { t: 'Accuracy only — no macro-F1', c: 'w' }, { t: 'Beautiful network pictures, no metrics', c: 'w' }, { t: '“People think …” from one platform', c: 'w' }, { t: 'Usernames or screenshots in slides', c: 'w' }, { t: 'AI use not disclosed', c: 'w' }
+]);
+
+// ---------- Section 17: canvas ----------
+const PC = [['rq', 'Research question', 'specific · answerable · measurable'], ['why', 'Why it matters', 'for whom? what decision?'], ['data', 'Data', 'source · time window · languages · size'], ['meth', 'Methods', 'which chapters, which models / networks'], ['fig', 'First figure', 'sketch the first chart or network figure'], ['eth', 'Ethics and GDPR', 'personal data? pseudonymisation? terms?'], ['risk', 'Biggest risk', 'what could make the project fail?'], ['who', 'Who does what', 'roles in the group']];
+const pcF = makeForm('#pcForm', 'sma-ch6-canvas', PC, st => { const n = PC.filter(([k]) => (st[k] || '').trim().length > 5).length; $('#pcMeter').style.width = (n / PC.length * 100) + '%'; });
+$('#pcSample').onclick = () => pcF.set({ rq: 'How did stance on the campus phone ban differ between student and staff subreddits in the first month?', why: 'The student council wants to know which concerns to address first.', data: 'Reddit, 3 subreddits, 1 month, English + German, ~1,500 comments', meth: 'VADER + TF-IDF baseline; zero-shot stance (validated on 150 gold labels); reply network + communities', fig: 'Gephi reply network: colour = stance, size = replies received, with n', eth: 'Pseudonymised IDs, paraphrased quotes, no profiles; Reddit terms checked', risk: 'Too few staff comments → fall back to students only', who: 'A: data · B: models · C: network + Gephi · D: report and slides' });
+$('#pcDl').onclick = () => downloadText('proposal_canvas.txt', pcF.text('Project proposal canvas'));
+$('#pcClear').onclick = () => pcF.set(Object.fromEntries(PC.map(([k]) => [k, ''])));
+const fbF = makeForm('#fbForm', 'sma-ch6-feedback', [['grp', 'For group', 'group number / topic'], ['s', 'Strength', 'What is most promising?'], ['q', 'Question', 'What is unclear?'], ['r', 'Risk', 'What could fail — data, method or ethics?']]);
+$('#fbDl').onclick = () => downloadText('feedback_card.txt', fbF.text('Peer feedback card'));
+
+// ---------- quiz ----------
+renderQuiz('#quizBox', [
+  { q: 'Your betweenness values in Gephi are in the hundreds; Chapter 4 showed 0.438 for node 0. What happened?', opts: ['Gephi is wrong', '“Normalize” was not ticked — Gephi shows raw path counts (231.07)', 'The graph is directed', 'Modularity changed it'], a: 1, why: 'Same graph, different setting. Tick Normalize, or report the raw value with its setting.' },
+  { q: 'Which Appearance option colours nodes by community?', opts: ['Ranking → PageRank', 'Unique', 'Partition → Modularity Class', 'Size → Degree'], a: 2, why: 'Categories → Partition; numbers → Ranking.' },
+  { q: 'Two nodes are far apart in a ForceAtlas 2 layout. What can you conclude?', opts: ['They are exactly twice as distant as two other nodes', 'Only that they are not closely connected — distance in a layout is not a measurement', 'They are in different clubs', 'Their PageRank differs'], a: 1, why: 'A layout is an argument, not a measurement.' },
+  { q: 'Which filter shows only the accounts one user reaches directly?', opts: ['Giant Component', 'Degree Range', 'Ego Network, depth 1', 'K-Core'], a: 2, why: 'Ego network of node 0, depth 1: node 0 and its 16 neighbours (17 nodes).' },
+  { q: 'Which export keeps a network figure sharp in your report?', opts: ['PNG at 72 dpi', 'SVG or PDF (vector)', 'A screenshot', 'JPEG'], a: 1, why: 'Vector formats stay sharp at any zoom.' },
+  { q: 'Mean sentiment per user ranges from −1 to +1. Which palette fits?', opts: ['Qualitative rainbow', 'Sequential light → dark', 'Diverging red – grey – blue with grey at 0', 'Red – green diverging'], a: 2, why: 'A meaningful middle needs a diverging palette; red–green is hard for colour-blind readers.' },
+  { q: 'You apply a K-core filter and then run Graph Density. Which graph does Gephi measure?', opts: ['The full graph', 'The visible (filtered) graph — say so in the caption', 'A random sample', 'The original CSV'], a: 1, why: 'A filter changes the view — statistics run on what is visible.' },
+  { q: 'What does Gephi’s Timeline need?', opts: ['A directed graph', 'Start times on nodes (and/or edges), e.g. from nx.write_gexf with “start” and mode “dynamic”', 'At least 1,000 nodes', 'A Preview preset'], a: 1, why: 'Dynamic GEXF: each node appears at its start time.' },
+  { q: 'Which project component is required when your project analyses a network?', opts: ['A transformer model', 'A Gephi figure with legend, caption and matching numbers', 'Topic modelling', 'A dashboard'], a: 1, why: 'Network figures need their settings and numbers to count as evidence.' },
+  { q: 'Which research question is strongest?', opts: ['What do people think about EVs?', 'How did sentiment about EV battery safety change in the two weeks after the March recall?', 'Do bots spread fake news?', 'Who is most influential?'], a: 1, why: 'Specific, measurable, answerable with your data.' }
+]);
+
+addCopy();
+</script>
+</body></html>
