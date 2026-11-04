@@ -34,6 +34,12 @@ Offline: download the `.html` files from the [`interactive/`](interactive/) fold
 
 Each lab has a walkthrough, **three challenges** and a reflection. Labs build on each other: Lab 2.1 writes `outputs/posts_ch2.parquet`, which Lab 3.1 reads; Lab 4.1 exports the networks as GEXF; Lab 6.1 prepares the Gephi files from the Lab 4.1 and 5.1 data. Labs 1, 2, 4, 5 and 6 are stored with their outputs; Lab 3.1 downloads models from Hugging Face on first run and is stored without outputs.
 
+## Example notebooks (not labs)
+
+| Chapter | Notebook | What you do |
+|---|---|---|
+| 3 | [`Ch3_Transformer_Examples.ipynb`](notebooks/Ch3_Transformer_Examples.ipynb) · [Open in Colab](https://colab.research.google.com/github/MehrdadJalali-AI/SocialMediaAnayltics/blob/main/notebooks/Ch3_Transformer_Examples.ipynb) | Every Chapter 3 slide example with real models: static vs. contextual embeddings, self-attention, fill-mask, subword tokens, pretrained inference, zero-shot label wording, fine-tuning before/after, weak vs. good prompt, Cohen's κ — each with a short "Try it" task. Use a T4 GPU runtime; first run downloads ~3 GB of models. |
+
 ## Data
 
 All files are **synthetic teaching data** (seed 42) — no real users.
