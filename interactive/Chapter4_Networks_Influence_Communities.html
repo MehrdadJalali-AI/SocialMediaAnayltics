@@ -458,7 +458,7 @@ nx.degree_assortativity_coefficient(G)              # -0.476</code></pre>
     <div class="flip"><div class="h">Dining-table network</div><div class="b">who eats with whom in a school dormitory — directed and weighted</div></div>
     <div class="flip"><div class="h">Dolphins of Shark Bay</div><div class="b">62 dolphins, ties = frequent association; communities guide conservation</div></div>
     <div class="flip"><div class="h">Protein interactions</div><div class="b">hubs are key regulators, modules are pathways</div></div>
-    <div class="flip"><div class="h">Amazon co-purchasing</div><div class="b">products bought together; communities = product groups (Lab 4.2)</div></div>
+    <div class="flip"><div class="h">Amazon co-purchasing</div><div class="b">products bought together; communities = product groups</div></div>
     <div class="flip"><div class="h">Fraud and finance</div><div class="b">transactions as edges; tight unusual groups signal fraud rings</div></div>
     <div class="flip"><div class="h">Cybersecurity</div><div class="b">traffic as a graph; unusual central nodes signal attacks</div></div>
   </div>
@@ -492,9 +492,11 @@ nx.degree_assortativity_coefficient(G)              # -0.476</code></pre>
   </div>
 </section>
 
-<section class="chap" id="activity" data-title="Activity 4.1: reply network">
-  <div class="sec-head"><div><div class="secnum">Section 14</div><h2>Activity 4.1 — draw a reply network</h2></div></div>
-  <p>Open a public thread, take the first 15 comments, pseudonymise authors as A, B, C…, write one row per reply. Enter your edges below (one <code>from,to</code> per line) — in-degree, out-degree and bridges are computed for you.</p>
+<section class="chap" id="activity" data-title="Activity 4.1: karate notebook">
+  <div class="sec-head"><div><div class="secnum">Section 14</div><h2>Activity 4.1 — measure the karate club in Python</h2></div></div>
+  <p>Open <a href="https://github.com/MehrdadJalali-AI/SocialMediaAnayltics/blob/main/notebooks/Activity4.1_Karate.ipynb" target="_blank" rel="noopener"><code>Activity4.1_Karate.ipynb</code></a> (or <a href="https://colab.research.google.com/github/MehrdadJalali-AI/SocialMediaAnayltics/blob/main/notebooks/Activity4.1_Karate.ipynb" target="_blank" rel="noopener">open in Colab</a>) and run it top to bottom. It computes <b>every measure from this chapter</b> on the karate club — density, clustering, BFS/DFS, four centralities, bridges, Louvain and modularity, assortativity, link prediction and node classification — and explains every command. At each <b>Try it</b> box, change one value (seed, start node, resolution, pair), run again and observe. Pairs · 30 minutes · then answer the five questions at the end.</p>
+  <h3>Extra: analyse your own reply network</h3>
+  <p>Take the first 15 comments of a public thread, pseudonymise authors as A, B, C…, and enter one <code>from,to</code> per line — in-degree, out-degree and bridges are computed for you.</p>
   <div class="widget"><div class="wtitle">Reply-network analyser</div>
     <div class="grid2">
       <div><textarea id="rnIn" rows="12"></textarea><div class="btnrow"><button class="btn" id="rnSample">Load sample answer</button></div></div>
@@ -507,14 +509,15 @@ nx.degree_assortativity_coefficient(G)              # -0.476</code></pre>
 
 <section class="chap" id="lab" data-title="Lab 4.1 & project">
   <div class="sec-head"><div><div class="secnum">Section 15</div><h2>Lab 4.1 — influence, communities and homophily</h2></div></div>
-  <p><b>Goal:</b> compute influence, communities and homophily — first on the karate club, then on your EV mention network (<code>ev_mentions.csv</code>). Optional Lab 4.2: the Amazon co-purchasing network.</p>
+  <p><b>Goal:</b> apply every measure from Activity 4.1 to a social media network — the EV mention network (<code>ev_mentions.csv</code>: 260 users, 1,208 mentions with sentiment; <code>ev_users.csv</code>) — and interpret it. Notebook: <a href="https://github.com/MehrdadJalali-AI/SocialMediaAnayltics/blob/main/notebooks/Lab4.1_Networks.ipynb" target="_blank" rel="noopener"><code>Lab4.1_Networks.ipynb</code></a>.</p>
   <div class="timeline">
-    <div class="t"><b>Walkthrough</b>Build the graph, graph-level statistics, reproducible drawing</div>
-    <div class="t"><b>Challenge 1</b>Degree, betweenness, PageRank: top 5 — why do they differ?</div>
-    <div class="t"><b>Challenge 2</b>Louvain at two resolutions; compare with the club split; find a bridge</div>
-    <div class="t"><b>Challenge 3</b>Assortativity for two attributes + one limitation</div>
-    <div class="t"><b>Transfer</b>Repeat on ev_mentions.csv; export GEXF; save for Ch 5 and 6</div>
+    <div class="t"><b>Walkthrough</b>Build the directed network, describe it, draw it with a fixed seed</div>
+    <div class="t"><b>Challenge 1</b>In-/out-degree, betweenness, closeness, PageRank — who ranks very differently?</div>
+    <div class="t"><b>Challenge 2</b>Louvain at 0.5 / 1.0 / 1.5 and modularity; name each community; find bridge users</div>
+    <div class="t"><b>Challenge 3</b>Assortativity by group and language; negative mentions inside vs. between</div>
+    <div class="t"><b>Save</b>Store results as node attributes; export ev_mentions_ch4.gexf for Lab 4.2</div>
   </div>
+  <p><b>Lab 4.2 — after Chapter 6:</b> redo Activity 4.1 and Lab 4.1 <b>in Gephi</b> and check the numbers against Python: <a href="https://github.com/MehrdadJalali-AI/SocialMediaAnayltics/blob/main/notebooks/Lab4.2_Gephi_Networks.ipynb" target="_blank" rel="noopener"><code>Lab4.2_Gephi_Networks.ipynb</code></a> writes both GEXF files with the Python values inside.</p>
   <div class="tabs" data-group="code" style="margin-top:14px"><button class="on" data-tab="a">1 · Build &amp; describe</button><button data-tab="b">2 · Communities &amp; homophily</button></div>
   <div class="tabpanel on" data-group="code" data-tab="a"><pre><code data-hl="py">import networkx as nx
 G = nx.karate_club_graph()
