@@ -30,10 +30,10 @@ Offline: download the `.html` files from the [`interactive/`](interactive/) fold
 | 3.1 | [`Lab3.1_Transformers.ipynb`](notebooks/Lab3.1_Transformers.ipynb) | Pretrained sentiment/emotion models, zero-shot stance, fine-tuning (Colab GPU), failure audit |
 | 4.1 | [`Lab4.1_Networks.ipynb`](notebooks/Lab4.1_Networks.ipynb) | EV mention network: centralities, Louvain communities and modularity, assortativity, sentiment inside vs. between communities (do Activity 4.1 first) |
 | 4.2 | [`Lab4.2_Gephi_Networks.ipynb`](notebooks/Lab4.2_Gephi_Networks.ipynb) | **After Chapter 6:** redo Activity 4.1 and Lab 4.1 in Gephi and compare every measure with Python |
-| 5.1 | [`Lab5.1_Diffusion.ipynb`](notebooks/Lab5.1_Diffusion.ipynb) | Cascade metrics from parent IDs, Independent Cascade / Linear Threshold, seed strategies |
+| 5.1 | [`Lab5.1_Diffusion.ipynb`](notebooks/Lab5.1_Diffusion.ipynb) | **Fully worked walkthrough:** cascade metrics and shapes from parent IDs; Independent Cascade and Linear Threshold, each as **own code** and with the **NDlib** library (results compared); p sweep; seed strategies |
 | 6.1 | [`Lab6.1_Gephi.ipynb`](notebooks/Lab6.1_Gephi.ipynb) | Prepare GEXF files, then in **Gephi**: statistics vs. Chapter 4, colour/size/filters, Timeline replay of two cascades, one captioned SVG figure |
 
-Each lab has a walkthrough, **three challenges** and a reflection. Labs build on each other: Lab 2.1 writes `outputs/posts_ch2.parquet`, which Lab 3.1 reads; Activity 4.1 and Lab 4.1 export their networks as GEXF, which Lab 4.2 opens in Gephi after Chapter 6; Lab 6.1 prepares the Gephi files from the Lab 4.1 and 5.1 data. Labs 1, 2, 4, 5 and 6 are stored with their outputs; Lab 3.1 downloads models from Hugging Face on first run and is stored without outputs.
+Each lab has a walkthrough, **three challenges** and a reflection (Lab 5.1 is a fully worked walkthrough without challenges). Labs build on each other: Lab 2.1 writes `outputs/posts_ch2.parquet`, which Lab 3.1 reads; Activity 4.1 and Lab 4.1 export their networks as GEXF, which Lab 4.2 opens in Gephi after Chapter 6; Lab 6.1 prepares the Gephi files from the Lab 4.1 and 5.1 data. Labs 1, 2, 4, 5 and 6 are stored with their outputs; Lab 3.1 downloads models from Hugging Face on first run and is stored without outputs.
 
 ## Example notebooks (not labs)
 

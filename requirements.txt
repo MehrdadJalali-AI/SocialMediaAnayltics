@@ -9,5 +9,6 @@ scikit-learn>=1.4,<2
 vaderSentiment>=3.3,<4
 emoji>=2.10
 networkx>=3.2,<4
+ndlib>=5.1
 transformers>=4.40,<5
 torch>=2.2,<3
